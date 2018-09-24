@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This XML file provides all the text to be used when the application
+    is to be displayed in English.
+-->
+<properties>
+    <property_list>
+
+        <!-- ENGLISH LANGUAGE SETTINGS FOR DESKTOP JAVA FRAMEWORK CONTROLS -->
+
+        <!-- WELCOME DIALOG TEXT -->
+        <property name="WELCOME_DIALOG_TITLE"               value="欢迎来到 Office Hours"></property>
+        <property name="WELCOME_DIALOG_RECENT_WORK_LABEL"   value="最近的文档"></property>
+        <property name="WELCOME_DIALOG_NEW_BUTTON_TEXT"  value="创建新的 Office Hours"></property>
+
+        <!-- GENERIC APP ERROR MESSAGES -->
+        <property name="APP_ERROR_TITLE"            value="错误程序"></property>
+        <property name="APP_ERROR_CONTENT"          value="程序出现了一个错误"></property>
+
+        <!-- PROPERTIES ERROR MESSAGES -->
+        <property name="PROPERTIES_ERROR_TITLE"     value="加载出错"></property>
+        <property name="PROPERTIES_ERROR_CONTENT"   value="属性文件加载时出错了"></property>
+
+        <!-- FILE TOOLBAR TOOLTIPS -->
+        <property name="NEW_BUTTON_TOOLTIP"         value="新建 Office Hours"></property>
+        <property name="LOAD_BUTTON_TOOLTIP"        value="加载 Office Hours"></property>
+        <property name="CLOSE_BUTTON_TOOLTIP"       value="关闭 Office Hours"></property>
+        <property name="SAVE_BUTTON_TOOLTIP"        value="保存 Office Hours"></property>
+        <property name="EXPORT_BUTTON_TOOLTIP"      value="导出 Office Hours"></property>
+        <property name="EXIT_BUTTON_TOOLTIP"        value="退出"></property>
+
+        <!-- CLIPBOARD TOOLBAR TOOLTIPS -->
+        <property name="CUT_BUTTON_TOOLTIP"         value="剪切"></property>
+        <property name="COPY_BUTTON_TOOLTIP"        value="复制"></property>
+        <property name="PASTE_BUTTON_TOOLTIP"       value="粘贴"></property>
+
+        <!-- UNDO TOOLBAR TOOLTIPS -->
+        <property name="UNDO_BUTTON_TOOLTIP"        value="后退一步"></property>
+        <property name="REDO_BUTTON_TOOLTIP"        value="向前一步"></property>
+
+        <!-- HELP TOOLBAR TOOLTIPS -->
+        <property name="HELP_BUTTON_TOOLTIP"        value="帮助"></property>
+        <property name="LANGUAGE_BUTTON_TOOLTIP"    value="更换语言"></property>
+        <property name="ABOUT_BUTTON_TOOLTIP"       value="关于"></property>
+
+        <!-- NEW FEEDBACK DIALOGS -->	
+        <property name="NEW_SUCCESS_TITLE"      value="新建完成"></property>
+        <property name="NEW_SUCCESS_CONTENT"	value="作品创建后未保存"></property>
+        <property name="NEW_ERROR_TITLE"        value="警告: 错误"></property>
+        <property name="NEW_ERROR_CONTENT"      value="创建新文件时出错."></property>
+
+        <!-- LOAD FEEDBACK DIALOGS -->
+        <property name="LOAD_WORK_TITLE"        value="加载文件"></property>
+        <property name="LOAD_SUCCESS_TITLE"     value="加载完毕"></property>
+        <property name="LOAD_SUCCESS_CONTENT"   value="文件加载完毕，现在可进行修改"></property>
+        <property name="LOAD_ERROR_TITLE"       value="加载出错"></property>        
+        <property name="LOAD_ERROR_CONTENT"     value="文件加载失败。文件格式可能不正确"></property>
+
+        <!-- SAVE FEEDBACK DIALOGS -->
+        <property name="SAVE_WORK_TITLE"        value="保存文件"></property>
+        <property name="SAVE_SUCCESS_TITLE"     value="保存完毕"></property>
+        <property name="SAVE_SUCCESS_CONTENT"   value="保存成功"></property>
+        <property name="SAVE_ERROR_TITLE"       value="储存错误"></property>
+        <property name="SAVE_ERROR_CONTENT"     value="储存失败。文件路径可能不正确"></property>
+        <property name="SAVE_VERIFY_TITLE"	value="保存未保存的文件?"></property>
+        <property name="SAVE_VERIFY_CONTENT"	value="请先保存未保存的文件"></property>
+
+        <!-- ABOUT DIALOG -->
+        <property name="ABOUT_TITLE"            value="关于 OH"></property>
+        <property name="ABOUT_CONTENT"          value="OH, the Office Hours Manager - Debugging Enterprises - © 2018"></property>
+
+
+        <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
+
+        <!-- LANGUAGE-DEPENDENT TEXT FOR OH WORKSPACE CONTROLS -->
+        <property name="OH_TAS_HEADER_LABEL_TEXT"           value="助教"></property>
+        <property name="OH_ADD_TA_BUTTON_TEXT"              value="添加TA"></property>
+        <property name="OH_OFFICE_HOURS_HEADER_LABEL_TEXT"  value="助教时间表"></property>
+        <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="姓名"></property>
+        <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="邮件"></property>
+        <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="时间槽"></property>
+        <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="开始时间"></property>
+        <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="结束时间"></property>
+        <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="星期一"></property>
+        <property name="OH_TUESDAY_TABLE_COLUMN_TEXT"       value="星期二"></property>
+        <property name="OH_WEDNESDAY_TABLE_COLUMN_TEXT"     value="星期三"></property>
+        <property name="OH_THURSDAY_TABLE_COLUMN_TEXT"      value="星期四"></property>
+        <property name="OH_FRIDAY_TABLE_COLUMN_TEXT"        value="星期五"></property>
+        <property name="OH_EMAIL_ERROR_TEXT"                value="无效的邮箱地址!"></property>
+        <property name="OH_NAME_TEXT_FIELD_TEXT"            value="姓名"></property>
+        <property name="OH_EMAIL_TEXT_FIELD_TEXT"           value="邮件"></property>
+        <property name="OH_NAME_ERROR_TEXT"                 value="无效的名字!"></property>
+
+
+        <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
+        <property name="LANGUAGE_DIALOG_TITLE"          value="语言选择"></property>
+        <property name="LANGUAGE_DIALOG_HEADER_TEXT"    value="请选择一个语言"></property>
+        <property name="LANGUAGE_DIALOG_CONTENT_TEXT"   value="请选择界面语言"></property>
+
+        <property name="WORK_FILE_EXT"          value="ta"></property>
+	<property name="WORK_FILE_EXT_DESC"     value="Teaching Assistant Files"></property>
+
+    </property_list>
+    
+    <property_options_list>
+        <property_options name="LANGUAGE_OPTIONS">
+            <option>English</option>
+        </property_options>
+    </property_options_list>
+</properties>

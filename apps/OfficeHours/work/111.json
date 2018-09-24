@@ -1,0 +1,27 @@
+
+{
+    "startHour":"9",
+    "endHour":"20",
+    "undergrad_tas":[
+        {
+            "name":"h",
+            "email":"h@g.com"
+        },
+        {
+            "name":"ss",
+            "email":"a@gamil.om"
+        }
+    ],
+    "officeHours":[
+        {
+            "time":"9_00am",
+            "day":"MONDAY",
+            "name":"h"
+        },
+        {
+            "time":"10_00am",
+            "day":"MONDAY",
+            "name":"ss"
+        }
+    ]
+}

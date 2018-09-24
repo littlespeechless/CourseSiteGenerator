@@ -1,0 +1,15 @@
+
+{
+    "startHour":"9",
+    "endHour":"20",
+    "undergrad_tas":[
+        {
+            "name":"Joe Shmo",
+            "email":"123@123"
+        },
+        {
+            "name":"Jane Doe",
+            "email":"123@123"
+        }
+    ]
+}
