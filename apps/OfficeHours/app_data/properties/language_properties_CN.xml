@@ -90,7 +90,7 @@
         <property name="OH_NAME_TEXT_FIELD_TEXT"            value="姓名"></property>
         <property name="OH_EMAIL_TEXT_FIELD_TEXT"           value="邮件"></property>
         <property name="OH_NAME_ERROR_TEXT"                 value="无效的名字!"></property>
-
+ 
 
         <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
         <property name="LANGUAGE_DIALOG_TITLE"          value="语言选择"></property>
