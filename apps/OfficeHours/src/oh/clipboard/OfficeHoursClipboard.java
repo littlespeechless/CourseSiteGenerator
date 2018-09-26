@@ -17,6 +17,7 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
     
     public OfficeHoursClipboard(OfficeHoursApp initApp) {
         app = initApp;
+        
         clipboardCutItems = null;
         clipboardCopiedItems = null;
     }

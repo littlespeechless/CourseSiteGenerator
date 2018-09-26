@@ -17,12 +17,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -504,6 +506,16 @@ public class AppNodesBuilder {
         // AND RETURN THE COMPLETED BUTTON
         return textField;
     }
+    public RadioButton buildRadioButton(Object nodeId,Pane parentPane, String styleClass,boolean enabled ){
+        //NOW MAKE THE RADIO BUTTON
+        RadioButton radioButton = new RadioButton();
+        //INITIALIZE THE OTHER SETTINGS
+        initNode(nodeId, radioButton, parentPane, styleClass, enabled);
+        //TEXT CHANGE 
+        initLabeledNode(nodeId, radioButton);
+        //RERUN THE BUTTON
+        return radioButton;
+    }
     public TableView buildTableView(Object nodeId,
             Pane parentPane,
             String styleClass,
@@ -539,4 +551,5 @@ public class AppNodesBuilder {
         languageSettings.addLabeledControlProperty(nodeId.toString() + "_TEXT", column.textProperty());
         return column;
     }
+    
 }

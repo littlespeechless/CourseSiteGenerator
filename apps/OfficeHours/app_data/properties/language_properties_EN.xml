@@ -79,6 +79,7 @@
         <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="Name"></property>
         <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="Email"></property>
         <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="Time Slots"></property>
+        <property name="OH_TYPE_TABLE_COLUMN_TEXT"          value="Type"></property>
         <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="Start Time"></property>
         <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="End Time"></property>
         <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="Monday"></property>
@@ -90,6 +91,10 @@
         <property name="OH_NAME_TEXT_FIELD_TEXT"            value="NAME"></property>
         <property name="OH_EMAIL_TEXT_FIELD_TEXT"           value="EMAIL"></property>
         <property name="OH_NAME_ERROR_TEXT"                 value="Invalid Name Input!"></property>
+        <property name="OH_TOGGLE_UNDERGRADUATE_TEXT"              value="Undergraduate"></property>
+        <property name="OH_TOGGLE_GRADUATE_TEXT"              value="Graduate"></property>
+        <property name="OH_TOGGLE_ALL_TEXT"              value="All"></property>
+
 
         <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
         <property name="LANGUAGE_DIALOG_TITLE"          value="App Language Selection"></property>

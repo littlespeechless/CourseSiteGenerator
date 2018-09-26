@@ -6,12 +6,15 @@ import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
 import djf.ui.AppNodesBuilder;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -45,6 +48,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
 
         // SETUP FOOLPROOF DESIGN FOR THIS APP
         initFoolproofDesign();
+        
     }
 
     // THIS HELPER METHOD INITIALIZES ALL THE CONTROLS IN THE WORKSPACE
@@ -59,7 +63,20 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         VBox leftPane = ohBuilder.buildVBox(OH_LEFT_PANE, null, CLASS_OH_PANE, ENABLED);
         HBox tasHeaderBox = ohBuilder.buildHBox(OH_TAS_HEADER_PANE, leftPane, CLASS_OH_BOX, ENABLED);
         ohBuilder.buildLabel(OfficeHoursPropertyType.OH_TAS_HEADER_LABEL, tasHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED);
+        HBox taTypeBox = ohBuilder.buildHBox(OH_TAS_TOGGLE, tasHeaderBox, CLASS_OH_TOGGLE, ENABLED);
+        //MAKE A RAIDO BUTTON
+        final ToggleGroup taTypGroup = new ToggleGroup();
+        RadioButton allButton = ohBuilder.buildRadioButton(OH_TOGGLE_ALL, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
+        RadioButton underguasButton=ohBuilder.buildRadioButton(OH_TOGGLE_UNDERGRADUATE, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
+        RadioButton graudButton=ohBuilder.buildRadioButton(OH_TOGGLE_GRADUATE, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
 
+        allButton.setToggleGroup(taTypGroup);
+        allButton.setSelected(ENABLED);
+        underguasButton.setToggleGroup(taTypGroup);
+        graudButton.setToggleGroup(taTypGroup);
+       
+
+        
         // MAKE THE TABLE AND SETUP THE DATA MODEL
         TableView<TeachingAssistantPrototype> taTable = ohBuilder.buildTableView(OH_TAS_TABLE_VIEW, leftPane, CLASS_OH_TABLE_VIEW, ENABLED);
         taTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -69,12 +86,15 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         //email column
         TableColumn emailColumn = ohBuilder.buildTableColumn(OH_EMAIL_TABLE_COLUMN,taTable,CLASS_OH_COLUMN);
         emailColumn.setCellValueFactory(new PropertyValueFactory<String, String>("email"));
-        emailColumn.prefWidthProperty().bind(taTable.widthProperty().multiply(1.5/4.0));
+        emailColumn.prefWidthProperty().bind(taTable.widthProperty().multiply(1.0/4.0));
         //slot 
         TableColumn slotColumn = ohBuilder.buildTableColumn(OH_SLOTS_TABLE_COLUMN,taTable,CLASS_OH_COLUMN);
         slotColumn.setCellValueFactory(new PropertyValueFactory<String, String>("slots"));
-        slotColumn.prefWidthProperty().bind(taTable.widthProperty().multiply(1.5/4.0));
-        
+        slotColumn.prefWidthProperty().bind(taTable.widthProperty().multiply(1.0/4.0));
+        //type
+        TableColumn typeColumn = ohBuilder.buildTableColumn(OH_TYPE_TABLE_COLUMN, taTable, CLASS_OH_COLUMN);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<String, String>("type"));
+        typeColumn.prefWidthProperty().bind(taTable.widthProperty().multiply(1.0/4.0));
         
         // ADD BOX FOR ADDING A TA
         HBox taBox = ohBuilder.buildHBox(OH_ADD_TA_PANE, leftPane, CLASS_OH_PANE, ENABLED);

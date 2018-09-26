@@ -76,7 +76,7 @@ public class OfficeHoursFiles implements AppFileComponent {
             JsonObject jsonTA = jsonTAArray.getJsonObject(i);
             String name = jsonTA.getString(JSON_NAME);
             String email = jsonTA.getString(JSON_EMAIL);
-            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email);
+            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,"Undergraduate");
             dataManager.addTA(ta);
         }
         // TIME SLOT

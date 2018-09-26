@@ -15,14 +15,16 @@ public class TeachingAssistantPrototype {
     private final StringProperty name;
     private final StringProperty email;
     private final IntegerProperty slots;
+    private final StringProperty type;
 
     /**
      * Constructor initializes both the TA name and email.
      */
-    public TeachingAssistantPrototype(String initName, String initEmail) {
+    public TeachingAssistantPrototype(String initName, String initEmail,String initType) {
         name = new SimpleStringProperty(initName);
         email = new SimpleStringProperty(initEmail);
         slots = new SimpleIntegerProperty(0);
+        type = new SimpleStringProperty(initType);
     }
 
     // ACCESSORS AND MUTATORS FOR THE PROPERTIES
@@ -62,5 +64,14 @@ public class TeachingAssistantPrototype {
     }
     public IntegerProperty slotsProperty(){
         return slots;
+    }
+    public  String getType(){
+        return type.get();
+    }
+    public void setType(String initType){
+        type.set(initType);
+    }
+    public StringProperty typeProperty(){
+        return type;
     }
 }

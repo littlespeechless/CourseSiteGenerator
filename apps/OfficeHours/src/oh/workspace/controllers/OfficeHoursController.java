@@ -14,8 +14,11 @@ import djf.ui.dialogs.AppDialogsFacade;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.scene.Parent;
+import javafx.scene.control.RadioButton;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_ERROR_TEXT;
 import static oh.OfficeHoursPropertyType.OH_NAME_ERROR_TEXT;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE;
 
 
 /**
@@ -50,10 +53,18 @@ public class OfficeHoursController {
             AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(), OH_NAME_ERROR_TEXT, OH_NAME_ERROR_TEXT);
         }else{
         OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
-        TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email);
-        AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
-        app.processTransaction(addTATransaction);
-
+        RadioButton grauButton = (RadioButton) gui.getGUINode(OH_TOGGLE_GRADUATE);
+        RadioButton undergruadeButton = (RadioButton) gui.getGUINode(OH_TOGGLE_UNDERGRADUATE);
+        TeachingAssistantPrototype ta;
+        if(grauButton.isSelected()){
+            ta = new TeachingAssistantPrototype(name,email,"Graduate");
+            AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
+            app.processTransaction(addTATransaction);
+        }else if (undergruadeButton.isSelected()){
+            ta = new TeachingAssistantPrototype(name,email,"Undergraduate");
+            AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
+            app.processTransaction(addTATransaction);
+        }
         // NOW CLEAR THE TEXT FIELDS
         nameTF.setText("");
         nameTF.requestFocus();

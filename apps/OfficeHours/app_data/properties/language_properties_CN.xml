@@ -79,6 +79,7 @@
         <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="姓名"></property>
         <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="邮件"></property>
         <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="时间槽"></property>
+        <property name="OH_TYPE_TABLE_COLUMN_TEXT"          value="助教类型"></property>
         <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="开始时间"></property>
         <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="结束时间"></property>
         <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="星期一"></property>
@@ -90,6 +91,10 @@
         <property name="OH_NAME_TEXT_FIELD_TEXT"            value="姓名"></property>
         <property name="OH_EMAIL_TEXT_FIELD_TEXT"           value="邮件"></property>
         <property name="OH_NAME_ERROR_TEXT"                 value="无效的名字!"></property>
+        <property name="OH_TOGGLE_UNDERGRADUATE_TEXT"       value="应届生"></property>
+        <property name="OH_TOGGLE_GRADUATE_TEXT"            value="研究生"></property>
+        <property name="OH_TOGGLE_ALL_TEXT"                 value="所有"></property>
+
  
 
         <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->

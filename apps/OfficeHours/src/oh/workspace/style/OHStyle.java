@@ -23,6 +23,7 @@ public class OHStyle {
     public static final String CLASS_OH_PROMPT        = "oh_prompt";
     public static final String CLASS_OH_TEXT_FIELD    = "oh_text_field";
     public static final String CLASS_OH_BUTTON        = "oh_button";
+    public static final String CLASS_OH_TOGGLE        = "oh_toggle";
     public static final String CLASS_OH_TABLE_VIEW    = "oh_table_view";
     public static final String CLASS_OH_COLUMN        = "oh_column";
     public static final String CLASS_OH_CENTERED_COLUMN = "oh_centered_column";
