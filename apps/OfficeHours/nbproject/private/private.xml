@@ -6,15 +6,21 @@
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/work/CSE219_TAs.json</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/OfficeHoursPropertyType.java</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/controllers/OfficeHoursController.java</file>
-            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/OfficeHoursApp.java</file>
-            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/OfficeHoursWorkspace.java</file>
-            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/style/oh_style.css</file>
-            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/app_data/properties/language_properties_CN.xml</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/data/OfficeHoursData.java</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/app_data/properties/language_properties_EN.xml</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/clipboard/OfficeHoursClipboard.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/app_data/properties/app_properties.xml</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/data/TimeSlot.java</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/style/OHStyle.java</file>
             <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/files/OfficeHoursFiles.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/transactions/AddTimeSlot_Transaction.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/OfficeHoursApp.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/OfficeHoursWorkspace.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/data/TeachingAssistantPrototype.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/style/oh_style.css</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/app_data/properties/language_properties_CN.xml</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/transactions/AddTA_Transaction.java</file>
+            <file>file:/Users/zhengyu/Documents/CS3LearningSuite_v2.0/apps/OfficeHours/src/oh/workspace/foolproof/OfficeHoursFoolproofDesign.java</file>
         </group>
     </open-files>
 </project-private>

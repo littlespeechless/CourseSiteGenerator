@@ -29,6 +29,8 @@ public class OfficeHoursData implements AppDataComponent {
     ObservableList<TeachingAssistantPrototype> gradTAS; 
 
     ObservableList<TimeSlot> officeHours;
+    ObservableList<TimeSlot> undergradOH;
+    ObservableList<TimeSlot> gradOH;
     
 
     // THESE ARE THE TIME BOUNDS FOR THE OFFICE HOURS GRID. NOTE
@@ -74,14 +76,20 @@ public class OfficeHoursData implements AppDataComponent {
         TableView<TimeSlot> officeHoursTableView = (TableView)gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
         officeHours = officeHoursTableView.getItems(); 
         officeHours.clear();
+        undergradOH = new TableView<TimeSlot>().getItems();
+        gradOH = new TableView<TimeSlot>().getItems();
+        
         for (int i = startHour; i <= endHour; i++) {
             TimeSlot timeSlot = new TimeSlot(   this.getTimeString(i, true),
                                                 this.getTimeString(i, false));
             officeHours.add(timeSlot);
-            
+            //gradOH.add(timeSlot);
+            //undergradOH.add(timeSlot);
             TimeSlot halfTimeSlot = new TimeSlot(   this.getTimeString(i, false),
                                                     this.getTimeString(i+1, true));
             officeHours.add(halfTimeSlot);
+            //gradOH.add(timeSlot);
+            //undergradOH.add(timeSlot);
         }
     }
     

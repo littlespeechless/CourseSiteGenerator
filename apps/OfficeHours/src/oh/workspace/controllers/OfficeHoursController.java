@@ -11,6 +11,7 @@ import oh.data.TimeSlot;
 import oh.transactions.AddTA_Transaction;
 import oh.transactions.AddTimeSlot_Transaction;
 import djf.ui.dialogs.AppDialogsFacade;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.property.StringProperty;
@@ -106,7 +107,13 @@ public class OfficeHoursController {
         TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
         OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
         taOfficeHoursTableView.setItems(data.getAllTAS());
+        Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
         up();
+        while (timeSlotsIterator.hasNext()) {
+            TimeSlot timeSlot = timeSlotsIterator.next();
+            timeSlot.setToAll();
+        }
+        
         
     }
     public void changeToUndergraduate (){
@@ -114,14 +121,25 @@ public class OfficeHoursController {
         TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
         OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
         taOfficeHoursTableView.setItems(data.getUndergradTAS());
+        Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
         up();
+        while (timeSlotsIterator.hasNext()) {
+            TimeSlot timeSlot = timeSlotsIterator.next();
+            timeSlot.setToUndergrad();
+        }
     }
     public void changeToGrad(){
         AppGUIModule gui = app.getGUIModule();
         TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
         OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
         taOfficeHoursTableView.setItems(data.getGradTAS());
+        Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
         up();
+        while (timeSlotsIterator.hasNext()) {
+            TimeSlot timeSlot = timeSlotsIterator.next();
+            timeSlot.setToGrad();
+        }
+        
     }
     public void editTA(TeachingAssistantPrototype ta){
         showEditTADialog(app.getGUIModule().getWindow(), OH_EDIT_TA_TITLE , OH_EDIT_TA_TEXT, OH_TOGGLE_UNDERGRADUATE_TEXT, OH_TOGGLE_GRADUATE_TEXT, OH_NAME_TABLE_COLUMN_TEXT, OH_EMAIL_TABLE_COLUMN_TEXT, OH_EDIT_TA_TYPE, ta);

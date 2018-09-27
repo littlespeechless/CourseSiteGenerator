@@ -20,19 +20,53 @@ public class TimeSlot {
     private StringProperty endTime;
     private HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> tas;
     private HashMap<DayOfWeek, StringProperty> dayText;
+    private HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> undergadTAS;
+    private HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> gradTAS;
+
 
     public TimeSlot(String initStartTime, String initEndTime) {
         startTime = new SimpleStringProperty(initStartTime);
         endTime = new SimpleStringProperty(initEndTime);
         tas = new HashMap();
         dayText = new HashMap();
+        undergadTAS = new HashMap();
+        gradTAS = new HashMap();
         for (DayOfWeek dow : DayOfWeek.values()) {
             tas.put(dow, new ArrayList());
+            gradTAS.put(dow, new ArrayList());
+            undergadTAS.put(dow, new ArrayList());
             dayText.put(dow, new SimpleStringProperty());
         }
     }
-    // ACCESSORS AND MUTATORS
     public void addTA(DayOfWeek dayOfWeek, TeachingAssistantPrototype ta){
+         //add to different time slot data.
+        if (ta.getType().equals("Undergraduate")) {
+            if (undergadTAS.get(dayOfWeek).contains(ta)) {
+                undergadTAS.get(dayOfWeek).remove(ta);
+                ta.setSlots(ta.getSlots()-1);
+            }else{
+                undergadTAS.get(dayOfWeek).add(ta);
+                ta.setSlots(ta.getSlots()+1);
+            }
+            String temp ="";
+            for (int i = 0; i<undergadTAS.get(dayOfWeek).size();i++){
+                temp+=undergadTAS.get(dayOfWeek).get(i).getName()+"\n";
+            }
+            dayText.get(dayOfWeek).set(temp);
+        }else{
+            if (gradTAS.get(dayOfWeek).contains(ta)) {
+                gradTAS.get(dayOfWeek).remove(ta);
+                ta.setSlots(ta.getSlots()-1);
+            }else{
+                gradTAS.get(dayOfWeek).add(ta);
+                ta.setSlots(ta.getSlots()+1);
+            }
+            String temp ="";
+            for (int i = 0; i<gradTAS.get(dayOfWeek).size();i++){
+                temp+=gradTAS.get(dayOfWeek).get(i).getName()+"\n";
+            }
+            dayText.get(dayOfWeek).set(temp);
+        }
        if(tas.get(dayOfWeek).contains(ta)){
            tas.get(dayOfWeek).remove(ta);
            ta.setSlots(ta.getSlots()-1);
@@ -41,13 +75,37 @@ public class TimeSlot {
            tas.get(dayOfWeek).add(ta);
            ta.setSlots(ta.getSlots()+1);         
         }
-        String temp ="";
-       for (int i = 0; i<tas.get(dayOfWeek).size();i++){
-               temp+=tas.get(dayOfWeek).get(i).getName()+"\n";
-           }
-       dayText.get(dayOfWeek).set(temp);
     }
     public void removeTA(DayOfWeek dayOfWeek, TeachingAssistantPrototype ta){
+        //add to different time slot data.
+        if (ta.getType().equals("Undergraduate")) {
+            if (undergadTAS.get(dayOfWeek).contains(ta)) {
+                undergadTAS.get(dayOfWeek).remove(ta);
+                ta.setSlots(ta.getSlots()-1);
+            }else{
+                undergadTAS.get(dayOfWeek).add(ta);
+                ta.setSlots(ta.getSlots()+1);
+            }
+            String temp ="";
+            for (int i = 0; i<undergadTAS.get(dayOfWeek).size();i++){
+                temp+=undergadTAS.get(dayOfWeek).get(i).getName()+"\n";
+            }
+            dayText.get(dayOfWeek).set(temp);
+        }else{
+            if (gradTAS.get(dayOfWeek).contains(ta)) {
+                gradTAS.get(dayOfWeek).remove(ta);
+                ta.setSlots(ta.getSlots()-1);
+            }else{
+                gradTAS.get(dayOfWeek).add(ta);
+                ta.setSlots(ta.getSlots()+1);
+            }
+            String temp ="";
+            for (int i = 0; i<gradTAS.get(dayOfWeek).size();i++){
+                temp+=gradTAS.get(dayOfWeek).get(i).getName()+"\n";
+            }
+            dayText.get(dayOfWeek).set(temp);
+        }
+        // all timesolt
         if(tas.get(dayOfWeek).contains(ta)){
            tas.get(dayOfWeek).remove(ta);
            ta.setSlots(ta.getSlots()-1);   
@@ -56,12 +114,36 @@ public class TimeSlot {
            tas.get(dayOfWeek).add(ta);
            ta.setSlots(ta.getSlots()+1);
         }
-        String temp ="";
-       for (int i = 0; i<tas.get(dayOfWeek).size();i++){
-               temp+=tas.get(dayOfWeek).get(i).getName()+"\n";
-           }
-           dayText.get(dayOfWeek).set(temp);
+
     }
+    public void setToUndergrad(){
+        for (DayOfWeek dow : DayOfWeek.values()){
+            String tempString="";
+            for(int i =0;i<undergadTAS.get(dow).size();i++){
+                tempString+=undergadTAS.get(dow).get(i).getName()+"\n";
+            }
+            dayText.get(dow).set(tempString);
+        }
+    }
+    public void setToGrad(){
+        for (DayOfWeek dow : DayOfWeek.values()){
+            String tempString="";
+            for(int i =0;i<gradTAS.get(dow).size();i++){
+                tempString+=gradTAS.get(dow).get(i).getName()+"\n";
+            }
+            dayText.get(dow).set(tempString);
+        }
+    }
+    public void setToAll(){
+        for (DayOfWeek dow : DayOfWeek.values()){
+            String tempString="";
+            for(int i =0;i<tas.get(dow).size();i++){
+                tempString+=tas.get(dow).get(i).getName()+"\n";
+            }
+            dayText.get(dow).set(tempString);
+        }
+    }
+    // ACCESSORS AND MUTATORS
     public String getStartTime() {
         return startTime.getValue();
     }

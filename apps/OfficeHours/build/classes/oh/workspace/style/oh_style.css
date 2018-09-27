@@ -136,8 +136,10 @@
 .oh_text_field{
     -fx-focus-color: red;
     -fx-faint-focus-color: #ff000022;
+    -fx-text-fill: red;
 }
 .oh_text_field.error{
     -fx-focus-color: #039ED3;
     -fx-faint-focus-color: #039ED322;
+    -fx-text-fill: black;
 }

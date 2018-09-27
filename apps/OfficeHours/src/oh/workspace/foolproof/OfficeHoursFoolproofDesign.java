@@ -44,19 +44,22 @@ public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         if(radioButton.isSelected()){
             
         }else {
-            if (officeHoursData.getTAWithName(name)!=null||name.equals("")) {
-                
-            }else{
-                nameField.getStyleClass().add("error");
-                
-            }
-            if(matcher.find()==true){
-                emailField.getStyleClass().add("error");
-            }
             if (matcher.find()==true&&officeHoursData.getTAWithName(name)==null) {
                 ((Button) gui.getGUINode(OH_ADD_TA_BUTTON)).setDisable(false);
+                nameField.getStyleClass().add("error");
+                emailField.getStyleClass().add("error");
+            }else{
+               if (officeHoursData.getTAWithName(name)!=null||name.equals("")) {
+                
+                }else{
+                    nameField.getStyleClass().add("error");
 
+                }
+                if(matcher.find()==true){
+                    emailField.getStyleClass().add("error");
+                }
             }
+            
             
            
         }
