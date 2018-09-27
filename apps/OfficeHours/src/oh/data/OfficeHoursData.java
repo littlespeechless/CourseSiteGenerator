@@ -25,6 +25,8 @@ public class OfficeHoursData implements AppDataComponent {
     // NOTE THAT THIS DATA STRUCTURE WILL DIRECTLY STORE THE
     // DATA IN THE ROWS OF THE TABLE VIEW
     ObservableList<TeachingAssistantPrototype> teachingAssistants;
+    ObservableList<TeachingAssistantPrototype> underGradTAS;
+    ObservableList<TeachingAssistantPrototype> gradTAS; 
 
     ObservableList<TimeSlot> officeHours;
     
@@ -55,6 +57,9 @@ public class OfficeHoursData implements AppDataComponent {
         // CONSTRUCT THE LIST OF TAs FOR THE TABLE
         TableView<TeachingAssistantPrototype> taTableView = (TableView)gui.getGUINode(OH_TAS_TABLE_VIEW);
         teachingAssistants = taTableView.getItems();
+        underGradTAS = new TableView<TeachingAssistantPrototype>().getItems();
+        gradTAS = new TableView<TeachingAssistantPrototype>().getItems();
+       
 
         // THESE ARE THE DEFAULT OFFICE HOURS
         startHour = MIN_START_HOUR;
@@ -154,16 +159,40 @@ public class OfficeHoursData implements AppDataComponent {
     }
     
     public void addTA(TeachingAssistantPrototype ta) {
-        if (!this.teachingAssistants.contains(ta))
+        if (!this.teachingAssistants.contains(ta)){
             this.teachingAssistants.add(ta);
+            if(ta.getType().equals("Undergraduate")){
+                addUnderGradTA(ta);
+            }else{
+                addGradTA(ta);
+            }
+        }
     }
-    
+    public void addUnderGradTA(TeachingAssistantPrototype ta){
+       if (!this.underGradTAS.contains(ta))
+            this.underGradTAS.add(ta);
+    }
+    public void addGradTA(TeachingAssistantPrototype ta){
+       if (!this.gradTAS.contains(ta))
+            this.gradTAS.add(ta);
+    }
+    public void removeGradTA(TeachingAssistantPrototype ta){
+        this.gradTAS.remove(ta);
+    }
+    public void removeUndergradTA(TeachingAssistantPrototype ta){
+        this.underGradTAS.remove(ta);
+    }
     public void removeTA(TeachingAssistantPrototype ta) {
         // REMOVE THE TA FROM THE LIST OF TAs
         this.teachingAssistants.remove(ta);
-        
+        if(ta.getType().equals("Undergraduate")){
+            this.underGradTAS.remove(ta);
+        }else{
+            this.gradTAS.remove(ta);
+        }
         // AND REMOVE THE TA FROM ALL THEIR OFFICE HOURS
     }
+    
     public boolean isDayOfWeekColumn(int columnNumber) {
         return columnNumber >= 2;
     }
@@ -171,7 +200,12 @@ public class OfficeHoursData implements AppDataComponent {
     public DayOfWeek getColumnDayOfWeek(int columnNumber) {
         return TimeSlot.DayOfWeek.values()[columnNumber-2];
     }
-
+    public Iterator<TeachingAssistantPrototype> undergraduateIterator() {
+        return underGradTAS.iterator();
+    }
+    public Iterator<TeachingAssistantPrototype> graduateIterator() {
+        return gradTAS.iterator();
+    }
     public Iterator<TeachingAssistantPrototype> teachingAssistantsIterator() {
         return teachingAssistants.iterator();
     }
@@ -184,7 +218,7 @@ public class OfficeHoursData implements AppDataComponent {
         Iterator<TeachingAssistantPrototype> taIterator = teachingAssistants.iterator();
         while (taIterator.hasNext()) {
             TeachingAssistantPrototype ta = taIterator.next();
-            if (ta.getName().toUpperCase().equals(name.toUpperCase()))
+            if (ta.getName().toUpperCase().trim().equals(name.toUpperCase()))
                 return ta;
         }
         return null;
@@ -199,5 +233,15 @@ public class OfficeHoursData implements AppDataComponent {
                 return timeSlot;
         }
         return null;
+    }
+    public ObservableList<TeachingAssistantPrototype> getAllTAS(){
+        return teachingAssistants;
+    }
+    public ObservableList<TeachingAssistantPrototype> getUndergradTAS(){
+        return underGradTAS;
+    }
+    public ObservableList<TeachingAssistantPrototype> getGradTAS(){
+         
+        return gradTAS;
     }
 }

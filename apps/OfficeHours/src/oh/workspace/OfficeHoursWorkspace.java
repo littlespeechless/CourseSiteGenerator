@@ -5,7 +5,12 @@ import djf.modules.AppFoolproofModule;
 import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
 import djf.ui.AppNodesBuilder;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
@@ -17,14 +22,19 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 import properties_manager.PropertiesManager;
 import oh.OfficeHoursApp;
 import oh.OfficeHoursPropertyType;
 import static oh.OfficeHoursPropertyType.*;
+import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.data.TimeSlot;
 import oh.workspace.controllers.OfficeHoursController;
@@ -69,11 +79,11 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         RadioButton allButton = ohBuilder.buildRadioButton(OH_TOGGLE_ALL, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
         RadioButton underguasButton=ohBuilder.buildRadioButton(OH_TOGGLE_UNDERGRADUATE, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
         RadioButton graudButton=ohBuilder.buildRadioButton(OH_TOGGLE_GRADUATE, taTypeBox,CLASS_OH_TOGGLE , ENABLED);
-
         allButton.setToggleGroup(taTypGroup);
         allButton.setSelected(ENABLED);
         underguasButton.setToggleGroup(taTypGroup);
         graudButton.setToggleGroup(taTypGroup);
+        
        
 
         
@@ -143,31 +153,64 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
 
     private void initControllers() {
         OfficeHoursController controller = new OfficeHoursController((OfficeHoursApp) app);
+        
+        //KEYBOARD 
         AppGUIModule gui = app.getGUIModule();
+        
         ((TextField) gui.getGUINode(OH_NAME_TEXT_FIELD)).setOnKeyPressed(e -> {
             controller.up();
         });
+        
         ((TextField) gui.getGUINode(OH_NAME_TEXT_FIELD)).setOnKeyReleased(e -> {
             controller.up();
         });
-        ((Button) gui.getGUINode(OH_ADD_TA_BUTTON)).setOnAction(e -> {
-            controller.processAddTA();
-        });
+        
         ((TextField) gui.getGUINode(OH_EMAIL_TEXT_FIELD)).setOnKeyPressed(e -> {
             controller.up();
         });
+        
         ((TextField) gui.getGUINode(OH_EMAIL_TEXT_FIELD)).setOnKeyReleased(e -> {
             controller.up();
         });
+        
+        
+        ((Button) gui.getGUINode(OH_ADD_TA_BUTTON)).setOnAction(e -> {
+            controller.processAddTA();
+        });
+        //TIME SLOT
         TableView officeHoursTableView = (TableView) gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
         officeHoursTableView.getSelectionModel().setCellSelectionEnabled(true);
         TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
-        
+        taOfficeHoursTableView.setOnMouseClicked((event) -> {
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                TeachingAssistantPrototype ta = (TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem();
+                controller.editTA(ta);
+            }
+        });
         officeHoursTableView.setOnMouseClicked((event) -> {
               TablePosition tp = officeHoursTableView.getFocusModel().getFocusedCell();
               TeachingAssistantPrototype ta = (TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem();
                if (!(ta==null)&&tp.getColumn()>1) {
                   controller.processAddTimeslot(ta,tp.getColumn(),(TimeSlot)officeHoursTableView.getSelectionModel().getSelectedItem());
+            }
+        });
+        //TA TOGGLE
+        RadioButton ALL = (RadioButton)gui.getGUINode(OH_TOGGLE_ALL);
+        RadioButton Undergrad = (RadioButton)gui.getGUINode(OH_TOGGLE_UNDERGRADUATE);
+        RadioButton Grad = (RadioButton)gui.getGUINode(OH_TOGGLE_GRADUATE);
+        ALL.setOnAction((event) -> {
+            if(ALL.isSelected()){
+                controller.changeToAll();
+            }
+        });
+        Undergrad.setOnAction((event) -> {
+            if(Undergrad.isSelected()){
+                controller.changeToUndergraduate();
+            }
+        });
+        Grad.setOnAction((event) -> {
+            if(Grad.isSelected()){
+                controller.changeToGrad();
             }
         });
         // DON'T LET ANYONE SORT THE TABLES
@@ -187,4 +230,6 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     public void showNewDialog() {
         // WE AREN'T USING THIS FOR THIS APPLICATION
     }
+    
+    
 }

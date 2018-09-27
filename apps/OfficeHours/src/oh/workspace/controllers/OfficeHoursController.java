@@ -13,12 +13,34 @@ import oh.transactions.AddTimeSlot_Transaction;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.util.Pair;
+import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TEXT;
+import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TITLE;
+import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TYPE;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_ERROR_TEXT;
+import static oh.OfficeHoursPropertyType.OH_EMAIL_TABLE_COLUMN_TEXT;
 import static oh.OfficeHoursPropertyType.OH_NAME_ERROR_TEXT;
+import static oh.OfficeHoursPropertyType.OH_NAME_TABLE_COLUMN_TEXT;
+import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE_TEXT;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE_TEXT;
+import properties_manager.PropertiesManager;
+
 
 
 /**
@@ -59,7 +81,8 @@ public class OfficeHoursController {
         if(grauButton.isSelected()){
             ta = new TeachingAssistantPrototype(name,email,"Graduate");
             AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
-            app.processTransaction(addTATransaction);
+            app.processTransaction(addTATransaction);            
+           
         }else if (undergruadeButton.isSelected()){
             ta = new TeachingAssistantPrototype(name,email,"Undergraduate");
             AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
@@ -77,5 +100,69 @@ public class OfficeHoursController {
         TimeSlot data = dataSlot;
         AddTimeSlot_Transaction addTimeSlot_Transaction = new AddTimeSlot_Transaction(app,data, ta,column);
         app.processTransaction(addTimeSlot_Transaction);
+    }
+    public void changeToAll(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        taOfficeHoursTableView.setItems(data.getAllTAS());
+        up();
+        
+    }
+    public void changeToUndergraduate (){
+        AppGUIModule gui = app.getGUIModule();
+        TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        taOfficeHoursTableView.setItems(data.getUndergradTAS());
+        up();
+    }
+    public void changeToGrad(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView taOfficeHoursTableView = (TableView) gui.getGUINode(OH_TAS_TABLE_VIEW);
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        taOfficeHoursTableView.setItems(data.getGradTAS());
+        up();
+    }
+    public void editTA(TeachingAssistantPrototype ta){
+        showEditTADialog(app.getGUIModule().getWindow(), OH_EDIT_TA_TITLE , OH_EDIT_TA_TEXT, OH_TOGGLE_UNDERGRADUATE_TEXT, OH_TOGGLE_GRADUATE_TEXT, OH_NAME_TABLE_COLUMN_TEXT, OH_EMAIL_TABLE_COLUMN_TEXT, OH_EDIT_TA_TYPE, ta);
+    }
+    public static void showEditTADialog(Stage parent,Object titleProperty, Object contentProperty, 
+        Object undergradProperty,Object gradProperty,Object nameFiedProperty, Object emailFiedProperty, Object typeProperty, 
+        TeachingAssistantPrototype ta){
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String title = props.getProperty(titleProperty);
+        String contentText = props.getProperty(contentProperty);
+        // Create the custom dialog.
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setContentText(contentText);
+        //set textfield
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        RadioButton undergrad = new RadioButton(props.getProperty(undergradProperty));
+        RadioButton grad = new RadioButton(props.getProperty(gradProperty));
+        ToggleGroup toggleGroup = new ToggleGroup();
+        undergrad.setToggleGroup(toggleGroup);
+        grad.setToggleGroup(toggleGroup);
+        HBox combinBox = new HBox(undergrad,grad);
+        TextField name = new TextField();
+        name.setText(ta.getName());
+        TextField email = new TextField();
+        email.setText(ta.getEmail());
+        grid.add(new Label(props.getProperty(contentProperty)), 0, 0);
+        grid.add(new Label(props.getProperty(nameFiedProperty)), 0, 1);
+        grid.add(name, 1, 1);
+        grid.add(new Label(props.getProperty(emailFiedProperty)), 0, 2);
+        grid.add(email, 1, 2);
+        grid.add(new Label(props.getProperty(typeProperty)),0,3);
+        grid.add(combinBox, 1, 3);
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        Node loginButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
+        loginButton.setDisable(true);
+
+        dialog.showAndWait();
     }
 }

@@ -18,16 +18,25 @@ import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import properties_manager.PropertiesManager;
 
 /**
@@ -177,7 +186,7 @@ public class AppDialogsFacade {
         });        
         Platform.runLater(()->textDialog.showAndWait());
     }
-
+    
     public static String showWelcomeDialog(AppTemplate app) {
         // FIRST LOAD ALL THE RECENT WORK
         AppRecentWorkModule recentWork = app.getRecentWorkModule();
@@ -205,4 +214,5 @@ public class AppDialogsFacade {
         Optional<ButtonType> result = confirmationDialog.showAndWait();
         return result.get();
     }
+    
 }

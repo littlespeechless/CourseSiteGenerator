@@ -94,7 +94,9 @@
         <property name="OH_TOGGLE_UNDERGRADUATE_TEXT"              value="Undergraduate"></property>
         <property name="OH_TOGGLE_GRADUATE_TEXT"              value="Graduate"></property>
         <property name="OH_TOGGLE_ALL_TEXT"              value="All"></property>
-
+        <property name="OH_EDIT_TA_TITLE"                value="Editing TA"></property>
+        <property name="OH_EDIT_TA_TEXT"                 value="Edit TA"></property>
+        <property name="OH_EDIT_TA_TYPE"                 value="Type"></property>
 
         <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
         <property name="LANGUAGE_DIALOG_TITLE"          value="App Language Selection"></property>
