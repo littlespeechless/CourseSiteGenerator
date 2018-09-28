@@ -22,6 +22,7 @@ public class TimeSlot {
     private HashMap<DayOfWeek, StringProperty> dayText;
     private HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> undergadTAS;
     private HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> gradTAS;
+    private HashMap<DayOfWeek,ArrayList<TeachingAssistantPrototype>> clipboard;
 
 
     public TimeSlot(String initStartTime, String initEndTime) {
@@ -31,10 +32,12 @@ public class TimeSlot {
         dayText = new HashMap();
         undergadTAS = new HashMap();
         gradTAS = new HashMap();
+        clipboard = new HashMap();
         for (DayOfWeek dow : DayOfWeek.values()) {
             tas.put(dow, new ArrayList());
             gradTAS.put(dow, new ArrayList());
             undergadTAS.put(dow, new ArrayList());
+            clipboard.put(dow, new ArrayList());
             dayText.put(dow, new SimpleStringProperty());
         }
     }
@@ -131,6 +134,48 @@ public class TimeSlot {
                 }
                     
                 
+            }
+        }
+    }
+    public void cutTATimeslot(TeachingAssistantPrototype ta){
+        if (ta.getType().equals("Undergraduate")) {
+            for (DayOfWeek dow : DayOfWeek.values()){
+                if (undergadTAS.get(dow).contains(ta)) {
+                    undergadTAS.get(dow).remove(ta);
+                    tas.get(dow).remove(ta);
+                    clipboard.get(dow).add(ta);
+                    ta.setSlots(ta.getSlots()-1);
+                }
+            }
+        }else{
+            for (DayOfWeek dow : DayOfWeek.values()){
+                if (gradTAS.get(dow).contains(ta)) {
+                    gradTAS.get(dow).remove(ta);
+                    tas.get(dow).remove(ta);
+                    clipboard.get(dow).add(ta);
+                    ta.setSlots(ta.getSlots()-1);
+                }
+            }
+        }
+    }
+    public void cutTATimesoltRestore(TeachingAssistantPrototype ta ){
+        if (ta.getType().equals("Undergraduate")) {
+            for (DayOfWeek dow : DayOfWeek.values()){
+                if (clipboard.get(dow).contains(ta)) {
+                    undergadTAS.get(dow).add(ta);
+                    tas.get(dow).add(ta);
+                    clipboard.get(dow).remove(ta);
+                    ta.setSlots(ta.getSlots()+1);
+                }
+            }
+        }else{
+            for (DayOfWeek dow : DayOfWeek.values()){
+                if (clipboard.get(dow).contains(ta)) {
+                    gradTAS.get(dow).add(ta);
+                    tas.get(dow).add(ta);
+                    clipboard.get(dow).remove(ta);
+                    ta.setSlots(ta.getSlots()+1);
+                }
             }
         }
     }

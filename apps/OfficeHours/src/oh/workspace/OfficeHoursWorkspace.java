@@ -185,6 +185,11 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 TeachingAssistantPrototype ta = (TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem();
                 controller.editTA(ta);
+            }else{
+                if ((TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem()!=null) {
+                    controller.up();
+                }
+        
             }
         });
         officeHoursTableView.setOnMouseClicked((event) -> {

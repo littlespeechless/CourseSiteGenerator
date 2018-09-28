@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class OfficeHoursFiles implements AppFileComponent {
     
     // THESE ARE USED FOR IDENTIFYING JSON TYPES
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
+    static final String JSON_GRAD_TAS = "grad_tas";
     static final String JSON_NAME = "name";
     static final String JSON_EMAIL= "email";
     static final String JSON_OFFICE_HOURS = "officeHours";
@@ -80,6 +82,16 @@ public class OfficeHoursFiles implements AppFileComponent {
             dataManager.addTA(ta);
             dataManager.addUnderGradTA(ta);
         }
+        //NOW LOAD ALL THE GRAD TAs
+        JsonArray jsonTAArray2 = json.getJsonArray(JSON_GRAD_TAS);
+        for (int i = 0; i < jsonTAArray2.size(); i++) {
+            JsonObject jsonTA = jsonTAArray2.getJsonObject(i);
+            String name = jsonTA.getString(JSON_NAME);
+            String email = jsonTA.getString(JSON_EMAIL);
+            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,"Graduate");
+            dataManager.addTA(ta);
+            dataManager.addGradTA(ta);
+        }
         // TIME SLOT
         JsonArray jsonTAOHArray = json.getJsonArray(JSON_OFFICE_HOURS);
         for (int i = 0; i<jsonTAOHArray.size();i++){
@@ -117,15 +129,26 @@ public class OfficeHoursFiles implements AppFileComponent {
 	OfficeHoursData dataManager = (OfficeHoursData)data;
 
 	// NOW BUILD THE TA JSON OBJCTS TO SAVE
-	JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();
-	Iterator<TeachingAssistantPrototype> tasIterator = dataManager.teachingAssistantsIterator();
-        while (tasIterator.hasNext()) {
-            TeachingAssistantPrototype ta = tasIterator.next();
+        //Undergrad save 
+	JsonArrayBuilder taUndergradArrayBuilder = Json.createArrayBuilder();
+	Iterator<TeachingAssistantPrototype> undergradIterator = dataManager.undergraduateIterator();
+        while (undergradIterator.hasNext()) {
+            TeachingAssistantPrototype ta = undergradIterator.next();
 	    JsonObject taJson = Json.createObjectBuilder()
 		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL, ta.getEmail()).build();
-	    taArrayBuilder.add(taJson);
+	    taUndergradArrayBuilder.add(taJson);
 	}
-	JsonArray undergradTAsArray = taArrayBuilder.build();
+	JsonArray undergradTAsArray = taUndergradArrayBuilder.build();
+        //Grad save
+        JsonArrayBuilder taGradArrayBuilder = Json.createArrayBuilder();
+	Iterator<TeachingAssistantPrototype> gradIterator = dataManager.graduateIterator();
+        while (gradIterator.hasNext()) {
+            TeachingAssistantPrototype ta = gradIterator.next();
+	    JsonObject taJson = Json.createObjectBuilder()
+		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL, ta.getEmail()).build();
+	    taGradArrayBuilder.add(taJson);
+	}
+	JsonArray gradTAsArray = taGradArrayBuilder.build();
         //time slot save
         JsonArrayBuilder taOHbArrayBuilder = Json.createArrayBuilder();
         Iterator<TimeSlot> ohIterator = dataManager.officeHoursIterator();
@@ -149,6 +172,7 @@ public class OfficeHoursFiles implements AppFileComponent {
 		.add(JSON_START_HOUR, "" + dataManager.getStartHour())
 		.add(JSON_END_HOUR, "" + dataManager.getEndHour())
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
+                .add(JSON_GRAD_TAS, gradTAsArray)
                 .add(JSON_OFFICE_HOURS,officeHourArray)
 		.build();
 	

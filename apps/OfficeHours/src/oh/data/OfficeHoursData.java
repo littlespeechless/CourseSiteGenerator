@@ -188,12 +188,7 @@ public class OfficeHoursData implements AppDataComponent {
        if (!this.gradTAS.contains(ta))
             this.gradTAS.add(ta);
     }
-    public void removeGradTA(TeachingAssistantPrototype ta){
-        this.gradTAS.remove(ta);
-    }
-    public void removeUndergradTA(TeachingAssistantPrototype ta){
-        this.underGradTAS.remove(ta);
-    }
+   
     public void removeTA(TeachingAssistantPrototype ta) {
         // REMOVE THE TA FROM THE LIST OF TAs
         this.teachingAssistants.remove(ta);
@@ -204,7 +199,27 @@ public class OfficeHoursData implements AppDataComponent {
         }
         // AND REMOVE THE TA FROM ALL THEIR OFFICE HOURS
     }
-    
+    public void cutTA(TeachingAssistantPrototype ta ){
+        removeTA(ta);
+        Iterator<TimeSlot> timeSlotsIterator = officeHoursIterator();
+        while (timeSlotsIterator.hasNext()) {
+            TimeSlot timeSlot = timeSlotsIterator.next();
+            timeSlot.cutTATimeslot(ta);
+        }
+        refreshOH();
+    }
+    public void cutTARestore(TeachingAssistantPrototype ta){
+        addTA(ta);
+        Iterator<TimeSlot> timeSlotsIterator = officeHoursIterator();
+        while (timeSlotsIterator.hasNext()) {
+            TimeSlot timeSlot = timeSlotsIterator.next();
+            timeSlot.cutTATimesoltRestore(ta);
+        }
+        refreshOH();
+    }
+    public void pasteTA(TeachingAssistantPrototype ta){
+        
+    }
     public boolean isDayOfWeekColumn(int columnNumber) {
         return columnNumber >= 2;
     }
