@@ -159,7 +159,6 @@ public class AppDialogsFacade {
         textArea.setMaxWidth(Double.MAX_VALUE);
         textArea.setMaxHeight(Double.MAX_VALUE);
         stackTraceDialog.getDialogPane().setExpandableContent(textArea);
-
         // OPEN THE DIALOG
         stackTraceDialog.showAndWait();
     }

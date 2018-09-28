@@ -4,10 +4,14 @@ import javafx.collections.ObservableList;
 import djf.components.AppDataComponent;
 import djf.modules.AppGUIModule;
 import java.util.Iterator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import oh.OfficeHoursApp;
 import static oh.OfficeHoursPropertyType.OH_OFFICE_HOURS_TABLE_VIEW;
 import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_ALL;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE;
 import oh.data.TimeSlot.DayOfWeek;
 
 /**
@@ -241,6 +245,49 @@ public class OfficeHoursData implements AppDataComponent {
                 return timeSlot;
         }
         return null;
+    }
+    public  void editTA(TeachingAssistantPrototype ta,String newName,String newEmail,String newType){
+        if (ta.getType().equals("Undergraduate")&&!newType.equals("Undergraduate")) {
+            underGradTAS.remove(ta);
+            gradTAS.add(ta);
+            
+        }else if(ta.getType().equals("Graduate")&&!newType.equals("Graduate")){
+            gradTAS.remove(ta);
+            underGradTAS.add(ta);
+        }
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
+          while (timeSlotsIterator.hasNext()) {
+             TimeSlot timeSlot = timeSlotsIterator.next();
+             timeSlot.editTATimesolot(ta, newType);
+           }
+            ta.setEmail(newEmail);
+            ta.setName(newName);
+            ta.setType(newType);
+            refreshOH();
+    }
+    public void refreshOH(){
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+            if (((RadioButton)gui.getGUINode(OH_TOGGLE_ALL)).isSelected()) {
+                Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
+                while (timeSlotsIterator.hasNext()) {
+                    TimeSlot timeSlot = timeSlotsIterator.next();
+                    timeSlot.setToAll();
+                }
+            }else if(((RadioButton)gui.getGUINode(OH_TOGGLE_UNDERGRADUATE)).isSelected()){
+                Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
+                while (timeSlotsIterator.hasNext()) {
+                    TimeSlot timeSlot = timeSlotsIterator.next();
+                    timeSlot.setToUndergrad();
+                }
+            }else if(((RadioButton)gui.getGUINode(OH_TOGGLE_GRADUATE)).isSelected()){
+                Iterator<TimeSlot> timeSlotsIterator = data.officeHoursIterator();
+                while (timeSlotsIterator.hasNext()) {
+                    TimeSlot timeSlot = timeSlotsIterator.next();
+                    timeSlot.setToGrad();
+                }
+            }
     }
     public ObservableList<TeachingAssistantPrototype> getAllTAS(){
         return teachingAssistants;

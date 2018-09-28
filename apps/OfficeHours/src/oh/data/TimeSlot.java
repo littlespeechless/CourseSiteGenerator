@@ -69,11 +69,11 @@ public class TimeSlot {
         }
        if(tas.get(dayOfWeek).contains(ta)){
            tas.get(dayOfWeek).remove(ta);
-           ta.setSlots(ta.getSlots()-1);
+           
            
        }else{
            tas.get(dayOfWeek).add(ta);
-           ta.setSlots(ta.getSlots()+1);         
+           
         }
     }
     public void removeTA(DayOfWeek dayOfWeek, TeachingAssistantPrototype ta){
@@ -107,14 +107,32 @@ public class TimeSlot {
         }
         // all timesolt
         if(tas.get(dayOfWeek).contains(ta)){
-           tas.get(dayOfWeek).remove(ta);
-           ta.setSlots(ta.getSlots()-1);   
+           tas.get(dayOfWeek).remove(ta);   
            
-       }else{
+        }else{
            tas.get(dayOfWeek).add(ta);
-           ta.setSlots(ta.getSlots()+1);
+           
         }
 
+    }
+    public void editTATimesolot(TeachingAssistantPrototype ta, String newType){
+        if (ta.getType().equals("Undergraduate")&&!newType.equals("Undergraduate")) {
+            for (DayOfWeek dow : DayOfWeek.values()){            
+                    if(undergadTAS.get(dow).contains(ta)){
+                        undergadTAS.get(dow).remove(ta);               
+                        gradTAS.get(dow).add(ta);
+                    }              
+            }
+        }else if(ta.getType().equals("Graduate")&&!newType.equals("Graduate")){
+            for (DayOfWeek dow : DayOfWeek.values()){            
+                if(gradTAS.get(dow).contains(ta)){
+                    gradTAS.get(dow).remove(ta);                                
+                    undergadTAS.get(dow).add(ta);
+                }
+                    
+                
+            }
+        }
     }
     public void setToUndergrad(){
         for (DayOfWeek dow : DayOfWeek.values()){

@@ -12,12 +12,14 @@ import oh.transactions.AddTA_Transaction;
 import oh.transactions.AddTimeSlot_Transaction;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -28,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import static oh.OfficeHoursPropertyType.OH_ADD_TA_BUTTON;
 import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TEXT;
 import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TITLE;
 import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TYPE;
@@ -36,10 +39,13 @@ import static oh.OfficeHoursPropertyType.OH_EMAIL_TABLE_COLUMN_TEXT;
 import static oh.OfficeHoursPropertyType.OH_NAME_ERROR_TEXT;
 import static oh.OfficeHoursPropertyType.OH_NAME_TABLE_COLUMN_TEXT;
 import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
+import static oh.OfficeHoursPropertyType.OH_TOGGLE_ALL;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE_TEXT;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_UNDERGRADUATE_TEXT;
+import oh.transactions.EditTA_Transaction;
+import static oh.workspace.foolproof.OfficeHoursFoolproofDesign.VALID_EMAIL_ADDRESS_REGEX;
 import properties_manager.PropertiesManager;
 
 
@@ -144,14 +150,14 @@ public class OfficeHoursController {
     public void editTA(TeachingAssistantPrototype ta){
         showEditTADialog(app.getGUIModule().getWindow(), OH_EDIT_TA_TITLE , OH_EDIT_TA_TEXT, OH_TOGGLE_UNDERGRADUATE_TEXT, OH_TOGGLE_GRADUATE_TEXT, OH_NAME_TABLE_COLUMN_TEXT, OH_EMAIL_TABLE_COLUMN_TEXT, OH_EDIT_TA_TYPE, ta);
     }
-    public static void showEditTADialog(Stage parent,Object titleProperty, Object contentProperty, 
+    public  void showEditTADialog(Stage parent,Object titleProperty, Object contentProperty, 
         Object undergradProperty,Object gradProperty,Object nameFiedProperty, Object emailFiedProperty, Object typeProperty, 
         TeachingAssistantPrototype ta){
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String title = props.getProperty(titleProperty);
         String contentText = props.getProperty(contentProperty);
         // Create the custom dialog.
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        Dialog dialog = new Dialog<>();
         dialog.setTitle(title);
         dialog.setContentText(contentText);
         //set textfield
@@ -164,6 +170,11 @@ public class OfficeHoursController {
         ToggleGroup toggleGroup = new ToggleGroup();
         undergrad.setToggleGroup(toggleGroup);
         grad.setToggleGroup(toggleGroup);
+        if (ta.getType().equals("Undergraduate")) {
+            undergrad.setSelected(true);
+        }else{
+            grad.setSelected(true);
+        }
         HBox combinBox = new HBox(undergrad,grad);
         TextField name = new TextField();
         name.setText(ta.getName());
@@ -178,9 +189,101 @@ public class OfficeHoursController {
         grid.add(combinBox, 1, 3);
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        Node loginButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
-        loginButton.setDisable(true);
-
-        dialog.showAndWait();
+        Node oKButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
+        oKButton.setDisable(true);
+        name.setOnKeyPressed((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);
+        });
+        name.setOnKeyReleased((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);
+     
+        });
+        email.setOnKeyPressed((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);
+        });
+        email.setOnKeyReleased((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);
+     
+        });
+        
+        grad.setOnAction((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);            
+            
+        });
+        undergrad.setOnAction((event) -> {
+             validateInput(name, email, oKButton,undergrad,grad,ta);            
+        });
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(!result.isPresent()){
+            // alert is exited, no button has been pressed.
+        }else if(result.get() == ButtonType.OK){
+            //oke button is pressed
+            OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+            if (undergrad.isSelected()) {
+                EditTA_Transaction editTA_Transaction = new 
+                EditTA_Transaction(data, ta, name.getText(), email.getText(), "Undergraduate");
+                app.processTransaction(editTA_Transaction);
+            }else{
+                EditTA_Transaction editTA_Transaction = new 
+                EditTA_Transaction(data, ta, name.getText(), email.getText(), "Graduate");
+                app.processTransaction(editTA_Transaction);
+            }
+            data.refreshOH();
+            
+        }else if(result.get() == ButtonType.CANCEL){
+            // cancel button is pressed
+        }
+        
+        
+    }
+    
+    public void validateInput(TextField nameField, TextField emailField,Node node,
+        RadioButton undergrad, RadioButton grad,TeachingAssistantPrototype ta){
+        node.setDisable(true);
+        String name = nameField.getText().trim();
+        String email =emailField.getText();
+        final String invalidCSS = "-fx-focus-color: red;-fx-faint-focus-color: #ff000022;-fx-text-fill: red;";
+        final String validCSS="-fx-focus-color: #039ED3;-fx-faint-focus-color: #039ED322;-fx-text-fill: black;";
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
+        OfficeHoursData officeHoursData = (OfficeHoursData) app.getDataComponent();
+        nameField.setStyle(invalidCSS);
+        emailField.setStyle(invalidCSS);
+        if(name.equals(ta.getName())){
+                if (email.equals(ta.getEmail())) {
+                    if (ta.getType().equals("Undergraduate")&&undergrad.isSelected()==false) {
+                        nameField.setStyle(validCSS);
+                        emailField.setStyle(validCSS);
+                        node.setDisable(false);
+                        }else if (ta.getType().equals("Graduate")&&grad.isSelected()==false){
+                            nameField.setStyle(validCSS);
+                            emailField.setStyle(validCSS);
+                            node.setDisable(false);
+                        }         
+                }else{
+                    if (!matcher.find()==true) {
+                        nameField.setStyle(invalidCSS);
+                        emailField.setStyle(invalidCSS);
+                    }else{
+                        nameField.setStyle(validCSS);
+                        emailField.setStyle(validCSS);
+                        node.setDisable(false);  
+                    }
+                }
+        }
+        else if (matcher.find()==true&&officeHoursData.getTAWithName(name)==null) {
+                node.setDisable(false);
+                nameField.setStyle(validCSS);
+                emailField.setStyle(validCSS);                
+        }else{
+               if (officeHoursData.getTAWithName(name)!=null||name.equals("")) {
+                   
+                }else{
+                    nameField.setStyle(validCSS);
+                }
+                if(matcher.find()==true){
+                    emailField.setStyle(validCSS);
+                }
+                
+        }
     }
 }
