@@ -10,7 +10,7 @@
     ],
     "grad_tas":[
         {
-            "name":"test2",
+            "name":"co",
             "email":"test2@c.com"
         }
     ],
@@ -18,7 +18,7 @@
         {
             "time":"9_30am",
             "day":"TUESDAY",
-            "name":"test2"
+            "name":"co"
         },
         {
             "time":"10_00am",
@@ -28,12 +28,12 @@
         {
             "time":"10_00am",
             "day":"THURSDAY",
-            "name":"test2"
+            "name":"co"
         },
         {
             "time":"10_30am",
             "day":"MONDAY",
-            "name":"test2"
+            "name":"co"
         },
         {
             "time":"10_30am",
@@ -53,7 +53,7 @@
         {
             "time":"1_00pm",
             "day":"WEDNESDAY",
-            "name":"test2"
+            "name":"co"
         },
         {
             "time":"1_00pm",

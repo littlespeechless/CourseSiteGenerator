@@ -24,8 +24,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -36,8 +39,10 @@ import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TITLE;
 import static oh.OfficeHoursPropertyType.OH_EDIT_TA_TYPE;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_ERROR_TEXT;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_TABLE_COLUMN_TEXT;
+import static oh.OfficeHoursPropertyType.OH_MONDAY_TABLE_COLUMN;
 import static oh.OfficeHoursPropertyType.OH_NAME_ERROR_TEXT;
 import static oh.OfficeHoursPropertyType.OH_NAME_TABLE_COLUMN_TEXT;
+import static oh.OfficeHoursPropertyType.OH_OFFICE_HOURS_TABLE_VIEW;
 import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_ALL;
 import static oh.OfficeHoursPropertyType.OH_TOGGLE_GRADUATE;
@@ -285,5 +290,37 @@ public class OfficeHoursController {
                 }
                 
         }
+    }
+    public void highlightOH(TeachingAssistantPrototype ta){
+        AppGUIModule gui = app.getGUIModule();
+        TableView<TimeSlot> tableView = (TableView) gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
+        OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
+        data.refreshOH();
+        
+        for(int i =2; i<tableView.getColumns().size();i++){
+            TableColumn column = tableView.getColumns().get(i);
+            column.setCellFactory(col -> {
+                    return new TableCell<TimeSlot, String>() {
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item == null || empty) {
+                                setText(null);
+                                setStyle("-fx-background-color: none");
+                            } else {
+                                if (item.toUpperCase().contains(ta.getName().toUpperCase())) {
+                                    setText(item);
+                                    setStyle("-fx-background-color: yellow");
+                                }else{
+                                    setText(item);
+                                    setStyle("-fx-background-color: none");
+                                }
+                                
+                            }
+                        }
+                    };
+                });
+        }
+        
+        
     }
 }

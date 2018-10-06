@@ -22,6 +22,7 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
     TeachingAssistantPrototype clipboardItem;
     TeachingAssistantPrototype renamedItem;
     int renameCounter;
+    boolean isCut;
     
     public OfficeHoursClipboard(OfficeHoursApp initApp) {
         app = initApp;
@@ -30,6 +31,7 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
         clipboardItem =null;
         renamedItem = null;
         renameCounter = 1;
+        isCut = false;
     }
     
     @Override
@@ -41,6 +43,7 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
         CutTA_Transaction cutTA_Transaction = new CutTA_Transaction(data, ta);
         app.processTransaction(cutTA_Transaction);
         clipboardItem=ta;
+        isCut = true;
         app.getFoolproofModule().updateAll();
     }
 
@@ -51,22 +54,32 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
         TeachingAssistantPrototype ta =  (TeachingAssistantPrototype) tatableView.getSelectionModel().getSelectedItem();
         clipboardItem = ta;
         app.getFoolproofModule().updateAll();
+        isCut = false;
     }
     
     @Override
     public void paste() {
         OfficeHoursData data = (OfficeHoursData) app.getDataComponent();
-        if(data.getAllTAS().contains(clipboardItem)==true){
-            renamedItem = new TeachingAssistantPrototype
-        (renameCounter+clipboardItem.getName(), renameCounter+clipboardItem.getEmail(), clipboardItem.getType());
-            renameCounter++;
-            PasteTA_Transaction pasteTA_Transaction = new PasteTA_Transaction(data, renamedItem);
-            app.processTransaction(pasteTA_Transaction);
-            data.refreshOH();
+        if(isCut = false){
+            if(data.getAllTAS().contains(clipboardItem)==true){
+                renamedItem = new TeachingAssistantPrototype
+            (renameCounter+clipboardItem.getName(), renameCounter+clipboardItem.getEmail(), clipboardItem.getType());
+                renameCounter++;
+                PasteTA_Transaction pasteTA_Transaction = new PasteTA_Transaction(data, renamedItem,isCut);
+                app.processTransaction(pasteTA_Transaction);
+                data.refreshOH();
+            }else{
+                PasteTA_Transaction pasteTA_Transaction = new PasteTA_Transaction(data, clipboardItem,isCut);
+                app.processTransaction(pasteTA_Transaction);
+                data.refreshOH();
+            }
         }else{
-            PasteTA_Transaction pasteTA_Transaction = new PasteTA_Transaction(data, clipboardItem);
+            PasteTA_Transaction pasteTA_Transaction = new PasteTA_Transaction(data, clipboardItem, isCut);
+            clipboardItem = null;
             app.processTransaction(pasteTA_Transaction);
+            isCut = false;
             data.refreshOH();
+            app.getFoolproofModule().updateAll();
         }
         
     }    

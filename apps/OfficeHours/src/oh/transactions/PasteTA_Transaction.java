@@ -10,19 +10,31 @@ import oh.data.TeachingAssistantPrototype;
  */
 public class PasteTA_Transaction implements jTPS_Transaction {
     OfficeHoursData data;
-    TeachingAssistantPrototype ta;    
-    public PasteTA_Transaction(OfficeHoursData initData, TeachingAssistantPrototype initTA) {
+    TeachingAssistantPrototype ta;
+    boolean isCut;
+    public PasteTA_Transaction(OfficeHoursData initData, TeachingAssistantPrototype initTA, boolean cutStats) {
         data = initData;
         ta = initTA;
+        isCut = cutStats;
     }
 
     @Override
     public void doTransaction() {
-        data.addTA(ta);
+        if (isCut = false) {
+            data.addTA(ta);
+        }else{
+            data.cutTARestore(ta);
+        }
+        
     }
 
     @Override
     public void undoTransaction() {
-        data.removeTA(ta);
+        if (isCut = false) {
+            data.removeTA(ta);
+        }else{
+            data.cutTA(ta);
+        }
+        
     }
 }

@@ -188,16 +188,20 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             }else{
                 if ((TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem()!=null) {
                     controller.up();
+                    TeachingAssistantPrototype ta = (TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem();
+                    controller.highlightOH(ta);
                 }
         
             }
         });
         officeHoursTableView.setOnMouseClicked((event) -> {
+                
               TablePosition tp = officeHoursTableView.getFocusModel().getFocusedCell();
               TeachingAssistantPrototype ta = (TeachingAssistantPrototype)taOfficeHoursTableView.getSelectionModel().getSelectedItem();
                if (!(ta==null)&&tp.getColumn()>1) {
                   controller.processAddTimeslot(ta,tp.getColumn(),(TimeSlot)officeHoursTableView.getSelectionModel().getSelectedItem());
-            }
+               }
+               
         });
         //TA TOGGLE
         RadioButton ALL = (RadioButton)gui.getGUINode(OH_TOGGLE_ALL);
