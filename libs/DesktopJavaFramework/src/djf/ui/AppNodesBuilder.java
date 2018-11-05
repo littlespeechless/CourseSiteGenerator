@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -156,6 +157,17 @@ public class AppNodesBuilder {
         GridPane gridPane = new GridPane();
         initNode(nodeId, gridPane, parentPane, styleClass, enabled);
         return gridPane;
+    }
+    public Tab buildTap(Object nodeID, Pane parentPane, String styleClass,boolean enabled){
+        Tab tab = new Tab();
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String propName =nodeID.toString() + "_TEXT";
+        String text = props.getProperty(propName);
+        if (text != null) {
+            languageSettings.addLabeledControlProperty(propName, tab.textProperty());
+        }
+        tab.getStyleClass().add(styleClass);
+        return tab;
     }
     public HBox buildHBox(Object nodeId,
             Pane parentPane,
