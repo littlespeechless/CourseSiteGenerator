@@ -18,12 +18,15 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
@@ -113,7 +116,11 @@ public class AppNodesBuilder {
         initNode(nodeId, comboBox, parentPane, styleClass, enabled);        
         return comboBox;
     }
-    
+     public ComboBox buildComboBox(Object nodeId, Pane parePane, String styleClass, boolean enabled){
+         ComboBox comboBox = new ComboBox();
+         initNode(nodeId, comboBox, styleClass, enabled);
+         return comboBox;
+    }
     public ComboBox buildComboBox(Object nodeId,
             GridPane parent,
             int col, int row, int colSpan, int rowSpan,
@@ -126,7 +133,7 @@ public class AppNodesBuilder {
         initNode(nodeId, comboBox, parent, col, row, colSpan, rowSpan, styleClass, enabled);        
         return comboBox;
     }
-    
+   
     private ComboBox initComboBox(
             Object optionsListProperty,
             Object defaultValueProperty) {
@@ -149,7 +156,11 @@ public class AppNodesBuilder {
         }
         return comboBox;
     }
-
+    public ScrollPane buildScrollPane (Object nodeId,Pane parentPane, String styleClass, boolean enabled){
+        ScrollPane scrollPane = new ScrollPane();
+        initNode(nodeId, scrollPane, styleClass, enabled);
+        return scrollPane;
+    }
     public GridPane buildGridPane(Object nodeId,
             Pane parentPane,
             String styleClass,
@@ -168,6 +179,12 @@ public class AppNodesBuilder {
         }
         tab.getStyleClass().add(styleClass);
         return tab;
+    }
+    public TitledPane buildTitledPane(Object nodeID, Pane parentPane, String styleClassString, boolean enabled){
+        TitledPane titledPane = new TitledPane();
+        initNode(nodeID, titledPane, styleClassString, enabled);
+        languageSettings.addLabeledControlProperty(nodeID.toString() + "_TEXT", titledPane.textProperty());
+        return titledPane;
     }
     public HBox buildHBox(Object nodeId,
             Pane parentPane,
@@ -294,7 +311,7 @@ public class AppNodesBuilder {
                 -> slider.setValue(Math.round(newVal.doubleValue())));
         return slider;
     }
-
+    
     public VBox buildVBox(Object nodeId,
             Pane parentPane,
             String styleClass,
@@ -377,7 +394,14 @@ public class AppNodesBuilder {
             button.setGraphic(new ImageView(buttonImage));
         }
     }
-
+    public Image buildImage(Object nodeID,Pane parentPane, boolean enabled){
+        // LOAD THE ICON FROM THE PROVIDED FILE
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String iconProperty = nodeID.toString() + "_ICON";
+        String imagePath =  FILE_PROTOCOL + props.getProperty(iconProperty);
+        Image selectedImage = new Image(imagePath);
+        return selectedImage;
+    }
     public ToggleButton buildIconToggleButton(Object nodeId,
             Pane parentPane,
             String styleClass,
@@ -505,6 +529,11 @@ public class AppNodesBuilder {
         // AND RETURN THE COMPLETED BUTTON
         return textField;
     }
+    public TextArea buildTextArea (Object nodeId, Pane parentPane, String styleClass, boolean  enabled){
+        TextArea textArea = new TextArea();
+        initNode(nodeId, textArea, styleClass, enabled);
+        return textArea;
+    }
     public TextField buildTextField(Object nodeId,
             GridPane parent,
             int col, int row, int colSpan, int rowSpan,
@@ -563,5 +592,7 @@ public class AppNodesBuilder {
         languageSettings.addLabeledControlProperty(nodeId.toString() + "_TEXT", column.textProperty());
         return column;
     }
+
+  
     
 }
