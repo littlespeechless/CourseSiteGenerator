@@ -15,6 +15,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
@@ -60,7 +61,7 @@ public class AppNodesBuilder {
             String styleClass,
             boolean enabled) {
         CheckBox checkBox = new CheckBox();
-        initNode(nodeId.toString(), checkBox, parentPane, styleClass, enabled);
+        initNode(nodeId, checkBox, parentPane, styleClass, enabled);
 
         // MAKE SURE THE LANGUAGE MANAGER HAS IT
         // SO THAT IT CAN CHANGE THE LANGUAGE AS NEEDED
@@ -182,9 +183,14 @@ public class AppNodesBuilder {
     }
     public TitledPane buildTitledPane(Object nodeID, Pane parentPane, String styleClassString, boolean enabled){
         TitledPane titledPane = new TitledPane();
-        initNode(nodeID, titledPane, styleClassString, enabled);
+        initNode(nodeID, titledPane,parentPane, styleClassString, enabled);
         languageSettings.addLabeledControlProperty(nodeID.toString() + "_TEXT", titledPane.textProperty());
         return titledPane;
+    }
+    public DatePicker buildDatePicker(Object nodeId, String styleClassString, boolean enabled){
+        DatePicker datePicker = new DatePicker();
+        initNode(nodeId, datePicker, styleClassString, enabled);
+        return datePicker;
     }
     public HBox buildHBox(Object nodeId,
             Pane parentPane,

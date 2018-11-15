@@ -110,6 +110,34 @@
         <property name="SITE_LEFT_FOOTER_IMG_ICON" value = "./images/LoadImage.png"></property>
         <property name="SITE_RIGHT_FOOTER_IMG_ICON" value = "./images/LoadImage.png"></property>
         
+        <!-- MEETING TIME VARIABLES -->
+        <property name="MT_ADD_LECTURE_BUTTON_TEXT" value = "+"></property>
+        <property name="MT_REMOVE_LECTURE_BUTTON_TEXT" value = "-"></property>
+        <property name="MT_LECTURE_LABEL_TEXT" value = "Lectures"></property>
+        <property name="MT_LECTURE_SECTION_COLUMN_TEXT" value = "Section"></property>
+        <property name="MT_LECTURE_DAYS_COLUMN_TEXT" value = "Days"></property>
+        <property name="MT_LECTURE_TIME_COLUMN_TEXT" value = "Times"></property>
+        <property name="MT_LECTURE_ROOM_COLUMN_TEXT" value = "Room"></property>
+        
+        <property name="MT_ADD_RECITATION_BUTTON_TEXT" value = "+"></property>
+        <property name="MT_REMOVE_RECITATION_BUTTON_TEXT" value = "-"></property>
+        <property name="MT_RECITATION_LABEL_TEXT" value = "Recitation"></property>
+        <property name="MT_RECITATION_SECTION_COLUMN_TEXT" value = "Section"></property>
+        <property name="MT_RECITATION_DAYSTIME_COLUMN_TEXT" value = "Days and Time"></property>
+        <property name="MT_RECITATION_ROOM_COLUMN_TEXT" value = "Room"></property>
+        <property name="MT_RECITATION_TA1_COLUMN_TEXT" value = "TA1"></property>
+        <property name="MT_RECITATION_TA2_COLUMN_TEXT" value = "TA2"></property>
+        
+        <property name="MT_ADD_LAB_BUTTON_TEXT" value = "+"></property>
+        <property name="MT_REMOVE_LAB_BUTTON_TEXT" value = "-"></property>
+        <property name="MT_LAB_LABEL_TEXT" value = "Lab"></property>
+        <property name="MT_LAB_SECTION_COLUMN_TEXT" value = "Section"></property>
+        <property name="MT_LAB_DAYSTIME_COLUMN_TEXT" value = "Days and Time"></property>
+        <property name="MT_LAB_ROOM_COLUMN_TEXT" value = "Room"></property>
+        <property name="MT_LAB_TA1_COLUMN_TEXT" value = "TA1"></property>
+        <property name="MT_LAB_TA2_COLUMN_TEXT" value = "TA2"></property>
+        
+        
         <!-- OFFICE HOURS TAB VARIABLES -->
         <property name="OH_TAS_HEADER_LABEL_TEXT"           value="TAs"></property>
         <property name="OH_ADD_TA_BUTTON_TEXT"              value="Add TA"></property>
@@ -138,12 +166,43 @@
         <property name="OH_EDIT_TA_TITLE"                value="Editing TA"></property>
         <property name="OH_EDIT_TA_TEXT"                 value="Edit TA"></property>
         <property name="OH_EDIT_TA_TYPE"                 value="Type"></property>
+
+        <!-- SYLLABUS TAB -->
+        <property name="SY_DESCRIPTION_TITLED_PANE_TEXT"                 value="Description:"></property>
+        <property name="SY_TOPIC_TITLED_PANE_TEXT"                 value="Topics:"></property>
+        <property name="SY_PREREQUIREMENT_TITLED_PANE_TEXT"                 value="Prerequisites:"></property>
+        <property name="SY_OUTCOMES_TITLED_PANE_TEXT"                 value="Outcomes:"></property>
+        <property name="SY_TEXTBOOK_TITLED_PANE_TEXT"                 value="Textbooks:"></property>
+        <property name="SY_GRADED_TITLED_PANE_TEXT"                 value="Graded Components:"></property>
+        <property name="SY_GRADING_TITLED_PANE_TEXT"                 value="Grading Note:"></property>
+        <property name="SY_ACADEMIC_TITLED_PANE_TEXT"                 value="Academic Dishoneesty:"></property>
+        <property name="SY_SPECIAL_TITLED_PANE_TEXT"                 value="Special Assistance:"></property>
         
+        <!-- SCHEDULE TAB VARIABLES -->
+    
+        <property name="SC_CALENDAR_LABEL_TEXT"                 value="Calendar Boundaries"></property>
+        <property name="SC_START_DATE_LABEL_TEXT"                 value="Starting Monday"></property>
+        <property name="SC_END_DATE_LABEL_TEXT"                 value="Ending Firday"></property>
+        <property name="SC_SCHEDULE_ITEM_LABEL_TEXT"                 value="Schedule Items"></property>
+        <property name="SC_REMOVE_ITEM_BUTTON_TEXT"                 value="-"></property>
+        <property name="SC_SCHEDULE_TYPE_COLUMN_TEXT"                 value="Type"></property>
+        <property name="SC_SCHEDULE_DATE_COLUMN_TEXT"                 value="Date"></property>
+        <property name="SC_SCHEDULE_TITLE_COLUMN_TEXT"                 value="Title"></property>
+        <property name="SC_SCHEDULE_TOPIC_COLUMN_TEXT"                 value="Topic"></property>
+        <property name="SC_ADD_LABEL_TEXT"                 value="Add/Edit"></property>
+        <property name="SC_TYPE_LABEL_TEXT"                 value="Type:"></property>
+        <property name="SC_DATE_LABEL_TEXT"                 value="Date:"></property>
+        <property name="SC_TITLE_LABEL_TEXT"                 value="Title:"></property>
+        <property name="SC_TOPIC_LABEL_TEXT"                 value="Topic:"></property>
+        <property name="SC_LINK_LABEL_TEXT"                 value="Link:"></property>
+        <property name="SC_ADD_ITEM_BUTTON_TEXT"                 value="Add"></property>
+        <property name="SC_CLEAR_ITEM_BUTTON_TEXT"                 value="Clear"></property>
+
         <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
         <property name="LANGUAGE_DIALOG_TITLE"          value="App Language Selection"></property>
         <property name="LANGUAGE_DIALOG_HEADER_TEXT"    value="Choose a Language"></property>
         <property name="LANGUAGE_DIALOG_CONTENT_TEXT"   value="Select a Language for the User Interface."></property>
-
+        
         <property name="WORK_FILE_EXT"          value="ta"></property>
 	<property name="WORK_FILE_EXT_DESC"     value="Teaching Assistant Files"></property>
 

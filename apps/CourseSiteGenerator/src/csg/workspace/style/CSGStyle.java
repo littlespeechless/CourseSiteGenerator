@@ -36,6 +36,7 @@ public class CSGStyle {
     public static final String CLASS_CSG_GRID_PANE = "csg_grid_pane";
     public static final String CLASS_CSG_SUB_GRID_PANE = "csg_sub_grid_pane";
     public static final String CLASS_CSG_HBOX = "csg_hbox";
+    public static final String CLASS_CSG_VBOX = "csg_vbox";
     public static final String CLASS_CSG_TAB = "csg_tab";
     public static final String CLASS_CSG_SCROLL_PANE = "csg_scroll_pane";
     public static final String CLASS_CSG_TAB_GRID_PANE = "csg_tab_grid_pane";
@@ -43,6 +44,10 @@ public class CSGStyle {
     public static final String CLASS_SITE_LABLE = "site_lable";
     public static final String CLASS_COMBO_BOX_LABLE = "site_combo_box";
     public static final String CLASS_CHECK_BOX_LABLE = "site_check_box";
+    public static final String CLASS_SYLLABUS_SCROOL_PANE = "sy_scroll_pane";
+    public static final String CLASS_MT_VBOX = "mt_vbox";
+
+    
 
     public static final String CLASS_SITE_ICON_BUTTON = "site_icon_button";
     

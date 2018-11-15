@@ -6,6 +6,9 @@
 package csg.data;
 
 import csg.CourseSiteGenerateApp;
+import static csg.CourseSitePropertyType.MT_LAB_TABLEVIEW;
+import static csg.CourseSitePropertyType.MT_LECTURE_TABLEVIEW;
+import static csg.CourseSitePropertyType.MT_RECITATION_TABLEVIEW;
 import static csg.CourseSitePropertyType.OH_END_TIME_COMBO_BOX;
 import static csg.CourseSitePropertyType.OH_OFFICE_HOURS_TABLE_VIEW;
 import static csg.CourseSitePropertyType.OH_START_TIME_COMBO_BOX;
@@ -13,11 +16,20 @@ import static csg.CourseSitePropertyType.OH_TAS_TABLE_VIEW;
 import static csg.CourseSitePropertyType.OH_TOGGLE_ALL;
 import static csg.CourseSitePropertyType.OH_TOGGLE_GRADUATE;
 import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
+import static csg.CourseSitePropertyType.SITE_SEMESTER_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
 import csg.data.TimeSlot.DayOfWeek;
+import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
 import djf.modules.AppGUIModule;
+import static djf.modules.AppGUIModule.ENABLED;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Iterator;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
@@ -39,6 +51,11 @@ public class CourseSiteData implements AppDataComponent{
     ObservableList<TimeSlot> undergradOH;
     ObservableList<TimeSlot> gradOH;
     
+    ObservableList<Lecture> lectures;
+    ObservableList<Recitation> recitations;
+    ObservableList<Lab> labs;
+    ObservableList<Schedule> schedules;
+    
 
     // THESE ARE THE TIME BOUNDS FOR THE OFFICE HOURS GRID. NOTE
     // THAT THESE VALUES CAN BE DIFFERENT FOR DIFFERENT FILES, BUT
@@ -56,12 +73,22 @@ public class CourseSiteData implements AppDataComponent{
 
         // CONSTRUCT THE LIST OF TAs FOR THE TABLE
         TableView<TeachingAssistantPrototype> taTableView = (TableView)gui.getGUINode(OH_TAS_TABLE_VIEW);
+        TableView<Lecture> lectureTable = (TableView)gui.getGUINode(MT_LECTURE_TABLEVIEW);
+        TableView<Recitation> reciationTable = (TableView)gui.getGUINode(MT_RECITATION_TABLEVIEW);
+        TableView<Lab> labTable = (TableView)gui.getGUINode(MT_LAB_TABLEVIEW);
+        TableView<Schedule> scheduleTable = (TableView)gui.getGUINode(SC_SCHEDULE_TABLEVIEW);
+        lectures = lectureTable.getItems();
+        recitations = reciationTable.getItems();
+        labs = labTable.getItems();
+        schedules = scheduleTable.getItems();
+        
         teachingAssistants = taTableView.getItems();
         underGradTAS = new TableView<TeachingAssistantPrototype>().getItems();
         gradTAS = new TableView<TeachingAssistantPrototype>().getItems();
         // THESE ARE THE DEFAULT OFFICE HOURS
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
+        addBannerCombobox();
         addTimeRange();
         resetOfficeHours();
     }
@@ -73,6 +100,10 @@ public class CourseSiteData implements AppDataComponent{
         teachingAssistants.clear();
         underGradTAS.clear();
         gradTAS.clear();
+        labs.clear();
+        recitations.clear();
+        lectures.clear();
+        schedules.clear();
         addTimeRange();
         resetOfficeHours();
         /*
@@ -88,7 +119,23 @@ public class CourseSiteData implements AppDataComponent{
         
         
     }
-    
+
+/****************************
+ * SITE  RELATED METHODS
+ */
+    public void addBannerCombobox(){
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox subject = (ComboBox)gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        subject.getItems().add("CSE");
+        subject.getItems().add("IEE");
+        ComboBox year = (ComboBox)gui.getGUINode(SITE_YEAR_COMBO_BOX);
+        int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
+        year.getItems().add(currentYear);
+        year.getItems().add(currentYear+1);
+        ComboBox semester = (ComboBox)gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
+        semester.getItems().addAll("Spring","Summer","Fall","Winter");
+        
+    }
 /****************************
  * OH RELATED METHODS
  */
@@ -114,8 +161,7 @@ public class CourseSiteData implements AppDataComponent{
             //undergradOH.add(timeSlot);
         }
         
-        ComboBox startTime = (ComboBox)gui.getGUINode(OH_START_TIME_COMBO_BOX);
-        ComboBox endTime = (ComboBox)gui.getGUINode(OH_END_TIME_COMBO_BOX);
+        
     }
     public void addTimeRange(){
         AppGUIModule gui = app.getGUIModule();
@@ -217,7 +263,95 @@ public class CourseSiteData implements AppDataComponent{
         }
         resetOfficeHours();
     }
-   
+ /****************************
+ * MEETING TIME  RELATED METHODS
+ */
+    public boolean  isLectureSelected(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView lectureTable = (TableView)gui.getGUINode(MT_LECTURE_TABLEVIEW);
+        return lectureTable.getSelectionModel().getSelectedItem() != null;
+    }
+    public boolean  isRecitationSelected(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView reciationTable = (TableView)gui.getGUINode(MT_RECITATION_TABLEVIEW);
+        return reciationTable.getSelectionModel().getSelectedItem() != null;
+    }
+    public boolean  isLabSelected(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView labTable = (TableView)gui.getGUINode(MT_LAB_TABLEVIEW);
+        return labTable.getSelectionModel().getSelectedItem() != null;
+    }
+    public void addLecture(Lecture lecture ){
+        if (!this.lectures.contains(lecture)) {
+            this.lectures.add(lecture);
+        }
+    }
+    public void removeLecture(Lecture lecture){
+        this.lectures.remove(lecture);
+    }
+    public void editLecture(String newSection, String newDays, 
+            String newTime, String newRoom, Lecture lecture){
+        lecture.setSection(newSection);
+        lecture.setDays(newDays);
+        lecture.setTime(newTime);
+        lecture.setRoom(newRoom);
+    }
+    public void addRecitation(Recitation recitation ){
+        if (!this.recitations.contains(recitation)) {
+            this.recitations.add(recitation);
+        }
+    }
+    public void removeRecitation(Recitation recitation){
+        this.recitations.remove(recitation);
+    }
+    public void editRecitation(String newSection, String newDayTime, 
+            String newRoom, String TA1,String TA2,Recitation recitation){
+        recitation.setSection(newSection);
+        recitation.setDaysTime(newDayTime);
+        recitation.setRoom(newRoom);
+        recitation.setTa1(TA1);
+        recitation.setTa2(TA2);
+    }
+    public void addLab(Lab lab ){
+        if (!this.labs.contains(lab)) {
+            this.labs.add(lab);
+        }
+    }
+    public void removeLab(Lab lab){
+        this.labs.remove(lab);
+    }
+    public void editLab(String newSection, String newDayTime, 
+            String newRoom, String TA1,String TA2,Lab lab){
+        lab.setSection(newSection);
+        lab.setDaysTime(newDayTime);
+        lab.setRoom(newRoom);
+        lab.setTa1(TA1);
+        lab.setTa2(TA2);
+    }
+ /****************************
+ * SCHEDULE  RELATED METHODS
+ */
+    public boolean isScheduleSelected(){
+        AppGUIModule gui = app.getGUIModule();
+        TableView scheduleTable = (TableView)gui.getGUINode(SC_SCHEDULE_TABLEVIEW);
+        return scheduleTable.getSelectionModel().getSelectedItem() != null;
+    }
+    public void addSchedule(Schedule schedule){
+        if (!schedules.contains(schedule)) {
+            schedules.add(schedule);
+        }
+    }
+    public void removeSchedule(Schedule schedule){
+        schedules.remove(schedule);
+    }
+    public void editSchedule(String newType, String newDate, String newTitle,
+            String newTopic, String newLink, Schedule schedule){
+        schedule.setType(newType);
+        schedule.setDate(newDate);
+        schedule.setTitle(newTitle);
+        schedule.setTopic(newTopic);
+        schedule.setLink(newLink);
+    }
 // ACCESSOR METHODS
 
     public int getStartHour() {

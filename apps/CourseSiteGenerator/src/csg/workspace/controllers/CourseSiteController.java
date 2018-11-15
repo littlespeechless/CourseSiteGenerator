@@ -24,15 +24,42 @@ import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE;
 import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE_TEXT;
 import static csg.CourseSitePropertyType.OH_OFFICE_HOURS_TABLE_VIEW;
 import static csg.CourseSitePropertyType.OH_START_TIME_COMBO_BOX;
+import static csg.CourseSitePropertyType.SC_ADD_ITEM_BUTTON;
+import static csg.CourseSitePropertyType.SC_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_END_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_LINK_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
+import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
 import csg.data.CourseSiteData;
+import csg.data.Lab;
+import csg.data.Lecture;
+import csg.data.Recitation;
+import csg.data.Schedule;
 import csg.data.TeachingAssistantPrototype;
 import csg.data.TimeSlot;
+import csg.transactions.AddLab_Transaction;
+import csg.transactions.AddLecture_Transaction;
+import csg.transactions.AddRecitation_Transaction;
+import csg.transactions.AddSchedule_Transaction;
 import csg.transactions.AddTimeSlot_Transaction;
+import csg.transactions.ChangeDate_Transaction;
 import csg.transactions.ChangeOHTable_Transaction;
+import csg.transactions.EditLab_Transaction;
+import csg.transactions.EditLecture_Transaction;
+import csg.transactions.EditRecitation_Transaction;
+import csg.transactions.EditSchedule_Transaction;
 import csg.transactions.EditTA_Transaction;
+import csg.transactions.RemvLab_Transaction;
+import csg.transactions.RemvLecture_Transaction;
+import csg.transactions.RemvRecitation_Transaction;
+import csg.transactions.RemvSchedule_Transaction;
 import csg.transactions.RemvTA_Transaction;
 import djf.modules.AppGUIModule;
 import djf.ui.dialogs.AppDialogsFacade;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -40,8 +67,10 @@ import java.util.regex.Pattern;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -61,11 +90,74 @@ import properties_manager.PropertiesManager;
  */
 public class CourseSiteController {
     CourseSiteGenerateApp app;
+    LocalDate oldStartDate;
+    LocalDate oldendDate;
     public CourseSiteController(CourseSiteGenerateApp initApp){
         app = initApp;
+        AppGUIModule gui = app.getGUIModule();
+        //oldStartDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)).getValue();
+        //oldendDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).getValue();
+        oldStartDate = LocalDate.MIN;
+        oldendDate = LocalDate.MAX;
     }
-    
-    
+    /*
+    * MT PAGE  CONTROLLS 
+    */
+    public void processAddLecture(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        Lecture lecture = new Lecture("?", "?","?", "?");
+        AddLecture_Transaction addLecture_Transaction = new AddLecture_Transaction(
+                data, lecture);
+        app.processTransaction(addLecture_Transaction);
+    }
+    public void processRemoveLecture(Lecture lecture){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        RemvLecture_Transaction lecture_Transaction = new RemvLecture_Transaction(data, lecture);
+        app.processTransaction(lecture_Transaction);
+
+    }
+    public void processChangeLecture(String newSection, String newDays, 
+            String newTime, String newRoom, Lecture lecture){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        EditLecture_Transaction editLecture_Transaction1 = new EditLecture_Transaction
+        (data, lecture, newSection, newDays, newTime, newRoom);
+        app.processTransaction(editLecture_Transaction1);
+
+    }
+    public void processAddRecitation(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        Recitation recitation = new Recitation("?", "?", "?", "?", "?");
+        AddRecitation_Transaction recitation_Transaction = new AddRecitation_Transaction(data, recitation);
+        app.processTransaction(recitation_Transaction);
+    }
+    public void processRemoveRecitation(Recitation recitation){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        RemvRecitation_Transaction recitation_Transaction = new RemvRecitation_Transaction(data, recitation);
+        app.processTransaction(recitation_Transaction);
+    }
+    public void processChangeRecitation(String newSection, String newDayTime, 
+            String newRoom, String TA1,String TA2, Recitation recitation){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        EditRecitation_Transaction recitation_Transaction = new EditRecitation_Transaction(data, recitation, newSection, newDayTime, newRoom, TA1, TA2);
+        app.processTransaction(recitation_Transaction);
+    }
+    public void processAddLab(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        Lab lab = new Lab("?", "?", "?", "?", "?");
+        AddLab_Transaction addLab_Transaction = new AddLab_Transaction(data, lab);
+        app.processTransaction(addLab_Transaction);
+    }
+    public void processRemoveLab(Lab lab){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        RemvLab_Transaction remvLab_Transaction =new RemvLab_Transaction(data, lab);
+        app.processTransaction(remvLab_Transaction);
+    }
+    public void processChangeLab(String newSection, String newDayTime, 
+            String newRoom, String TA1,String TA2, Lab lab){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        EditLab_Transaction editLab_Transaction = new EditLab_Transaction(data, lab, newSection, newDayTime, newRoom, TA1, TA2);
+        app.processTransaction(editLab_Transaction);
+    }
     /*
     * OH PAGE  CONTROLLS 
     */
@@ -369,6 +461,85 @@ public class CourseSiteController {
         }
         data.refreshOH();
         
+    }
+    /*******
+     * SCHEDULE CONTROL
+     */
+    public void processAddOrUpdateSchedule(){
+        AppGUIModule gui = app.getGUIModule();
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        if (((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).getText().equals("Add")){
+            ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+            DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
+            TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
+            TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
+            TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
+            String newType = (String) type.getValue();
+            String newDate = date.getValue().toString();
+            String newTitle = title.getText();
+            String newTopic = topic.getText();
+            String newLink = link.getText();
+            Schedule schedule = new Schedule(newType, newDate, newTitle, newTopic, newLink);
+            AddSchedule_Transaction addSchedule_Transaction = new AddSchedule_Transaction(data, schedule);
+            app.processTransaction(addSchedule_Transaction);
+        }else{
+            ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+            DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
+            TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
+            TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
+            TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
+            Schedule schedule = (Schedule)((TableView) gui.getGUINode(SC_SCHEDULE_TABLEVIEW)).getSelectionModel().getSelectedItem();
+            String newType = (String) type.getValue();
+            String newDate = date.getValue().toString();
+            String newTitle = title.getText();
+            String newTopic = topic.getText();
+            String newLink = link.getText();
+            EditSchedule_Transaction editSchedule_Transaction = new EditSchedule_Transaction
+                (data, schedule, newType, newDate, newTitle, newTopic, newLink);
+            app.processTransaction(editSchedule_Transaction);
+        }
         
+    }
+    public void processRemoveSchedule(Schedule schedule){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        RemvSchedule_Transaction remvSchedule_Transaction = new RemvSchedule_Transaction(data, schedule);
+        app.processTransaction(remvSchedule_Transaction);
+    }
+    public void updateScheduleField(Schedule schedule){
+            AppGUIModule gui = app.getGUIModule();
+            ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+            DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
+            TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
+            TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
+            TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
+            type.setValue(schedule.getType());
+            date.setValue(LocalDate.parse(schedule.getDate()));
+            title.textProperty().setValue(schedule.getTitle());
+            topic.textProperty().setValue(schedule.getTopic());
+            link.textProperty().setValue(schedule.getLink());
+            ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setText("Update");
+    }
+    public void  processChangeStartDate(LocalDate oldDate, LocalDate newDate){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        if (newDate!=oldStartDate) {
+            
+            ChangeDate_Transaction cdt = new ChangeDate_Transaction(data, oldDate, newDate, 
+                    ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)));
+            app.processTransaction(cdt);
+            
+        }
+        oldStartDate = oldDate;
+    }
+    public void  processChangeEndDate(LocalDate oldDate, LocalDate newDate){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        if (newDate!=oldendDate) {
+            ChangeDate_Transaction cdt = new ChangeDate_Transaction(data, oldDate, newDate, 
+                    ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)));
+            app.processTransaction(cdt);
+            
+        }
+        oldendDate = oldDate;
     }
 }

@@ -13,6 +13,33 @@ import static csg.CourseSitePropertyType.CSG_SCHEDULE;
 import static csg.CourseSitePropertyType.CSG_SCROLL_PANE;
 import static csg.CourseSitePropertyType.CSG_SITE;
 import static csg.CourseSitePropertyType.CSG_SYLLABUS;
+import static csg.CourseSitePropertyType.MT_ADD_LAB_BUTTON;
+import static csg.CourseSitePropertyType.MT_ADD_LECTURE_BUTTON;
+import static csg.CourseSitePropertyType.MT_ADD_RECITATION_BUTTON;
+import static csg.CourseSitePropertyType.MT_LAB_DAYSTIME_COLUMN;
+import static csg.CourseSitePropertyType.MT_LAB_LABEL;
+import static csg.CourseSitePropertyType.MT_LAB_ROOM_COLUMN;
+import static csg.CourseSitePropertyType.MT_LAB_SECTION_COLUMN;
+import static csg.CourseSitePropertyType.MT_LAB_TA1_COLUMN;
+import static csg.CourseSitePropertyType.MT_LAB_TA2_COLUMN;
+import static csg.CourseSitePropertyType.MT_LAB_TABLEVIEW;
+import static csg.CourseSitePropertyType.MT_LECTURE_DAYS_COLUMN;
+import static csg.CourseSitePropertyType.MT_LECTURE_LABEL;
+import static csg.CourseSitePropertyType.MT_LECTURE_ROOM_COLUMN;
+import static csg.CourseSitePropertyType.MT_LECTURE_SECTION_COLUMN;
+import static csg.CourseSitePropertyType.MT_LECTURE_TABLEVIEW;
+import static csg.CourseSitePropertyType.MT_LECTURE_TIME_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_DAYSTIME_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_LABEL;
+import static csg.CourseSitePropertyType.MT_RECITATION_ROOM_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_SECTION_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_TA1_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_TA2_COLUMN;
+import static csg.CourseSitePropertyType.MT_RECITATION_TABLEVIEW;
+import static csg.CourseSitePropertyType.MT_REMOVE_LAB_BUTTON;
+import static csg.CourseSitePropertyType.MT_REMOVE_LECTURE_BUTTON;
+import static csg.CourseSitePropertyType.MT_REMOVE_RECITATION_BUTTON;
+import static csg.CourseSitePropertyType.MT_VBOX;
 import static csg.CourseSitePropertyType.OH_ADD_TA_BUTTON;
 import static csg.CourseSitePropertyType.OH_BOX;
 import static csg.CourseSitePropertyType.OH_EMAIL_TABLE_COLUMN;
@@ -44,6 +71,32 @@ import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE;
 import static csg.CourseSitePropertyType.OH_TUESDAY_TABLE_COLUMN;
 import static csg.CourseSitePropertyType.OH_TYPE_TABLE_COLUMN;
 import static csg.CourseSitePropertyType.OH_WEDNESDAY_TABLE_COLUMN;
+import static csg.CourseSitePropertyType.SC_ADD_ITEM_BUTTON;
+import static csg.CourseSitePropertyType.SC_ADD_LABEL;
+import static csg.CourseSitePropertyType.SC_CALENDAR_LABEL;
+import static csg.CourseSitePropertyType.SC_CLEAR_ITEM_BUTTON;
+import static csg.CourseSitePropertyType.SC_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_DATE_LABEL;
+import static csg.CourseSitePropertyType.SC_END_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_END_DATE_LABEL;
+import static csg.CourseSitePropertyType.SC_LINK_LABEL;
+import static csg.CourseSitePropertyType.SC_LINK_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_REMOVE_ITEM_BUTTON;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_DATE_COLUMN;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_ITEM_LABEL;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TYPE_COLUMN;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TITLE_COLUMN;
+import static csg.CourseSitePropertyType.SC_SCHEDULE_TOPIC_COLUMN;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
+import static csg.CourseSitePropertyType.SC_START_DATE_LABEL;
+import static csg.CourseSitePropertyType.SC_TITLE_LABEL;
+import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_TOPIC_LABEL;
+import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
+import static csg.CourseSitePropertyType.SC_TYPE_LABEL;
+import static csg.CourseSitePropertyType.SC_VBOX;
 import static csg.CourseSitePropertyType.SITE_BANNER;
 import static csg.CourseSitePropertyType.SITE_BANNER_BOX;
 import static csg.CourseSitePropertyType.SITE_CSS;
@@ -88,6 +141,29 @@ import static csg.CourseSitePropertyType.SITE_TITLE;
 import static csg.CourseSitePropertyType.SITE_TITLE_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SITE_YEAR;
 import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
+import static csg.CourseSitePropertyType.SY_ACADEMIC_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_ACADEMIC_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_DESCRIPTION_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_DESCRIPTION_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_GRADED_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_GRADED_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_GRADING_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_GRADING_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_OUTCOMES_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_OUTCOMES_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_PREREQUIREMENT_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_PREREQUIREMENT_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_SPECIAL_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_SPECIAL_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_TEXTBOOK_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_TEXTBOOK_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_TOPIC_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_TOPIC_TITLED_PANE;
+import static csg.CourseSitePropertyType.SY_VBOX;
+import csg.data.Lab;
+import csg.data.Lecture;
+import csg.data.Recitation;
+import csg.data.Schedule;
 import csg.data.TeachingAssistantPrototype;
 import csg.data.TimeSlot;
 import csg.workspace.controllers.CourseSiteController;
@@ -100,6 +176,8 @@ import static csg.workspace.style.CSGStyle.CLASS_CSG_SCROLL_PANE;
 import static csg.workspace.style.CSGStyle.CLASS_CSG_SUB_GRID_PANE;
 import static csg.workspace.style.CSGStyle.CLASS_CSG_TAB;
 import static csg.workspace.style.CSGStyle.CLASS_CSG_TAB_GRID_PANE;
+import static csg.workspace.style.CSGStyle.CLASS_CSG_VBOX;
+import static csg.workspace.style.CSGStyle.CLASS_MT_VBOX;
 import static csg.workspace.style.CSGStyle.CLASS_OH_BUTTON;
 import static csg.workspace.style.CSGStyle.CLASS_OH_COLUMN;
 import static csg.workspace.style.CSGStyle.CLASS_OH_DAY_OF_WEEK_COLUMN;
@@ -113,21 +191,28 @@ import static csg.workspace.style.CSGStyle.CLASS_OH_VBOX;
 import static csg.workspace.style.CSGStyle.CLASS_SITE_ICON_BUTTON;
 import static csg.workspace.style.CSGStyle.CLASS_SITE_LABLE;
 import static csg.workspace.style.CSGStyle.CLASS_SITE_TITLE_LABLE;
+import static csg.workspace.style.CSGStyle.CLASS_SYLLABUS_SCROOL_PANE;
+import static djf.AppPropertyType.EXPORT_BUTTON;
+import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.AppTemplate;
 import djf.components.AppWorkspaceComponent;
 import djf.modules.AppFoolproofModule;
 import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
 import djf.ui.AppNodesBuilder;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
@@ -135,7 +220,9 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -150,6 +237,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 
 /**
@@ -164,7 +252,8 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
     
     public CourseSiteWorkspace(CourseSiteGenerateApp app) {
         super(app);
-
+        
+        
         // LAYOUT THE APP
         initLayout();
 
@@ -185,9 +274,10 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         //Create TabPane for the application
         TabPane siteTabPane = new TabPane();
         
-        //Site TAB
+        /*****
+         * SITE TAB 
+         */
         Tab siteTab = csgBuilder.buildTap(CSG_SITE, workspace, CLASS_CSG_TAB, ENABLED);
-        
         //banner 
         HBox bannerBox = csgBuilder.buildHBox(SITE_BANNER_BOX, null, CLASS_CSG_HBOX, ENABLED);
         GridPane bannerPane = csgBuilder.buildGridPane(CSG_GRID_PANE, bannerBox, CLASS_CSG_GRID_PANE, ENABLED);
@@ -303,14 +393,215 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         siteScrollPane.setContent(siteGridPane);
         siteTab.setContent(siteScrollPane);
         
-        //SYLLBUS TAB
+        /*****
+         * SYLLABUS TAB
+         */   
+        //TEXT AREAS 
         Tab syllbusTab = csgBuilder.buildTap(CSG_SYLLABUS, workspace, CLASS_CSG_TAB, ENABLED);
+        TextArea descriptionArea = csgBuilder.buildTextArea(SY_DESCRIPTION_TEXT_AREA, null, "", ENABLED);
+        TextArea topicArea = csgBuilder.buildTextArea(SY_TOPIC_TEXT_AREA, null, "", ENABLED);
+        TextArea prerequirementArea = csgBuilder.buildTextArea(SY_PREREQUIREMENT_TEXT_AREA, null, "", ENABLED);
+        TextArea outcomesArea = csgBuilder.buildTextArea(SY_OUTCOMES_TEXT_AREA, null, "", ENABLED);
+        TextArea textbookArea = csgBuilder.buildTextArea(SY_TEXTBOOK_TEXT_AREA, null, "", ENABLED);
+        TextArea gradedArea = csgBuilder.buildTextArea(SY_GRADED_TEXT_AREA, null, "", ENABLED);
+        TextArea gradingArea = csgBuilder.buildTextArea(SY_GRADING_TEXT_AREA, null, "", ENABLED);
+        TextArea academicArea = csgBuilder.buildTextArea(SY_ACADEMIC_TEXT_AREA, null, "", ENABLED);
+        TextArea specialArea = csgBuilder.buildTextArea(SY_SPECIAL_TEXT_AREA, null, "", ENABLED);
         
+        //TITLED PANES 
+        TitledPane description = csgBuilder.buildTitledPane(SY_DESCRIPTION_TITLED_PANE,null , "", ENABLED);
+        TitledPane topic = csgBuilder.buildTitledPane(SY_TOPIC_TITLED_PANE,null , "", ENABLED);
+        TitledPane prerequirment = csgBuilder.buildTitledPane(SY_PREREQUIREMENT_TITLED_PANE, null, "", ENABLED);
+        TitledPane outcomes = csgBuilder.buildTitledPane(SY_OUTCOMES_TITLED_PANE, null, "", ENABLED);
+        TitledPane textbook = csgBuilder.buildTitledPane(SY_TEXTBOOK_TITLED_PANE, null, "", ENABLED);
+        TitledPane graded = csgBuilder.buildTitledPane(SY_GRADED_TITLED_PANE, null, "", ENABLED);
+        TitledPane grading = csgBuilder.buildTitledPane(SY_GRADING_TITLED_PANE, null, "", ENABLED);
+        TitledPane academic = csgBuilder.buildTitledPane(SY_ACADEMIC_TITLED_PANE, null, "", ENABLED);
+        TitledPane special = csgBuilder.buildTitledPane(SY_SPECIAL_TITLED_PANE, null, "", ENABLED);
         
-        //MEETING TIME TAB
+        description.setContent(descriptionArea);
+        //description.setExpanded(Boolean.FALSE);
+        topic.setContent(topicArea);
+        topic.setExpanded(Boolean.FALSE);
+        prerequirment.setContent(prerequirementArea);
+        prerequirment.setExpanded(Boolean.FALSE);
+        outcomes.setContent(outcomesArea);
+        outcomes.setExpanded(Boolean.FALSE);
+        textbook.setContent(textbookArea);
+        textbook.setExpanded(Boolean.FALSE);
+        graded.setContent(gradedArea);
+        graded.setExpanded(Boolean.FALSE);
+        grading.setContent(gradingArea);
+        grading.setExpanded(Boolean.FALSE);
+        academic.setContent(academicArea);
+        academic.setExpanded(Boolean.FALSE);
+        special.setContent(specialArea);
+        special.setExpanded(Boolean.FALSE);
+        
+        //LAYOUT FOR TAB 
+        GridPane syllabusGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, null, CLASS_CSG_TAB_GRID_PANE, ENABLED);
+        syllabusGridPane.add(description, 0, 0);
+        syllabusGridPane.add(topic, 0, 1);
+        syllabusGridPane.add(prerequirment, 0, 2);
+        syllabusGridPane.add(outcomes, 0, 3);
+        syllabusGridPane.add(textbook, 0, 4);
+        syllabusGridPane.add(graded, 0, 5);
+        syllabusGridPane.add(grading, 0, 6);
+        syllabusGridPane.add(academic, 0, 7);
+        syllabusGridPane.add(special, 0, 8);
+        
+        ScrollPane syllabusScrollPane = csgBuilder.buildScrollPane(CSG_SCROLL_PANE, null, CLASS_SYLLABUS_SCROOL_PANE, ENABLED);
+        syllabusScrollPane.setContent(syllabusGridPane);
+        syllbusTab.setContent(syllabusScrollPane);
+        
+        /****
+         * METTING TAB 
+         */
+        
         Tab meetingTab = csgBuilder.buildTap(CSG_MEETING, workspace, CLASS_CSG_TAB, ENABLED);
+        VBox lectureBox = csgBuilder.buildVBox(MT_VBOX, null, CLASS_MT_VBOX, ENABLED);
+        VBox recitationBox = csgBuilder.buildVBox(MT_VBOX, null, CLASS_MT_VBOX, ENABLED);
+        VBox labBox = csgBuilder.buildVBox(MT_VBOX, null, CLASS_MT_VBOX, ENABLED);
         
-        //OFFICE HOURS TAB
+        //lecture
+        Button addLecture = csgBuilder.buildTextButton(MT_ADD_LECTURE_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Button removeLecture = csgBuilder.buildTextButton(MT_REMOVE_LECTURE_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Label lectureLabel = csgBuilder.buildLabel(MT_LECTURE_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        GridPane lectureHeader = csgBuilder.buildGridPane(CSG_GRID_PANE, lectureBox, CLASS_CSG_SUB_GRID_PANE, ENABLED);
+        lectureHeader.add(addLecture, 0, 0);
+        lectureHeader.add(removeLecture, 1, 0);
+        lectureHeader.add(lectureLabel, 2, 0);
+        //lecture table 
+        TableView<Lecture> lectureTable = csgBuilder.buildTableView(MT_LECTURE_TABLEVIEW, lectureBox, "", ENABLED);
+        lectureTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        lectureTable.setEditable(ENABLED);
+        Callback<TableColumn<Lecture,String>,TableCell<Lecture,String>> lectureCellFactory =(TableColumn<Lecture, String> param) -> new EditingLectureCell();
+        //section 
+        TableColumn lectureSectionColumn = csgBuilder.buildTableColumn(MT_LECTURE_SECTION_COLUMN, lectureTable, "");
+        lectureSectionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("section"));
+        lectureSectionColumn.setCellFactory(lectureCellFactory);
+        lectureSectionColumn.prefWidthProperty().bind(lectureTable.widthProperty().multiply(1.0/4.0));
+        
+        //days
+        TableColumn lectureDaysColumn = csgBuilder.buildTableColumn(MT_LECTURE_DAYS_COLUMN, lectureTable, "");
+        lectureDaysColumn.setCellValueFactory(new PropertyValueFactory<String, String>("days"));
+        lectureDaysColumn.setCellFactory(lectureCellFactory);
+        lectureDaysColumn.prefWidthProperty().bind(lectureTable.widthProperty().multiply(1.0/4.0));
+        //time
+        TableColumn lectureTimeColumn = csgBuilder.buildTableColumn(MT_LECTURE_TIME_COLUMN, lectureTable, "");
+        lectureTimeColumn.setCellValueFactory(new PropertyValueFactory<String, String>("time"));
+        lectureTimeColumn.setCellFactory(lectureCellFactory);
+        lectureTimeColumn.prefWidthProperty().bind(lectureTable.widthProperty().multiply(1.0/4.0));
+        //room
+        TableColumn lectureRoomColumn = csgBuilder.buildTableColumn(MT_LECTURE_ROOM_COLUMN, lectureTable, "");
+        lectureRoomColumn.setCellValueFactory(new PropertyValueFactory<String, String>("room"));
+        lectureRoomColumn.setCellFactory(lectureCellFactory);
+        lectureRoomColumn.prefWidthProperty().bind(lectureTable.widthProperty().multiply(1.0/4.0));
+        VBox.setVgrow(lectureTable, Priority.ALWAYS);
+        
+        
+        
+        // recitation
+        Button  addRecitation = csgBuilder.buildTextButton(MT_ADD_RECITATION_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Button  removeRecitation = csgBuilder.buildTextButton(MT_REMOVE_RECITATION_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Label recitationLabel = csgBuilder.buildLabel(MT_RECITATION_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        GridPane recitationHeader =csgBuilder.buildGridPane(CSG_GRID_PANE, recitationBox, CLASS_CSG_SUB_GRID_PANE, ENABLED);
+        recitationHeader.add(addRecitation, 0, 0);
+        recitationHeader.add(removeRecitation, 1, 0);
+        recitationHeader.add(recitationLabel, 2, 0);
+        
+        TableView<Recitation> recitationTable = csgBuilder.buildTableView(MT_RECITATION_TABLEVIEW, recitationBox, "", ENABLED);
+        recitationTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        recitationTable.setEditable(ENABLED);
+        Callback<TableColumn<Recitation,String>,TableCell<Recitation,String>> recitationCellFactory =(TableColumn<Recitation, String> param) -> new EditingRecitationCell();
+
+        //section
+        TableColumn recitationSectionColumn = csgBuilder.buildTableColumn(MT_RECITATION_SECTION_COLUMN, recitationTable, "");
+        recitationSectionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("section"));
+        recitationSectionColumn.setCellFactory(recitationCellFactory);
+        recitationSectionColumn.prefWidthProperty().bind(recitationTable.widthProperty().multiply(1.0/5.0));
+        //DAYS ADN TIME 
+        TableColumn recitationDaysTimeColumn = csgBuilder.buildTableColumn(MT_RECITATION_DAYSTIME_COLUMN, recitationTable, "");
+        recitationDaysTimeColumn.setCellValueFactory(new PropertyValueFactory<String, String>("daysTime"));
+        recitationDaysTimeColumn.setCellFactory(recitationCellFactory);
+        recitationDaysTimeColumn.prefWidthProperty().bind(recitationTable.widthProperty().multiply(1.0/5.0));
+        //ROOM
+        TableColumn recitationRoomColumn = csgBuilder.buildTableColumn(MT_RECITATION_ROOM_COLUMN, recitationTable, "");
+        recitationRoomColumn.setCellValueFactory(new PropertyValueFactory<String, String>("room"));
+        recitationRoomColumn.setCellFactory(recitationCellFactory);
+        recitationRoomColumn.prefWidthProperty().bind(recitationTable.widthProperty().multiply(1.0/5.0));
+        //TA1
+        TableColumn recitationTA1Column = csgBuilder.buildTableColumn(MT_RECITATION_TA1_COLUMN, recitationTable, "");
+        recitationTA1Column.setCellValueFactory(new PropertyValueFactory<String, String>("ta1"));
+        recitationTA1Column.setCellFactory(recitationCellFactory);
+        recitationTA1Column.prefWidthProperty().bind(recitationTable.widthProperty().multiply(1.0/5.0));
+        //TA2
+        TableColumn recitationTA2Column = csgBuilder.buildTableColumn(MT_RECITATION_TA2_COLUMN, recitationTable, "");
+        recitationTA2Column.setCellValueFactory(new PropertyValueFactory<String, String>("ta2"));
+        recitationTA2Column.setCellFactory(recitationCellFactory);
+        recitationTA2Column.prefWidthProperty().bind(recitationTable.widthProperty().multiply(1.0/5.0));
+        
+        VBox.setVgrow(recitationTable, Priority.ALWAYS);
+        
+       
+        
+        //lab box 
+        Button  addLab = csgBuilder.buildTextButton(MT_ADD_LAB_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Button  removeLAB = csgBuilder.buildTextButton(MT_REMOVE_LAB_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Label labLabel = csgBuilder.buildLabel(MT_LAB_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        GridPane labHeader =csgBuilder.buildGridPane(CSG_GRID_PANE, labBox, CLASS_CSG_SUB_GRID_PANE, ENABLED);
+        labHeader.add(addLab, 0, 0);
+        labHeader.add(removeLAB, 1, 0);
+        labHeader.add(labLabel, 2, 0);
+        
+        TableView<Lab> labTable = csgBuilder.buildTableView(MT_LAB_TABLEVIEW, labBox, "", ENABLED);
+        labTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        labTable.setEditable(ENABLED);
+        Callback<TableColumn<Lab,String>,TableCell<Lab,String>> labCellFactory =(TableColumn<Lab, String> param) -> new EditingLabCell();
+
+        //section
+        TableColumn labSectionColumn = csgBuilder.buildTableColumn(MT_LAB_SECTION_COLUMN, labTable, "");
+        labSectionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("section"));
+        labSectionColumn.setCellFactory(labCellFactory);
+        labSectionColumn.prefWidthProperty().bind(labTable.widthProperty().multiply(1.0/5.0));
+        //DAYS ADN TIME 
+        TableColumn labDaysTimeColumn = csgBuilder.buildTableColumn(MT_LAB_DAYSTIME_COLUMN, labTable, "");
+        labDaysTimeColumn.setCellValueFactory(new PropertyValueFactory<String, String>("daysTime"));
+        labDaysTimeColumn.setCellFactory(labCellFactory);
+        labDaysTimeColumn.prefWidthProperty().bind(labTable.widthProperty().multiply(1.0/5.0));
+        //ROOM
+        TableColumn labRoomColumn = csgBuilder.buildTableColumn(MT_LAB_ROOM_COLUMN, labTable, "");
+        labRoomColumn.setCellValueFactory(new PropertyValueFactory<String, String>("room"));
+        labRoomColumn.setCellFactory(labCellFactory);
+        labRoomColumn.prefWidthProperty().bind(labTable.widthProperty().multiply(1.0/5.0));
+        //TA1
+        TableColumn labTA1Column = csgBuilder.buildTableColumn(MT_LAB_TA1_COLUMN, labTable, "");
+        labTA1Column.setCellValueFactory(new PropertyValueFactory<String, String>("ta1"));
+        labTA1Column.setCellFactory(labCellFactory);
+        labTA1Column.prefWidthProperty().bind(labTable.widthProperty().multiply(1.0/5.0));
+        //TA2
+        TableColumn labTA2Column = csgBuilder.buildTableColumn(MT_LAB_TA2_COLUMN, labTable, "");
+        labTA2Column.setCellValueFactory(new PropertyValueFactory<String, String>("ta2"));
+        labTA2Column.setCellFactory(labCellFactory);
+        labTA2Column.prefWidthProperty().bind(labTable.widthProperty().multiply(1.0/5.0));
+        VBox.setVgrow(labTable, Priority.ALWAYS);
+        
+        lectureTable.getSelectionModel().setCellSelectionEnabled(true);
+        recitationTable.getSelectionModel().setCellSelectionEnabled(true);
+        labTable.getSelectionModel().setCellSelectionEnabled(true);
+        
+        GridPane meetingGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, null, CLASS_CSG_TAB_GRID_PANE, ENABLED);
+        meetingGridPane.add(lectureBox, 0, 0);
+        meetingGridPane.add(recitationBox, 0, 1);
+        meetingGridPane.add(labBox, 0, 2);
+        ScrollPane meetingScrollPane = csgBuilder.buildScrollPane(CSG_SCROLL_PANE, null, CLASS_CSG_SCROLL_PANE, ENABLED);
+        meetingScrollPane.setContent(meetingGridPane);
+        meetingTab.setContent(meetingScrollPane);
+        
+        /*******
+         * Office Hours Tab
+         */
+        
         Tab OHTab = csgBuilder.buildTap(CSG_OH, null, CLASS_CSG_TAB, ENABLED);
         VBox taVBox = csgBuilder.buildVBox(OH_TA_BOX, workspace, CLASS_OH_VBOX, ENABLED);
         Label taLabel = csgBuilder.buildLabel(OH_TAS_HEADER_LABEL, null, CLASS_OH_HEADER_LABEL, ENABLED);
@@ -406,10 +697,167 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ScrollPane ohScrollPane = csgBuilder.buildScrollPane(CSG_SCROLL_PANE, null,CLASS_CSG_SCROLL_PANE , ENABLED);
         ohScrollPane.setContent(sPane);
         OHTab.setContent(ohScrollPane);
+        
 
-
-        //SCHEDULE TAB
+        /*****
+         * SCHEDULE TAB 
+         */
+        
         Tab scheduleTab = csgBuilder.buildTap(CSG_SCHEDULE, workspace, CLASS_CSG_TAB, ENABLED);
+        
+        VBox calenderBox = csgBuilder.buildVBox(SC_VBOX, null, CLASS_MT_VBOX, ENABLED);
+        VBox scheduleBox = csgBuilder.buildVBox(SC_VBOX, null, CLASS_MT_VBOX, ENABLED);
+        VBox addItemsBox = csgBuilder.buildVBox(SC_VBOX, null, CLASS_MT_VBOX, ENABLED);
+        
+        Label calenderLabel = csgBuilder.buildLabel(SC_CALENDAR_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label startDateLabel = csgBuilder.buildLabel(SC_START_DATE_LABEL, null, CLASS_SITE_LABLE, ENABLED);
+        Label endDateLabel = csgBuilder.buildLabel(SC_END_DATE_LABEL, null, CLASS_SITE_LABLE, ENABLED);
+        DatePicker startDatePicker = csgBuilder.buildDatePicker( SC_START_DATE_DATE_PIKER, "", ENABLED);
+        DatePicker endDatePicker = csgBuilder.buildDatePicker(SC_END_DATE_DATE_PICKER, "", ENABLED);
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        final Callback<DatePicker, DateCell> startdayCellFactory = 
+            new Callback<DatePicker, DateCell>() {
+                @Override
+                public DateCell call(final DatePicker datePicker) {
+                    return new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate item, boolean empty) {
+                            super.updateItem(item, empty);
+                           if  (endDatePicker.getValue()!=null){
+                            if (item.isAfter(
+                                    endDatePicker.getValue().plusDays(-1))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                            }  
+                           }
+                    }
+                };
+            }
+        };
+        startDatePicker.setDayCellFactory(startdayCellFactory);
+         final Callback<DatePicker, DateCell> endayCellFactory = 
+            new Callback<DatePicker, DateCell>() {
+                @Override
+                public DateCell call(final DatePicker datePicker) {
+                    return new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate item, boolean empty) {
+                            super.updateItem(item, empty);
+                           if(startDatePicker.getValue()!=null){
+                            if (item.isBefore(
+                                    startDatePicker.getValue().plusDays(1))
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                            }   
+                          }
+                    }
+                };
+            }
+        };
+        endDatePicker.setDayCellFactory(endayCellFactory);
+        GridPane calenderGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, calenderBox, CLASS_CSG_GRID_PANE, ENABLED);
+        calenderGridPane.add(calenderLabel, 0, 0);
+        calenderGridPane.add(startDateLabel, 0, 1);
+        calenderGridPane.add(startDatePicker, 1, 1);
+        calenderGridPane.add(endDateLabel, 0, 2);
+        calenderGridPane.add(endDatePicker, 1, 2);
+        
+        Button removeItembButton = csgBuilder.buildIconButton(SC_REMOVE_ITEM_BUTTON, null, CLASS_OH_BUTTON, ENABLED);
+        Label scheduleItemLabel = csgBuilder.buildLabel(SC_SCHEDULE_ITEM_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        GridPane itemGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, scheduleBox, CLASS_CSG_GRID_PANE, ENABLED);
+        itemGridPane.add(removeItembButton, 0, 0);
+        itemGridPane.add(scheduleItemLabel, 1, 0);
+        
+        TableView <Schedule> scheduleTable = csgBuilder.buildTableView(SC_SCHEDULE_TABLEVIEW, scheduleBox, "", ENABLED);
+        //option
+        TableColumn scTypeColumn = csgBuilder.buildTableColumn(SC_SCHEDULE_TYPE_COLUMN, scheduleTable, "");
+        scTypeColumn.setCellValueFactory(new PropertyValueFactory<String, String>("type"));
+        scTypeColumn.prefWidthProperty().bind(scheduleTable.widthProperty().multiply(1.0/4.0));
+        //date
+        TableColumn dateColumn = csgBuilder.buildTableColumn(SC_SCHEDULE_DATE_COLUMN, scheduleTable, "");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<String, String>("date"));
+        dateColumn.prefWidthProperty().bind(scheduleTable.widthProperty().multiply(1.0/4.0));
+        //title
+        TableColumn titleColumn = csgBuilder.buildTableColumn(SC_SCHEDULE_TITLE_COLUMN, scheduleTable, "");
+        titleColumn.setCellValueFactory(new PropertyValueFactory<String, String>("title"));
+        titleColumn.prefWidthProperty().bind(scheduleTable.widthProperty().multiply(1.0/4.0));
+        //option
+        TableColumn topicColumn = csgBuilder.buildTableColumn(SC_SCHEDULE_TOPIC_COLUMN, scheduleTable, "");
+        topicColumn.setCellValueFactory(new PropertyValueFactory<String, String>("topic"));
+        topicColumn.prefWidthProperty().bind(scheduleTable.widthProperty().multiply(1.0/4.0));
+        VBox.setVgrow(scheduleTable, Priority.ALWAYS);
+        
+
+        Label additemLabel = csgBuilder.buildLabel(SC_ADD_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label typeLabel = csgBuilder.buildLabel(SC_TYPE_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label dateLabel = csgBuilder.buildLabel(SC_DATE_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label scTitleLabel = csgBuilder.buildLabel(SC_TITLE_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label topicLabel = csgBuilder.buildLabel(SC_TOPIC_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+        Label linkLabel = csgBuilder.buildLabel(SC_LINK_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
+
+        ComboBox typeBox = csgBuilder.buildComboBox(SC_TYPE_COMBO_BOX, null, CLASS_COMBO_BOX_LABLE, ENABLED);
+        DatePicker datePicker = csgBuilder.buildDatePicker(SC_DATE_DATE_PICKER, "", ENABLED);
+        TextField scTitleField = csgBuilder.buildTextField(SC_TITLE_TEXT_FIELD, null, "", ENABLED);
+        TextField topicField = csgBuilder.buildTextField(SC_TOPIC_TEXT_FIELD, null, "", ENABLED);
+        TextField linkField = csgBuilder.buildTextField(SC_LINK_TEXT_FIELD, null, "", ENABLED);
+        Button addItemButton = csgBuilder.buildTextButton(SC_ADD_ITEM_BUTTON, null, "", ENABLED);
+        Button clearItemButton = csgBuilder.buildTextButton(SC_CLEAR_ITEM_BUTTON, null, "", ENABLED); 
+        datePicker.setEditable(false);
+        final Callback<DatePicker, DateCell> dateCellFactory = 
+            new Callback<DatePicker, DateCell>() {
+                @Override
+                public DateCell call(final DatePicker datePicker) {
+                    return new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate item, boolean empty) {
+                            super.updateItem(item, empty);
+                           if  (endDatePicker.getValue()!=null&&startDatePicker.getValue()!=null){
+                            if (item.isAfter(
+                                    endDatePicker.getValue())
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                            }
+                            if (item.isBefore(
+                                    startDatePicker.getValue())
+                                ) {
+                                    setDisable(true);
+                                    setStyle("-fx-background-color: #ffc0cb;");
+                            }   
+                           }
+                    }
+                };
+            }
+        };
+        datePicker.setDayCellFactory(dateCellFactory);
+        
+        GridPane addItemGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, addItemsBox, CLASS_CSG_GRID_PANE, ENABLED);
+        addItemGridPane.add(additemLabel, 0, 0);
+        addItemGridPane.add(typeLabel, 0, 1);
+        addItemGridPane.add(typeBox, 1, 1);
+        addItemGridPane.add(dateLabel, 0, 2);
+        addItemGridPane.add(datePicker, 1, 2);
+        addItemGridPane.add(scTitleLabel, 0, 3);
+        addItemGridPane.add(scTitleField, 1, 3);
+        addItemGridPane.add(topicLabel, 0, 4);
+        addItemGridPane.add(topicField, 1, 4);
+        addItemGridPane.add(linkLabel, 0, 5);
+        addItemGridPane.add(linkField, 1, 5);
+        addItemGridPane.add(addItemButton, 0, 6);
+        addItemGridPane.add(clearItemButton, 1, 6);
+
+        GridPane scheduleTabGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, null, CLASS_CSG_TAB_GRID_PANE, ENABLED);
+        scheduleTabGridPane.add(calenderBox, 0, 0);
+        scheduleTabGridPane.add(scheduleBox, 0, 1);
+        scheduleTabGridPane.add(addItemsBox, 0, 2);
+        ScrollPane scheduleScrollPane = csgBuilder.buildScrollPane(CSG_SCROLL_PANE, null, CLASS_CSG_SCROLL_PANE, ENABLED);
+        scheduleScrollPane.setContent(scheduleTabGridPane);
+        scheduleTab.setContent(scheduleScrollPane);
+        
+        
         
         siteTabPane.getTabs().add(siteTab);
         siteTabPane.getTabs().add(syllbusTab);
@@ -423,12 +871,229 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
     }
     private void initControllers(){
         CourseSiteController controller = new CourseSiteController((CourseSiteGenerateApp) app);
+        AppGUIModule gui = app.getGUIModule(); 
+        
+        /**
+         * Site pane
+         * 
+         */
+        ((CheckBox) gui.getGUINode(SITE_HOME)).setOnAction(e->{
+            controller.up();
+        });
+        ((CheckBox) gui.getGUINode(SITE_SYLLABUS)).setOnAction(e->{
+            controller.up();
+        });
+        ((CheckBox) gui.getGUINode(SITE_SCHEDULE)).setOnAction(e->{
+            controller.up();
+        });
+        ((CheckBox) gui.getGUINode(SITE_HWS)).setOnAction(e->{
+            controller.up();
+        });
+        
+        
+        /**
+         * meeting time pane
+         * 
+         */
+       TableView lectureTable = (TableView) gui.getGUINode(MT_LECTURE_TABLEVIEW);
+        ((Button) gui.getGUINode(MT_ADD_LECTURE_BUTTON)).setOnAction(e->{
+            controller.processAddLecture();
+        });
+        ((Button) gui.getGUINode(MT_REMOVE_LECTURE_BUTTON)).setOnAction(e->{
+            Lecture lecture = (Lecture)lectureTable.getSelectionModel().getSelectedItem();
+            controller.processRemoveLecture(lecture);
+        });
+        TableColumn lectureSectionColumn = (TableColumn) lectureTable.getColumns().get(0);
+        TableColumn lectureDaysColumn = (TableColumn) lectureTable.getColumns().get(1);
+        TableColumn lectureTimeColumn = (TableColumn) lectureTable.getColumns().get(2);
+        TableColumn lectureRoomColumn = (TableColumn) lectureTable.getColumns().get(3);
+        lectureTable.setOnMouseClicked(e->{
+            controller.up();
+        });
+        lectureSectionColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lecture, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lecture, String> t) {
+                    Lecture lecture = ((Lecture) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLecture(t.getNewValue(),lecture.getDays(),
+                            lecture.getTime(),lecture.getRoom(),lecture);
+                }
+             });
+        lectureDaysColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lecture, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lecture, String> t) {
+                    Lecture lecture = ((Lecture) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLecture(lecture.getSection(),t.getNewValue(),
+                            lecture.getTime(),lecture.getRoom(),lecture);
+                }
+             });
+        lectureTimeColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lecture, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lecture, String> t) {
+                    Lecture lecture = ((Lecture) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLecture(lecture.getSection(),lecture.getDays(),
+                            t.getNewValue(),lecture.getRoom(),lecture);
+                }
+             });
+        lectureRoomColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lecture, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lecture, String> t) {
+                    Lecture lecture = ((Lecture) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLecture(lecture.getSection(),lecture.getDays(),
+                            lecture.getTime(),t.getNewValue(),lecture);
+                }
+             });
+        
+        TableView recitationTable = (TableView) gui.getGUINode(MT_RECITATION_TABLEVIEW);
+        ((Button) gui.getGUINode(MT_ADD_RECITATION_BUTTON)).setOnAction(e->{
+            controller.processAddRecitation();
+        });
+        ((Button) gui.getGUINode(MT_REMOVE_RECITATION_BUTTON)).setOnAction(e->{
+            Recitation recitation = (Recitation)recitationTable.getSelectionModel().getSelectedItem();
+            controller.processRemoveRecitation(recitation);
+        });
+        recitationTable.setOnMouseClicked((event) -> {
+            controller.up();
+        });
+        
+        TableColumn recitationSectionColumn =(TableColumn) recitationTable.getColumns().get(0);
+        TableColumn recitationDaysTimeColumn =(TableColumn) recitationTable.getColumns().get(1);
+        TableColumn recitationRoomColumn =(TableColumn) recitationTable.getColumns().get(2);
+        TableColumn recitationTA1Column =(TableColumn) recitationTable.getColumns().get(3);
+        TableColumn recitationTA2Column =(TableColumn) recitationTable.getColumns().get(4);
+        
+        recitationSectionColumn.setOnEditCommit(new EventHandler<CellEditEvent<Recitation, String>>() {
+                @Override
+                public void handle(CellEditEvent<Recitation, String> t) {
+                    Recitation recitation = ((Recitation) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeRecitation(t.getNewValue(),recitation.getDaysTime(),
+                            recitation.getRoom(),recitation.getTa1(),recitation.getTa2(),recitation);
+                }
+             });
+        recitationDaysTimeColumn.setOnEditCommit(new EventHandler<CellEditEvent<Recitation, String>>() {
+                @Override
+                public void handle(CellEditEvent<Recitation, String> t) {
+                    Recitation recitation = ((Recitation) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeRecitation(recitation.getSection(),t.getNewValue(),
+                            recitation.getRoom(),recitation.getTa1(),recitation.getTa2(),recitation);
+                }
+             });
+        recitationRoomColumn.setOnEditCommit(new EventHandler<CellEditEvent<Recitation, String>>() {
+                @Override
+                public void handle(CellEditEvent<Recitation, String> t) {
+                    Recitation recitation = ((Recitation) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
+                            t.getNewValue(),recitation.getTa1(),recitation.getTa2(),recitation);
+                }
+             });
+        recitationTA1Column.setOnEditCommit(new EventHandler<CellEditEvent<Recitation, String>>() {
+                @Override
+                public void handle(CellEditEvent<Recitation, String> t) {
+                    Recitation recitation = ((Recitation) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
+                            recitation.getRoom(),t.getNewValue(),recitation.getTa2(),recitation);
+                }
+             });
+        recitationTA2Column.setOnEditCommit(new EventHandler<CellEditEvent<Recitation, String>>() {
+                @Override
+                public void handle(CellEditEvent<Recitation, String> t) {
+                    Recitation recitation = ((Recitation) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
+                            recitation.getRoom(),recitation.getTa1(),t.getNewValue(),recitation);
+                }
+             });
+        
+        TableView labTable = (TableView) gui.getGUINode(MT_LAB_TABLEVIEW);
+        ((Button) gui.getGUINode(MT_ADD_LAB_BUTTON)).setOnAction(e->{
+            controller.processAddLab();
+        });
+        ((Button) gui.getGUINode(MT_REMOVE_LAB_BUTTON)).setOnAction(e->{
+            Lab lab = (Lab)labTable.getSelectionModel().getSelectedItem();
+            controller.processRemoveLab(lab);
+        });
+        labTable.setOnMouseClicked((event) -> {
+            controller.up();
+        });
+        
+        TableColumn labSectionColumn =(TableColumn) labTable.getColumns().get(0);
+        TableColumn labDaysTimeColumn =(TableColumn) labTable.getColumns().get(1);
+        TableColumn labRoomColumn =(TableColumn) labTable.getColumns().get(2);
+        TableColumn labTA1Column =(TableColumn) labTable.getColumns().get(3);
+        TableColumn labTA2Column =(TableColumn) labTable.getColumns().get(4);
+        
+        labSectionColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lab, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lab, String> t) {
+                    Lab lab = ((Lab) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLab(t.getNewValue(),lab.getDaysTime(),
+                            lab.getRoom(),lab.getTa1(),lab.getTa2(),lab);
+                }
+             });
+        labDaysTimeColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lab, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lab, String> t) {
+                    Lab lab = ((Lab) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLab(lab.getSection(),t.getNewValue(),
+                            lab.getRoom(),lab.getTa1(),lab.getTa2(),lab);
+                }
+             });
+        labRoomColumn.setOnEditCommit(new EventHandler<CellEditEvent<Lab, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lab, String> t) {
+                    Lab lab = ((Lab) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
+                            t.getNewValue(),lab.getTa1(),lab.getTa2(),lab);
+                }
+             });
+        labTA1Column.setOnEditCommit(new EventHandler<CellEditEvent<Lab, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lab, String> t) {
+                    Lab lab = ((Lab) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
+                            lab.getRoom(),t.getNewValue(),lab.getTa2(),lab);
+                }
+             });
+        labTA2Column.setOnEditCommit(new EventHandler<CellEditEvent<Lab, String>>() {
+                @Override
+                public void handle(CellEditEvent<Lab, String> t) {
+                    Lab lab = ((Lab) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        );
+                    controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
+                            lab.getRoom(),lab.getTa1(),t.getNewValue(),lab);
+                }
+             });
         
         /*
-            OH PANE
+           OH PANE
         */
         //KEYBOARD 
-        AppGUIModule gui = app.getGUIModule();
+        
         
         ((TextField) gui.getGUINode(OH_NAME_TEXT_FIELD)).setOnKeyPressed(e -> {
             controller.up();
@@ -566,6 +1231,83 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         for (int i = 0; i < officeHoursTableView.getColumns().size(); i++) {
             ((TableColumn)officeHoursTableView.getColumns().get(i)).setSortable(false);
         }
+        
+        /****
+         * SCHEDULE PANE
+         * 
+         */
+        ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)).valueProperty().
+                addListener((observable, oldValue, newValue) -> {
+                   controller.processChangeStartDate(oldValue, newValue);
+                   controller.up();
+        });
+        ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).valueProperty().
+                addListener((observable, oldValue, newValue) -> {
+                   controller.processChangeEndDate(oldValue, newValue);
+                   controller.up();
+        });
+        TableView scheduleTable = (TableView)gui.getGUINode(SC_SCHEDULE_TABLEVIEW);
+        ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+        type.getItems().add("TEST");
+        type.setOnAction((event) -> {
+            controller.up();
+        });
+        DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
+        date.setOnAction((event) -> {
+            controller.up();
+        });
+        TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
+        title.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null&&oldValue
+                    !=null){
+                controller.up();
+            }
+        });
+        TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
+        topic.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null&&oldValue
+                    !=null){
+                controller.up();
+            }
+        });
+        TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
+        link.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null&&oldValue
+                    !=null){
+                controller.up();
+            }
+        });
+       
+        
+        ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setOnAction(e->{
+            controller.processAddOrUpdateSchedule();
+            type.setValue(null);
+            date.setValue(null);
+            title.setText("");
+            topic.setText("");
+            link.setText("");
+            scheduleTable.getSelectionModel().clearSelection();
+        });
+        ((Button) gui.getGUINode(SC_REMOVE_ITEM_BUTTON)).setOnAction(e->{
+            Schedule schedule = (Schedule)scheduleTable.getSelectionModel().getSelectedItem();
+            controller.processRemoveSchedule(schedule);
+        });
+        scheduleTable.setOnMouseClicked((event) -> {
+            Schedule schedule = (Schedule)scheduleTable.getSelectionModel().getSelectedItem();
+            if (schedule!=null) {
+                controller.updateScheduleField(schedule);
+            }
+        });
+        ((Button) gui.getGUINode(SC_CLEAR_ITEM_BUTTON)).setOnAction(e->{
+            type.setValue(null);
+            date.setValue(null);
+            title.setText("");
+            topic.setText("");
+            link.setText("");
+            scheduleTable.getSelectionModel().clearSelection();
+            ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setText("Add");
+        });
+    
     }
     private void initFoolproofDesign(){
         AppGUIModule gui = app.getGUIModule();
@@ -578,4 +1320,202 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
     public void showNewDialog() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public class EditingLectureCell extends TableCell<Lecture, String> {
+ 
+        private TextField textField;
+ 
+        public EditingLectureCell() {
+        }
+ 
+        @Override
+        public void startEdit() {
+            if (!isEmpty()) {
+                super.startEdit();
+                createTextField();
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
+            }
+        }
+ 
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+ 
+            setText((String) getItem());
+            setGraphic(null);
+        }
+ 
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+ 
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(null);
+                }
+            }
+        }
+ 
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap()* 2);
+            textField.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, 
+                    Boolean arg1, Boolean arg2) {
+                        if (!arg2) {
+                            commitEdit(textField.getText());
+                        }
+                }
+            });
+        }
+ 
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
+    public class EditingRecitationCell extends TableCell<Recitation, String> {
+ 
+        private TextField textField;
+ 
+        public EditingRecitationCell() {
+        }
+ 
+        @Override
+        public void startEdit() {
+            if (!isEmpty()) {
+                super.startEdit();
+                createTextField();
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
+            }
+        }
+ 
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+ 
+            setText((String) getItem());
+            setGraphic(null);
+        }
+ 
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+ 
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(null);
+                }
+            }
+        }
+ 
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap()* 2);
+            textField.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, 
+                    Boolean arg1, Boolean arg2) {
+                        if (!arg2) {
+                            commitEdit(textField.getText());
+                        }
+                }
+            });
+        }
+ 
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
+    public class EditingLabCell extends TableCell<Lab, String> {
+ 
+        private TextField textField;
+ 
+        public EditingLabCell() {
+        }
+ 
+        @Override
+        public void startEdit() {
+            if (!isEmpty()) {
+                super.startEdit();
+                createTextField();
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
+            }
+        }
+ 
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+ 
+            setText((String) getItem());
+            setGraphic(null);
+        }
+ 
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+ 
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(null);
+                }
+            }
+        }
+ 
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap()* 2);
+            textField.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, 
+                    Boolean arg1, Boolean arg2) {
+                        if (!arg2) {
+                            commitEdit(textField.getText());
+                        }
+                }
+            });
+        }
+ 
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
+
 }
+ 

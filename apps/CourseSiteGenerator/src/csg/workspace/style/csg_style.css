@@ -176,6 +176,13 @@
     -fx-background-radius:10px;
     -fx-border-width:2px;
 }
+.csg_vbox{
+    -fx-background-color:white;
+    -fx-border-radius:15px;
+    -fx-padding:10 0 10 0;
+    -fx-background-radius:10px;
+    -fx-border-width:2px;
+}
 .csg_scroll_pane{
     -fx-fit-to-width:true;
     -fx-padding:10 10 10 10;
@@ -222,4 +229,20 @@
 }
 .site_icon_button{
     -fx-pref-width: 170px;
+}
+.sy_scroll_pane{
+    -fx-fit-to-width:true;
+    -fx-fit-to-height:true;
+    -fx-padding:10 10 10 10;
+    -fx-background-color: #87cefa;
+    
+}
+.mt_vbox{
+    -fx-background-color:white;
+    -fx-border-radius:15px;
+    -fx-padding:10 10 10 10;
+    -fx-background-radius:10px;
+    -fx-border-width:2px;
+    -fx-pref-width:600px;
+    -fx-spacing:10;
 }
