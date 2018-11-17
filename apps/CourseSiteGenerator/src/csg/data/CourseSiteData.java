@@ -17,6 +17,9 @@ import static csg.CourseSitePropertyType.OH_TOGGLE_ALL;
 import static csg.CourseSitePropertyType.OH_TOGGLE_GRADUATE;
 import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
+import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_CSS_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_NUMBER_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_SEMESTER_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
@@ -25,6 +28,7 @@ import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
 import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -42,6 +46,9 @@ public class CourseSiteData implements AppDataComponent{
     CourseSiteGenerateApp app;
      // NOTE THAT THIS DATA STRUCTURE WILL DIRECTLY STORE THE
     // DATA IN THE ROWS OF THE TABLE VIEW
+    ObservableList<String> subjects;
+    ObservableList<String> numbers;
+    
     ObservableList<TeachingAssistantPrototype> teachingAssistants;
     ObservableList<TeachingAssistantPrototype> underGradTAS;
     ObservableList<TeachingAssistantPrototype> gradTAS; 
@@ -55,6 +62,7 @@ public class CourseSiteData implements AppDataComponent{
     ObservableList<Recitation> recitations;
     ObservableList<Lab> labs;
     ObservableList<Schedule> schedules;
+    
     
 
     // THESE ARE THE TIME BOUNDS FOR THE OFFICE HOURS GRID. NOTE
@@ -70,7 +78,11 @@ public class CourseSiteData implements AppDataComponent{
     public CourseSiteData(CourseSiteGenerateApp initApp){
         app = initApp;
          AppGUIModule gui = app.getGUIModule();
-
+         
+        ComboBox subject = (ComboBox)gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        ComboBox number = (ComboBox)gui.getGUINode(SITE_NUMBER_COMBO_BOX);
+        subjects = subject.getItems();
+        numbers = number.getItems();
         // CONSTRUCT THE LIST OF TAs FOR THE TABLE
         TableView<TeachingAssistantPrototype> taTableView = (TableView)gui.getGUINode(OH_TAS_TABLE_VIEW);
         TableView<Lecture> lectureTable = (TableView)gui.getGUINode(MT_LECTURE_TABLEVIEW);
@@ -88,9 +100,11 @@ public class CourseSiteData implements AppDataComponent{
         // THESE ARE THE DEFAULT OFFICE HOURS
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
-        addBannerCombobox();
+        initalizeBannerCombobox();
         addTimeRange();
         resetOfficeHours();
+        initalizeCssComboBox();
+        initializeType();
     }
 
     @Override
@@ -123,19 +137,36 @@ public class CourseSiteData implements AppDataComponent{
 /****************************
  * SITE  RELATED METHODS
  */
-    public void addBannerCombobox(){
+    public void initalizeBannerCombobox(){
         AppGUIModule gui = app.getGUIModule();
-        ComboBox subject = (ComboBox)gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
-        subject.getItems().add("CSE");
-        subject.getItems().add("IEE");
         ComboBox year = (ComboBox)gui.getGUINode(SITE_YEAR_COMBO_BOX);
         int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
         year.getItems().add(currentYear);
         year.getItems().add(currentYear+1);
+        year.setValue(currentYear);
         ComboBox semester = (ComboBox)gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
         semester.getItems().addAll("Spring","Summer","Fall","Winter");
-        
+        semester.setValue("Fall");
     }
+    public void initalizeCssComboBox(){
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+        File cssFolder = new File("work/css/");
+        for (File cssFile:cssFolder.listFiles()){
+            css.getItems().add(cssFile.getName());
+        }
+    }
+    public void addSubject(String subject){
+        if (!subjects.contains(subject)) {
+            subjects.add(subject);
+        }
+    }
+    public void addNumber(String number){
+        if(!numbers.contains(number)){
+            numbers.add(number);
+        }
+    }
+    
 /****************************
  * OH RELATED METHODS
  */
@@ -352,8 +383,13 @@ public class CourseSiteData implements AppDataComponent{
         schedule.setTopic(newTopic);
         schedule.setLink(newLink);
     }
+    public void initializeType(){
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+        type.getItems().addAll("Holiday","Lecture","HW","Recitation","Lab","Reference");
+    }
 // ACCESSOR METHODS
-
+    
     public int getStartHour() {
         return startHour;
     }
@@ -437,7 +473,19 @@ public class CourseSiteData implements AppDataComponent{
     public Iterator<TimeSlot> officeHoursIterator() {
         return officeHours.iterator();
     }
-
+    public Iterator<Lecture> lecturesIterator() {
+        return lectures.iterator();
+    }
+    public Iterator<Recitation> recitationsIterator() {
+        return recitations.iterator();
+    }
+    public Iterator<Lab> labsIterator() {
+        return labs.iterator();
+    }
+    public Iterator<Schedule> schedulesIterator() {
+        return schedules.iterator();
+    }
+    
     public TeachingAssistantPrototype getTAWithName(String name) {
         Iterator<TeachingAssistantPrototype> taIterator = teachingAssistants.iterator();
         while (taIterator.hasNext()) {
@@ -511,4 +559,5 @@ public class CourseSiteData implements AppDataComponent{
          
         return gradTAS;
     }
+    
 }

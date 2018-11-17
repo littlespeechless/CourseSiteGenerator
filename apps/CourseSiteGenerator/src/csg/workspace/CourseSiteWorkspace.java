@@ -200,6 +200,7 @@ import djf.modules.AppFoolproofModule;
 import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
 import djf.ui.AppNodesBuilder;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
@@ -237,6 +238,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 
@@ -292,7 +294,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ComboBox numberCombo = csgBuilder.buildComboBox(SITE_NUMBER_COMBO_BOX,  null, CLASS_COMBO_BOX_LABLE, ENABLED);
         ComboBox semesterCombo = csgBuilder.buildComboBox(SITE_SEMESTER_COMBO_BOX, null, CLASS_COMBO_BOX_LABLE, ENABLED);
         ComboBox yearCombo = csgBuilder.buildComboBox(SITE_YEAR_COMBO_BOX, null, CLASS_COMBO_BOX_LABLE, ENABLED);
-        subjecCombo.setEditable(ENABLED);
+        subjecCombo.setEditable(true);
         numberCombo.setEditable(ENABLED);
         semesterCombo.setEditable(ENABLED);
         yearCombo.setEditable(ENABLED);
@@ -335,21 +337,21 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         Button leftFooterButton = csgBuilder.buildTextButton(SITE_LEFT_FOOTER, null, CLASS_SITE_ICON_BUTTON, ENABLED);
         Button rightFooterButton = csgBuilder.buildTextButton(SITE_RIGHT_FOOTER, null, CLASS_SITE_ICON_BUTTON, ENABLED);
         ComboBox cssComboBox = csgBuilder.buildComboBox(SITE_CSS_COMBO_BOX, null, CLASS_SITE_ICON_BUTTON, ENABLED);
-        Image favicon = csgBuilder.buildImage(SITE_FAVICON_IMG, null, ENABLED);
-        Image navbar = csgBuilder.buildImage(SITE_NAVBAR_IMG, null, ENABLED);
-        Image leftFooter = csgBuilder.buildImage(SITE_LEFT_FOOTER_IMG, null, ENABLED);
-        Image rightFooter = csgBuilder.buildImage(SITE_RIGHT_FOOTER_IMG, null, ENABLED);
+        ImageView favicon = csgBuilder.buildImageView(SITE_FAVICON_IMG, null, ENABLED);
+        ImageView navbar = csgBuilder.buildImageView(SITE_NAVBAR_IMG, null, ENABLED);
+        ImageView leftFooter = csgBuilder.buildImageView(SITE_LEFT_FOOTER_IMG, null, ENABLED);
+        ImageView rightFooter = csgBuilder.buildImageView(SITE_RIGHT_FOOTER_IMG, null, ENABLED);
         GridPane styleGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, styleBox, CLASS_CSG_GRID_PANE, ENABLED);
         styleGridPane.add(styleLabel, 0, 0);
         GridPane iconspGridPane = csgBuilder.buildGridPane(CSG_GRID_PANE, null, CLASS_CSG_SUB_GRID_PANE, ENABLED);
         iconspGridPane.add(faviconButton, 0, 0);
-        iconspGridPane.add(new ImageView(favicon), 1, 0);
+        iconspGridPane.add(favicon, 1, 0);
         iconspGridPane.add(navbarButton, 0, 1);
-        iconspGridPane.add(new ImageView(navbar), 1, 1);
+        iconspGridPane.add(navbar, 1, 1);
         iconspGridPane.add(leftFooterButton, 0, 2);
-        iconspGridPane.add(new ImageView(leftFooter), 1, 2);
+        iconspGridPane.add(leftFooter, 1, 2);
         iconspGridPane.add(rightFooterButton, 0, 3);
-        iconspGridPane.add(new ImageView(rightFooter), 1, 3);
+        iconspGridPane.add(rightFooter, 1, 3);
         iconspGridPane.add(cssLabel, 0, 4);
         iconspGridPane.add(cssComboBox, 1, 4);
         styleGridPane.add(iconspGridPane, 0, 1);
@@ -877,6 +879,49 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
          * Site pane
          * 
          */
+        ComboBox subjectBox = (ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        subjectBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                controller.setOldSubject();
+            }else{
+                controller.processSubjectChange();
+            }
+        });
+        ComboBox numberBox = (ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX);
+        numberBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                controller.setOldNumber();
+            }else{
+                controller.processNumberChange();
+            }
+        });
+        ComboBox yearBox = (ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX);
+        ComboBox semesterBox = (ComboBox) gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
+        semesterBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                controller.setComboBox(semesterBox);
+            }else{
+                controller.processComboBoxChange(semesterBox);
+            }
+        });
+        yearBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                controller.setComboBox(yearBox);
+            }else{
+                controller.processComboBoxChange(yearBox);
+            }
+        });
+
+        TextField titlefiField = ((TextField) gui.getGUINode(SITE_TITLE_TEXT_FIELD));
+        titlefiField.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldFieldText(titlefiField);
+                    }else{
+                        controller.processTextFieldChange(titlefiField);
+                    }
+        }); 
+                
         ((CheckBox) gui.getGUINode(SITE_HOME)).setOnAction(e->{
             controller.up();
         });
@@ -889,6 +934,201 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ((CheckBox) gui.getGUINode(SITE_HWS)).setOnAction(e->{
             controller.up();
         });
+        ((CheckBox) gui.getGUINode(SITE_HOME)).setOnMouseClicked(e->{
+            controller.processCheckboxChange(((CheckBox) gui.getGUINode(SITE_HOME)));
+        });
+        ((CheckBox) gui.getGUINode(SITE_SYLLABUS)).setOnMouseClicked(e->{
+            controller.processCheckboxChange(((CheckBox) gui.getGUINode(SITE_SYLLABUS)));
+        });
+        ((CheckBox) gui.getGUINode(SITE_SCHEDULE)).setOnMouseClicked(e->{
+            controller.processCheckboxChange(((CheckBox) gui.getGUINode(SITE_SCHEDULE)));
+        });
+        ((CheckBox) gui.getGUINode(SITE_HWS)).setOnMouseClicked(e->{
+            controller.processCheckboxChange(((CheckBox) gui.getGUINode(SITE_HWS)));
+        });
+        
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+            );                 
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.jpg","*.png","*.icon")
+                
+            );
+        Button faviconButton = (Button) gui.getGUINode(SITE_FAVICON);
+        ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
+        Button navbarButton = (Button) gui.getGUINode(SITE_NAVBAR);
+        ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
+        Button leftFooterButton = (Button) gui.getGUINode(SITE_LEFT_FOOTER);
+        ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
+        Button rightFooterButton =(Button) gui.getGUINode(SITE_RIGHT_FOOTER);
+        ImageView rightFooterImageView = (ImageView) gui.getGUINode(SITE_RIGHT_FOOTER_IMG);
+        
+        faviconButton.setOnAction((event) -> {
+            File file = fileChooser.showOpenDialog(gui.getWindow());
+            if (file!=null) {
+                Image newImage = new Image(file.toURI().toString());
+                controller.changeImages(newImage, faviconImageView);
+            }
+        });
+        navbarButton.setOnAction((event) -> {
+            File file = fileChooser.showOpenDialog(gui.getWindow());
+            if (file!=null) {
+                Image newImage = new Image(file.toURI().toString());
+                controller.changeImages(newImage, navbarImageView);
+            }
+        });
+        leftFooterButton.setOnAction((event) -> {
+            File file = fileChooser.showOpenDialog(gui.getWindow());
+            if (file!=null) {
+                Image newImage = new Image(file.toURI().toString());
+                controller.changeImages(newImage, leftFooterImageView);
+            }
+        });
+        rightFooterButton.setOnAction((event) -> {
+            File file = fileChooser.showOpenDialog(gui.getWindow());
+            if (file!=null) {
+                Image newImage = new Image(file.toURI().toString());
+                controller.changeImages(newImage, rightFooterImageView);
+            }
+        });
+        
+        
+        TextField insName = (TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD);
+        TextField insEmail = (TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD);
+        TextField insRoom = (TextField) gui.getGUINode(SITE_INSTRUCTOR_ROOM_TEXT_FIELD);
+        TextField insHomepage = (TextField) gui.getGUINode(SITE_INSTRUCTOR_HOMEPAGE_TEXT_FIELD);
+        
+        insName.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldFieldText(insName);
+                    }else{
+                        controller.processTextFieldChange(insName);
+                    }
+        }); 
+        insEmail.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldFieldText(insEmail);
+                    }else{
+                        controller.processTextFieldChange(insEmail);
+                    }
+        }); 
+        insRoom.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldFieldText(insRoom);
+                    }else{
+                        controller.processTextFieldChange(insRoom);
+                    }
+        }); 
+        insHomepage.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldFieldText(insHomepage);
+                    }else{
+                        controller.processTextFieldChange(insHomepage);
+                    }
+        }); 
+        
+        TextArea insOH = (TextArea) gui.getGUINode(SITE_INSTRUCTOR_OH_TEXT_AREA);
+        
+        insOH.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(insOH);
+                    }else{
+                        controller.processTextAreaChange(insOH);
+                    }
+        }); 
+        
+        /**
+         * SYLLABUS TAB
+         * 
+         */
+        TextArea des = (TextArea) gui.getGUINode(SY_DESCRIPTION_TEXT_AREA);
+        TextArea topicArea = (TextArea) gui.getGUINode(SY_TOPIC_TEXT_AREA);
+        TextArea prereq = (TextArea) gui.getGUINode(SY_PREREQUIREMENT_TEXT_AREA);
+        TextArea outcomes = (TextArea) gui.getGUINode(SY_OUTCOMES_TEXT_AREA);
+        TextArea textbook = (TextArea) gui.getGUINode(SY_TEXTBOOK_TEXT_AREA);
+        TextArea graded = (TextArea) gui.getGUINode(SY_GRADED_TEXT_AREA);
+        TextArea grading = (TextArea) gui.getGUINode(SY_GRADING_TEXT_AREA);
+        TextArea academic = (TextArea) gui.getGUINode(SY_ACADEMIC_TEXT_AREA);
+        TextArea special = (TextArea) gui.getGUINode(SY_SPECIAL_TEXT_AREA);
+        des.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(des);
+                    }else{
+                        controller.processTextAreaChange(des);
+                    }
+        }); 
+        topicArea.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(topicArea);
+                    }else{
+                        controller.processTextAreaChange(topicArea);
+                    }
+        }); 
+        prereq.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(prereq);
+                    }else{
+                        controller.processTextAreaChange(prereq);
+                    }
+        }); 
+        outcomes.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(outcomes);
+                    }else{
+                        controller.processTextAreaChange(outcomes);
+                    }
+        }); 
+        textbook.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(textbook);
+                    }else{
+                        controller.processTextAreaChange(textbook);
+                    }
+        }); 
+        graded.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(graded);
+                    }else{
+                        controller.processTextAreaChange(graded);
+                    }
+        }); 
+        grading.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(grading);
+                    }else{
+                        controller.processTextAreaChange(grading);
+                    }
+        }); 
+        academic.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(academic);
+                    }else{
+                        controller.processTextAreaChange(academic);
+                    }
+        }); 
+        special.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        controller.setOldAreaText(special);
+                    }else{
+                        controller.processTextAreaChange(special);
+                    }
+        }); 
         
         
         /**
@@ -1248,7 +1488,6 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         });
         TableView scheduleTable = (TableView)gui.getGUINode(SC_SCHEDULE_TABLEVIEW);
         ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
-        type.getItems().add("TEST");
         type.setOnAction((event) -> {
             controller.up();
         });

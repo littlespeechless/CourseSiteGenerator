@@ -33,6 +33,8 @@ import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
 import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_NUMBER_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
 import csg.data.CourseSiteData;
 import csg.data.Lab;
 import csg.data.Lecture;
@@ -45,8 +47,15 @@ import csg.transactions.AddLecture_Transaction;
 import csg.transactions.AddRecitation_Transaction;
 import csg.transactions.AddSchedule_Transaction;
 import csg.transactions.AddTimeSlot_Transaction;
+import csg.transactions.ChangeCheckBox_Transaction;
+import csg.transactions.ChangeComboBox_Transaction;
 import csg.transactions.ChangeDate_Transaction;
+import csg.transactions.ChangeImage_Transaction;
+import csg.transactions.ChangeNumber_Transaction;
 import csg.transactions.ChangeOHTable_Transaction;
+import csg.transactions.ChangeSubject_Transaction;
+import csg.transactions.ChangeTextArea_Transaction;
+import csg.transactions.ChangeTextField_Transaction;
 import csg.transactions.EditLab_Transaction;
 import csg.transactions.EditLecture_Transaction;
 import csg.transactions.EditRecitation_Transaction;
@@ -69,6 +78,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
@@ -77,8 +87,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -92,6 +105,11 @@ public class CourseSiteController {
     CourseSiteGenerateApp app;
     LocalDate oldStartDate;
     LocalDate oldendDate;
+    String oldNumber;
+    String oldSubject;
+    String oldFieldText;
+    String oldAreaText;
+    String oldComboBox;
     public CourseSiteController(CourseSiteGenerateApp initApp){
         app = initApp;
         AppGUIModule gui = app.getGUIModule();
@@ -99,6 +117,95 @@ public class CourseSiteController {
         //oldendDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).getValue();
         oldStartDate = LocalDate.MIN;
         oldendDate = LocalDate.MAX;
+        oldNumber = "";
+        oldSubject= "";
+        oldFieldText = "";
+        oldAreaText = "";
+        oldComboBox = "";
+        
+    }
+    /*
+    * SITE PAGE  CONTROLLS 
+    */
+    public void processSubjectChange(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox subjectBox = (ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        String newSubject = subjectBox.getEditor().getText();
+        if (!oldSubject.equals(newSubject)){
+            System.out.println(newSubject);
+            ChangeSubject_Transaction cst =new ChangeSubject_Transaction(data, oldSubject,newSubject, subjectBox);
+            app.processTransaction(cst);
+        }
+    }
+    public void setOldSubject(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox subjectBox = (ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        if (subjectBox.getValue()==null) {
+            oldSubject = "";
+        }else{
+            oldSubject =(String) subjectBox.getValue();
+        }
+        
+    }
+    public void processNumberChange(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox numberBox = (ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX);
+        String newNumber = numberBox.getEditor().getText();
+        if (!oldNumber.equals(newNumber)) {
+            ChangeNumber_Transaction cnt = new ChangeNumber_Transaction(data, oldNumber,newNumber, numberBox);
+            app.processTransaction(cnt);
+        }
+    }
+    public void setOldNumber(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox numberBox = (ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX);
+        oldNumber = numberBox.getEditor().getText();
+    }
+    public void processComboBoxChange(ComboBox comboBox){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        String newString = comboBox.getEditor().getText();
+        if (!oldComboBox.equals(newString)) {
+            ChangeComboBox_Transaction ccbt = new ChangeComboBox_Transaction(data, oldComboBox, newString, comboBox);
+            app.processTransaction(ccbt);
+        }
+    }
+    public void setComboBox(ComboBox box){
+        oldComboBox = box.getEditor().getText();
+    }
+    public void processTextFieldChange(TextField textField){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        String newText = textField.getText();
+        if (!oldFieldText.equals(newText)) {
+            ChangeTextField_Transaction ctft = new ChangeTextField_Transaction(data, newText, oldFieldText, textField);
+            app.processTransaction(ctft);
+        }
+    }
+    public void setOldFieldText(TextField textField){
+        oldFieldText = textField.getText();
+    }
+    public void processTextAreaChange(TextArea textArea){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        String newText = textArea.getText();
+        if(!oldAreaText.equals(newText)){
+            ChangeTextArea_Transaction ctat = new ChangeTextArea_Transaction(data, newText, oldAreaText, textArea);
+            app.processTransaction(ctat);
+        }
+    }
+    public void setOldAreaText(TextArea textArea){
+        oldAreaText = textArea.getText();
+    }
+    public void processCheckboxChange(CheckBox checkBox){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        ChangeCheckBox_Transaction ccbt = new ChangeCheckBox_Transaction(data, checkBox, checkBox.isSelected());
+        app.processTransaction(ccbt);
+    }
+    public void changeImages(Image newimImage,ImageView imageView){
+        ChangeImage_Transaction cit = new ChangeImage_Transaction(newimImage, imageView);
+        app.processTransaction(cit);
     }
     /*
     * MT PAGE  CONTROLLS 
@@ -207,7 +314,7 @@ public class CourseSiteController {
         app.processTransaction(removeTA_Transaction);
     }
     public void processAddTimeslot(TeachingAssistantPrototype ta, int column,TimeSlot dataSlot){
-        AppGUIModule gui = app.getGUIModule();
+        
         //TimeSlot data = (TimeSlot) app.getDataComponent();
         TimeSlot dataTimeSlot = dataSlot;
         CourseSiteData data = (CourseSiteData) app.getDataComponent();

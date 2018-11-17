@@ -400,14 +400,17 @@ public class AppNodesBuilder {
             button.setGraphic(new ImageView(buttonImage));
         }
     }
-    public Image buildImage(Object nodeID,Pane parentPane, boolean enabled){
+    public ImageView buildImageView(Object nodeID,Pane parentPane, boolean enabled){
         // LOAD THE ICON FROM THE PROVIDED FILE
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String iconProperty = nodeID.toString() + "_ICON";
         String imagePath =  FILE_PROTOCOL + props.getProperty(iconProperty);
         Image selectedImage = new Image(imagePath);
-        return selectedImage;
+        ImageView imageView = new ImageView(selectedImage);
+        initNode(nodeID, imageView, null, enabled);
+        return imageView;
     }
+    
     public ToggleButton buildIconToggleButton(Object nodeId,
             Pane parentPane,
             String styleClass,
