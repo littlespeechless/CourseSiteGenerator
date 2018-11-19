@@ -88,7 +88,6 @@ import static csg.CourseSitePropertyType.SC_SCHEDULE_TYPE_COLUMN;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TITLE_COLUMN;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TOPIC_COLUMN;
-import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
 import static csg.CourseSitePropertyType.SC_START_DATE_LABEL;
 import static csg.CourseSitePropertyType.SC_TITLE_LABEL;
 import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
@@ -241,6 +240,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import properties_manager.PropertiesManager;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SITE_EXPORT_DIR;
 
 /**
  *
@@ -289,6 +290,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         Label semesterLabel = csgBuilder.buildLabel(SITE_SEMESTER, null, CLASS_SITE_LABLE, ENABLED);
         Label yearLabel = csgBuilder.buildLabel(SITE_YEAR, null, CLASS_SITE_LABLE, ENABLED);
         Label exportLabel = csgBuilder.buildLabel(SITE_EXPORT, null, CLASS_SITE_LABLE, ENABLED);
+        Label exportDirLabel =csgBuilder.buildLabel(SITE_EXPORT_DIR, null, CLASS_SITE_LABLE, ENABLED);
         Label titleLabel = csgBuilder.buildLabel(SITE_TITLE, null, CLASS_SITE_LABLE, ENABLED);
         ComboBox subjecCombo = csgBuilder.buildComboBox(SITE_SUBJECT_COMBO_BOX, null, CLASS_COMBO_BOX_LABLE, ENABLED);
         ComboBox numberCombo = csgBuilder.buildComboBox(SITE_NUMBER_COMBO_BOX,  null, CLASS_COMBO_BOX_LABLE, ENABLED);
@@ -312,7 +314,11 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         firstRow.add(titleLabel, 0, 2);
         firstRow.add(titleField, 1, 2);
         bannerPane.add(firstRow, 0, 1);
-        bannerPane.add(exportLabel, 0, 2);
+        GridPane exportPane = csgBuilder.buildGridPane(CSG_GRID_PANE, null, CLASS_CSG_SUB_GRID_PANE, ENABLED);
+        exportPane.add(exportLabel, 0, 0);
+        exportPane.add(exportDirLabel, 1, 0);
+        bannerPane.add(exportPane, 0, 2);
+        
         //pages
         HBox pagesBox = csgBuilder.buildHBox(SITE_PAGE_BOX, null, CLASS_CSG_HBOX, ENABLED);
         Label pageLabel = csgBuilder.buildLabel(SITE_PAGE, null, CLASS_SITE_TITLE_LABLE, ENABLED);
@@ -714,7 +720,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         Label calenderLabel = csgBuilder.buildLabel(SC_CALENDAR_LABEL, null, CLASS_SITE_TITLE_LABLE, ENABLED);
         Label startDateLabel = csgBuilder.buildLabel(SC_START_DATE_LABEL, null, CLASS_SITE_LABLE, ENABLED);
         Label endDateLabel = csgBuilder.buildLabel(SC_END_DATE_LABEL, null, CLASS_SITE_LABLE, ENABLED);
-        DatePicker startDatePicker = csgBuilder.buildDatePicker( SC_START_DATE_DATE_PIKER, "", ENABLED);
+        DatePicker startDatePicker = csgBuilder.buildDatePicker(SC_START_DATE_DATE_PICKER, "", ENABLED);
         DatePicker endDatePicker = csgBuilder.buildDatePicker(SC_END_DATE_DATE_PICKER, "", ENABLED);
         startDatePicker.setEditable(false);
         endDatePicker.setEditable(false);
@@ -885,6 +891,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 controller.setOldSubject();
             }else{
                 controller.processSubjectChange();
+                controller.up();
             }
         });
         ComboBox numberBox = (ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX);
@@ -893,6 +900,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 controller.setOldNumber();
             }else{
                 controller.processNumberChange();
+                controller.up();
             }
         });
         ComboBox yearBox = (ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX);
@@ -902,6 +910,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 controller.setComboBox(semesterBox);
             }else{
                 controller.processComboBoxChange(semesterBox);
+                controller.up();
             }
         });
         yearBox.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -909,7 +918,20 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 controller.setComboBox(yearBox);
             }else{
                 controller.processComboBoxChange(yearBox);
+                controller.up();
             }
+        });
+        subjectBox.setOnAction((event) -> {
+            controller.up();
+        });
+        numberBox.setOnAction((event) -> {
+            controller.up();
+        });
+        semesterBox.setOnAction((event) -> {
+            controller.up();
+        });
+        yearBox.setOnAction((event) -> {
+            controller.up();
         });
 
         TextField titlefiField = ((TextField) gui.getGUINode(SITE_TITLE_TEXT_FIELD));
@@ -953,16 +975,16 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 new File(System.getProperty("user.home"))
             );                 
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", "*.jpg","*.png","*.icon")
+                new FileChooser.ExtensionFilter("All Images", "*.jpg","*.png","*.ico")
                 
             );
         Button faviconButton = (Button) gui.getGUINode(SITE_FAVICON);
-        ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
         Button navbarButton = (Button) gui.getGUINode(SITE_NAVBAR);
-        ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
         Button leftFooterButton = (Button) gui.getGUINode(SITE_LEFT_FOOTER);
-        ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
         Button rightFooterButton =(Button) gui.getGUINode(SITE_RIGHT_FOOTER);
+        ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
+        ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
+        ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
         ImageView rightFooterImageView = (ImageView) gui.getGUINode(SITE_RIGHT_FOOTER_IMG);
         
         faviconButton.setOnAction((event) -> {
@@ -1391,9 +1413,10 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ComboBox endTime = (ComboBox)gui.getGUINode(OH_END_TIME_COMBO_BOX);
         
         startTime.setOnAction((event) -> {
-           controller.changeTimeRange();
-           String selected = (String)startTime.getValue();
-           String endSelected = (String)endTime.getValue();
+                if (startTime.getValue()!=null&&endTime.getValue()!=null){
+                    controller.changeTimeRange();
+                String selected = (String)startTime.getValue();
+                String endSelected = (String)endTime.getValue();
                 int startHour =controller.getHours(selected);
                 int endHour = controller.getHours(endSelected);
                 //endTime.getItems().clear();
@@ -1414,11 +1437,13 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                             endTime.getItems().add(0,i-12+":00pm");
                         }
                 }
-                
+                }
+
         });
         
         endTime.setOnAction((event) -> {
-            controller.changeTimeRange();
+            if (startTime.getValue()!=null&&endTime.getValue()!=null){
+           controller.changeTimeRange();
            String selected = (String)startTime.getValue();
            String endSelected = (String)endTime.getValue();
                 int startHour =controller.getHours(selected);
@@ -1442,6 +1467,8 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                             startTime.getItems().add(i-12+":00pm");
                         }
                 }
+            }
+          
                
         });
         
@@ -1455,16 +1482,21 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ALL.setOnAction((event) -> {
             if(ALL.isSelected()){
                 controller.changeToAll();
+                controller.updateOH();
             }
         });
         Undergrad.setOnAction((event) -> {
             if(Undergrad.isSelected()){
                 controller.changeToUndergraduate();
+                controller.updateOH();
+                
             }
         });
         Grad.setOnAction((event) -> {
             if(Grad.isSelected()){
                 controller.changeToGrad();
+                controller.updateOH();
+                
             }
         });
         // DON'T LET ANYONE SORT THE TABLES
@@ -1476,7 +1508,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
          * SCHEDULE PANE
          * 
          */
-        ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)).valueProperty().
+        ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER)).valueProperty().
                 addListener((observable, oldValue, newValue) -> {
                    controller.processChangeStartDate(oldValue, newValue);
                    controller.up();

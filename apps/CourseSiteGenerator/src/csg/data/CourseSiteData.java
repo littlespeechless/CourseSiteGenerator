@@ -16,27 +16,69 @@ import static csg.CourseSitePropertyType.OH_TAS_TABLE_VIEW;
 import static csg.CourseSitePropertyType.OH_TOGGLE_ALL;
 import static csg.CourseSitePropertyType.OH_TOGGLE_GRADUATE;
 import static csg.CourseSitePropertyType.OH_TOGGLE_UNDERGRADUATE;
+import static csg.CourseSitePropertyType.SC_ADD_ITEM_BUTTON;
+import static csg.CourseSitePropertyType.SC_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_END_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_LINK_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_CSS_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_EXPORT_DIR;
+import static csg.CourseSitePropertyType.SITE_FAVICON_IMG;
+import static csg.CourseSitePropertyType.SITE_HOME;
+import static csg.CourseSitePropertyType.SITE_HWS;
+import static csg.CourseSitePropertyType.SITE_INSTRUCTOR_EMAIL_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SITE_INSTRUCTOR_HOMEPAGE_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SITE_INSTRUCTOR_NAME_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SITE_INSTRUCTOR_OH_TEXT_AREA;
+import static csg.CourseSitePropertyType.SITE_INSTRUCTOR_ROOM_TEXT_FIELD;
+import static csg.CourseSitePropertyType.SITE_LEFT_FOOTER_IMG;
+import static csg.CourseSitePropertyType.SITE_NAVBAR_IMG;
 import static csg.CourseSitePropertyType.SITE_NUMBER_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_RIGHT_FOOTER_IMG;
+import static csg.CourseSitePropertyType.SITE_SCHEDULE;
 import static csg.CourseSitePropertyType.SITE_SEMESTER_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_SYLLABUS;
+import static csg.CourseSitePropertyType.SITE_TITLE_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
+import static csg.CourseSitePropertyType.SY_ACADEMIC_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_DESCRIPTION_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_GRADED_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_GRADING_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_OUTCOMES_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_PREREQUIREMENT_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_SPECIAL_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_TEXTBOOK_TEXT_AREA;
+import static csg.CourseSitePropertyType.SY_TOPIC_TEXT_AREA;
 import csg.data.TimeSlot.DayOfWeek;
 import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
 import djf.modules.AppGUIModule;
 import static djf.modules.AppGUIModule.ENABLED;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Iterator;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -73,8 +115,8 @@ public class CourseSiteData implements AppDataComponent{
     int endHour;
     
     // DEFAULT VALUES FOR START AND END HOURS IN MILITARY HOURS
-    public static final int MIN_START_HOUR = 9;
-    public static final int MAX_END_HOUR = 21;
+    public static final int MIN_START_HOUR = 8;
+    public static final int MAX_END_HOUR = 22;
     public CourseSiteData(CourseSiteGenerateApp initApp){
         app = initApp;
          AppGUIModule gui = app.getGUIModule();
@@ -100,26 +142,91 @@ public class CourseSiteData implements AppDataComponent{
         // THESE ARE THE DEFAULT OFFICE HOURS
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
+        //banner loading
         initalizeBannerCombobox();
-        addTimeRange();
+        //time rangebuilding
         resetOfficeHours();
         initalizeCssComboBox();
+        //loading css files
+        ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+        css.setValue(css.getItems().get(0));
         initializeType();
     }
 
     @Override
     public void reset() {
+        AppGUIModule gui = app.getGUIModule();
+        //reset site pane
+        ((ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX)).setValue("");
+        ((ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX)).setValue("");
+        ((ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX)).setValue("");
+        ((ComboBox) gui.getGUINode(SITE_SEMESTER_COMBO_BOX)).setValue("");
+        ((TextField) gui.getGUINode(SITE_TITLE_TEXT_FIELD)).setText("");
+        ((Label) gui.getGUINode(SITE_EXPORT_DIR)).setText(".\\export\\subject_number_semester_year\\public_html");
+        //page
+        ((CheckBox) gui.getGUINode(SITE_HOME)).setSelected(false);
+        ((CheckBox)gui.getGUINode(SITE_SYLLABUS)).setSelected(false);
+        ((CheckBox)gui.getGUINode(SITE_SCHEDULE)).setSelected(false);
+        ((CheckBox)gui.getGUINode(SITE_HWS)).setSelected(false);
+        //style
+        initalizeCssComboBox();
+        Image image = new Image("file:./images/LoadImage.png");
+        ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
+        ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
+        ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
+        ImageView rightFooterImageView = (ImageView) gui.getGUINode(SITE_RIGHT_FOOTER_IMG);
+        faviconImageView.setImage(image);
+        navbarImageView.setImage(image);
+        leftFooterImageView.setImage(image);
+        rightFooterImageView.setImage(image);
+        ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+        css.setValue(css.getItems().get(0));
+        //instructor
+        ((TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD)).setText("");
+        ((TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD)).setText("");
+        ((TextField) gui.getGUINode(SITE_INSTRUCTOR_ROOM_TEXT_FIELD)).setText("");
+        ((TextField) gui.getGUINode(SITE_INSTRUCTOR_HOMEPAGE_TEXT_FIELD)).setText("");
+        ((TextArea) gui.getGUINode(SITE_INSTRUCTOR_OH_TEXT_AREA)).setText("");
+        
+        //reste syllabus
+        ((TextArea) gui.getGUINode(SY_DESCRIPTION_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_TOPIC_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_PREREQUIREMENT_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_OUTCOMES_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_TEXTBOOK_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_GRADED_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_GRADING_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_ACADEMIC_TEXT_AREA)).setText("");
+        ((TextArea) gui.getGUINode(SY_SPECIAL_TEXT_AREA)).setText("");
+        
+        //reset meeting time
+        labs.clear();
+        recitations.clear();
+        lectures.clear();
+        //reset OH
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
         teachingAssistants.clear();
         underGradTAS.clear();
         gradTAS.clear();
-        labs.clear();
-        recitations.clear();
-        lectures.clear();
-        schedules.clear();
-        addTimeRange();
         resetOfficeHours();
+        //reset schedule pane
+        schedules.clear();
+        ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER)).setValue(null);
+        ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).setValue(null);
+        ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
+            DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
+            TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
+            TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
+            TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
+            type.setValue(null);
+            date.setValue(null);
+            title.setText("");
+            topic.setText("");
+            link.setText("");
+            ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setText("Add");
+        
+        app.getTPS().clearAllTransactions();
         /*
         for (int i = 0; i <officeHours.size(); i++) {
             TimeSlot timeSlot = officeHours.get(i);
@@ -137,33 +244,77 @@ public class CourseSiteData implements AppDataComponent{
 /****************************
  * SITE  RELATED METHODS
  */
-    public void initalizeBannerCombobox(){
+    public void initalizeBannerCombobox() {
         AppGUIModule gui = app.getGUIModule();
         ComboBox year = (ComboBox)gui.getGUINode(SITE_YEAR_COMBO_BOX);
         int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
         year.getItems().add(currentYear);
         year.getItems().add(currentYear+1);
-        year.setValue(currentYear);
+        //year.setValue(currentYear);
         ComboBox semester = (ComboBox)gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
         semester.getItems().addAll("Spring","Summer","Fall","Winter");
-        semester.setValue("Fall");
+        //semester.setValue("Fall");
+        try{
+            File subjectFile = new File("./app_data/properties/subject.txt");
+            if (!subjectFile.exists()) {
+                subjectFile.createNewFile();
+            }else{
+                BufferedReader br = new BufferedReader(new FileReader(subjectFile));
+                String st;
+                while((st=br.readLine())!=null){
+                    subjects.add(st);
+                }
+            }
+            File numberFile = new File("./app_data/properties/number.txt");
+            if (!numberFile.exists()) {
+                subjectFile.createNewFile();
+            }else{
+                BufferedReader br = new BufferedReader(new FileReader(numberFile));
+                String st;
+                while((st=br.readLine())!=null){
+                    numbers.add(st);
+                }
+            }
+        }catch(Exception e){
+            
+        }
+        
     }
     public void initalizeCssComboBox(){
         AppGUIModule gui = app.getGUIModule();
         ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
         File cssFolder = new File("work/css/");
         for (File cssFile:cssFolder.listFiles()){
-            css.getItems().add(cssFile.getName());
+            if (!css.getItems().contains(cssFile.getName())&&cssFile.getName().contains(".css")) {
+                css.getItems().add(cssFile.getName());
+            }
+            
         }
     }
     public void addSubject(String subject){
         if (!subjects.contains(subject)) {
             subjects.add(subject);
+            try{
+                File subjectFile = new File("./app_data/properties/subject.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(subjectFile, true));
+                writer.append(subject+"\n");
+                writer.close();
+            }catch (Exception e){
+                
+            }
         }
     }
     public void addNumber(String number){
         if(!numbers.contains(number)){
             numbers.add(number);
+            try{
+                File numberFile = new File("./app_data/properties/number.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(numberFile, true));
+                writer.append(number+"\n");
+                writer.close();
+            }catch(Exception e){
+                
+            }
         }
     }
     
@@ -191,13 +342,15 @@ public class CourseSiteData implements AppDataComponent{
             //gradOH.add(timeSlot);
             //undergradOH.add(timeSlot);
         }
-        
+        addTimeRange();
         
     }
     public void addTimeRange(){
         AppGUIModule gui = app.getGUIModule();
         ComboBox startTime = (ComboBox)gui.getGUINode(OH_START_TIME_COMBO_BOX);
         ComboBox endTime = (ComboBox)gui.getGUINode(OH_END_TIME_COMBO_BOX);
+        startTime.getItems().clear();
+        endTime.getItems().clear();
         for (int i = startHour;i<endHour;i++){
             if (i<12) {
                 startTime.getItems().add(i+":00am");
@@ -234,6 +387,10 @@ public class CourseSiteData implements AppDataComponent{
             }
             index++;
         }
+        if (startTime!=null&&endTime!=null) {
+            updateHours(startTime, endTime);
+        }
+        
         return changeableOH;
     }
     public int getStartTimeslotIndex(String timeString){
@@ -282,7 +439,27 @@ public class CourseSiteData implements AppDataComponent{
         }
         return cellText;
     }
-    
+    public void updateHours(String startTime,String endTime){
+        if (startTime.contains("pm")) {
+            if(startTime.contains("12")){
+                startHour = 12;
+            }else{
+                startHour = Integer.parseInt(startTime.substring(0,startTime.indexOf(":")))+12;
+            }
+        }else{
+            startHour = Integer.parseInt(startTime.substring(0,startTime.indexOf(":")));
+        }
+        if (endTime.contains("pm")) {
+            if(endTime.contains("12")){
+                endHour = 12-1;
+            }else{
+                endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))+12-1;
+            }
+        }else{
+            endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))-1;
+        }
+        
+    }
     public void initHours(String startHourText, String endHourText) {
         int initStartHour = Integer.parseInt(startHourText);
         int initEndHour = Integer.parseInt(endHourText);

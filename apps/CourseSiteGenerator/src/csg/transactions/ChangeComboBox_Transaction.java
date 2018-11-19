@@ -1,7 +1,9 @@
 package csg.transactions;
 
+import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
 import csg.data.CourseSiteData;
 import csg.data.TeachingAssistantPrototype;
+import djf.modules.AppGUIModule;
 import javafx.scene.control.ComboBox;
 import jtps.jTPS_Transaction;
 

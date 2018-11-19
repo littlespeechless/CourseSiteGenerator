@@ -29,7 +29,6 @@ import static csg.CourseSitePropertyType.SC_DATE_DATE_PICKER;
 import static csg.CourseSitePropertyType.SC_END_DATE_DATE_PICKER;
 import static csg.CourseSitePropertyType.SC_LINK_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_SCHEDULE_TABLEVIEW;
-import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
 import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
@@ -96,6 +95,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
 
 /**
  *
@@ -113,7 +113,7 @@ public class CourseSiteController {
     public CourseSiteController(CourseSiteGenerateApp initApp){
         app = initApp;
         AppGUIModule gui = app.getGUIModule();
-        //oldStartDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)).getValue();
+        //oldStartDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER)).getValue();
         //oldendDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).getValue();
         oldStartDate = LocalDate.MIN;
         oldendDate = LocalDate.MAX;
@@ -569,6 +569,10 @@ public class CourseSiteController {
         data.refreshOH();
         
     }
+    public void updateOH(){
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
+        data.refreshOH();
+    }
     /*******
      * SCHEDULE CONTROL
      */
@@ -632,7 +636,7 @@ public class CourseSiteController {
         if (newDate!=oldStartDate) {
             
             ChangeDate_Transaction cdt = new ChangeDate_Transaction(data, oldDate, newDate, 
-                    ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PIKER)));
+                    ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER)));
             app.processTransaction(cdt);
             
         }

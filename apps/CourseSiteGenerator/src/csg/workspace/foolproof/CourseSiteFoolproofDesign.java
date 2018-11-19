@@ -20,7 +20,6 @@ import static csg.CourseSitePropertyType.SC_DATE_DATE_PICKER;
 import static csg.CourseSitePropertyType.SC_END_DATE_DATE_PICKER;
 import static csg.CourseSitePropertyType.SC_LINK_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_REMOVE_ITEM_BUTTON;
-import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PIKER;
 import static csg.CourseSitePropertyType.SC_TITLE_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TOPIC_TEXT_FIELD;
 import static csg.CourseSitePropertyType.SC_TYPE_COMBO_BOX;
@@ -41,6 +40,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SITE_EXPORT_DIR;
+import static csg.CourseSitePropertyType.SITE_NUMBER_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_SEMESTER_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
+import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -63,6 +69,7 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         exportIconControls();
         scheduleDatePickerControls();
         ScheduleControls();
+        updateExportDir();
     }
     public void exportIconControls(){
         AppGUIModule gui = app.getGUIModule();
@@ -80,6 +87,18 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         }
 
         
+    }
+    public void updateExportDir(){
+        AppGUIModule gui = app.getGUIModule();
+        ComboBox subjectBox = (ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
+        ComboBox numberBox = (ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX);
+        ComboBox yearBox = (ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX);
+        ComboBox semesterBox = (ComboBox) gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
+        Label exportDir = (Label) gui.getGUINode(SITE_EXPORT_DIR);
+        String newDir = ".\\export\\" + subjectBox.getEditor().getText()+"_"+
+                numberBox.getEditor().getText()+"_"+semesterBox.getEditor().getText()+"_"
+                +yearBox.getEditor().getText()+"\\public_html";
+        exportDir.setText(newDir);
     }
     public void removeTAButtonControls(){
         AppGUIModule gui = app.getGUIModule();
@@ -115,8 +134,12 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         TextField title = (TextField)gui.getGUINode(SC_TITLE_TEXT_FIELD);
         TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
         TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
-        if (type.getValue()==null||date.getValue()==null||
-                title.getText().equals("")||topic.getText().equals("")|link.getText().equals("")){
+        topic.setDisable(true);
+        if (type.getValue()!=null&&!((String)type.getValue()).equals("Holiday")) {
+            topic.setDisable(false);
+        }
+        if (type.getValue()==null||date.getValue()==null){
+            
         }else{
          ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setDisable(false);
            
@@ -126,7 +149,7 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
     public void scheduleDatePickerControls(){
         AppGUIModule gui = app.getGUIModule();
         ((DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER)).setDisable(true);
-        DatePicker startDate = (DatePicker) gui.getGUINode(SC_START_DATE_DATE_PIKER);
+        DatePicker startDate = (DatePicker) gui.getGUINode(SC_START_DATE_DATE_PICKER);
         DatePicker endDate = (DatePicker) gui.getGUINode(SC_END_DATE_DATE_PICKER);
 
         if (startDate.getValue()!=null&&endDate.getValue()!=null) {
