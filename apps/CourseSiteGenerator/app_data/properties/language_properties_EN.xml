@@ -87,7 +87,7 @@
         <property name="SITE_NUMBER_TEXT" value = "Number:"></property>
         <property name="SITE_TITLE_TEXT" value = "Title:"></property>
         <property name="SITE_EXPORT_TEXT" value = "Export Dir:"></property>
-        <property name="SITE_EXPORT_DIR_TEXT" value = ".\export\subject_number_semester_year\public_html"></property>
+        <property name="SITE_EXPORT_DIR_TEXT" value = "./export/subject_number_semester_year/public_html"></property>
         <property name="SITE_PAGE_TEXT" value = "Page"></property>
         <property name="SITE_HOME_TEXT" value = "Home"></property>
         <property name="SITE_SYLLABUS_TEXT" value = "Syllabus"></property>

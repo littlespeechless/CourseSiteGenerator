@@ -95,9 +95,9 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         ComboBox yearBox = (ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX);
         ComboBox semesterBox = (ComboBox) gui.getGUINode(SITE_SEMESTER_COMBO_BOX);
         Label exportDir = (Label) gui.getGUINode(SITE_EXPORT_DIR);
-        String newDir = ".\\export\\" + subjectBox.getEditor().getText()+"_"+
+        String newDir = "./export/" + subjectBox.getEditor().getText()+"_"+
                 numberBox.getEditor().getText()+"_"+semesterBox.getEditor().getText()+"_"
-                +yearBox.getEditor().getText()+"\\public_html";
+                +yearBox.getEditor().getText()+"/public_html";
         exportDir.setText(newDir);
     }
     public void removeTAButtonControls(){

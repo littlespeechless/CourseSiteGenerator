@@ -3,11 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/modules/AppLanguageModule.java</file>
-            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/AppTemplate.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/ui/dialogs/AppDialogsFacade.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/ui/dialogs/AppWebDialog.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/modules/AppGUIModule.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/modules/AppFileModule.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/AppPropertyType.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/ui/controllers/AppHelpController.java</file>
             <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/ui/controllers/AppFileController.java</file>
             <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/components/AppFileComponent.java</file>
             <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/ui/AppNodesBuilder.java</file>
+            <file>file:/Users/zhengyu/Documents/CouseSiteGenerator/libs/DesktopJavaFramework/src/djf/modules/AppFoolproofModule.java</file>
         </group>
     </open-files>
 </project-private>

@@ -86,7 +86,7 @@
         <property name="SITE_NUMBER_TEXT" value = "课码:"></property>
         <property name="SITE_TITLE_TEXT" value = "标题:"></property>
         <property name="SITE_EXPORT_TEXT" value = "导出目录:"></property>
-        <property name="SITE_EXPORT_DIR_TEXT" value = ".\export\subject_number_semester_year\public_html"></property>
+        <property name="SITE_EXPORT_DIR_TEXT" value = "./export/subject_number_semester_year/public_html"></property>
         <property name="SITE_PAGE_TEXT" value = "网页"></property>
         <property name="SITE_HOME_TEXT" value = "主页"></property>
         <property name="SITE_SYLLABUS_TEXT" value = "课程进度表"></property>

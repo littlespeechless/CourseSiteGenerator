@@ -116,7 +116,7 @@ public class CourseSiteData implements AppDataComponent{
     
     // DEFAULT VALUES FOR START AND END HOURS IN MILITARY HOURS
     public static final int MIN_START_HOUR = 8;
-    public static final int MAX_END_HOUR = 22;
+    public static final int MAX_END_HOUR = 23;
     public CourseSiteData(CourseSiteGenerateApp initApp){
         app = initApp;
          AppGUIModule gui = app.getGUIModule();
@@ -324,13 +324,14 @@ public class CourseSiteData implements AppDataComponent{
     public void resetOfficeHours(){
         AppGUIModule gui = app.getGUIModule();
         TableView<TimeSlot> officeHoursTableView = (TableView)gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
+        addTimeRange();
         officeHours = officeHoursTableView.getItems(); 
         officeHours.clear();
         undergradOH = new TableView<TimeSlot>().getItems();
         gradOH = new TableView<TimeSlot>().getItems();
         changeableOH = new TableView<TimeSlot>().getItems();
         
-        for (int i = startHour; i <= endHour; i++) {
+        for (int i = startHour; i < endHour; i++) {
             TimeSlot timeSlot = new TimeSlot(   this.getTimeString(i, true),
                                                 this.getTimeString(i, false));
             officeHours.add(timeSlot);
@@ -342,7 +343,6 @@ public class CourseSiteData implements AppDataComponent{
             //gradOH.add(timeSlot);
             //undergradOH.add(timeSlot);
         }
-        addTimeRange();
         
     }
     public void addTimeRange(){
@@ -351,7 +351,7 @@ public class CourseSiteData implements AppDataComponent{
         ComboBox endTime = (ComboBox)gui.getGUINode(OH_END_TIME_COMBO_BOX);
         startTime.getItems().clear();
         endTime.getItems().clear();
-        for (int i = startHour;i<endHour;i++){
+        for (int i = startHour;i<endHour-1;i++){
             if (i<12) {
                 startTime.getItems().add(i+":00am");
             }else if (i==12){
@@ -360,7 +360,7 @@ public class CourseSiteData implements AppDataComponent{
                 startTime.getItems().add(i-12+":00pm");
             }
         }
-        for (int i = startHour+1;i<=endHour+1;i++){
+        for (int i = startHour+1;i<endHour+1;i++){
             if (i<12) {
                 endTime.getItems().add(i+":00am");
             }else if (i==12){
@@ -451,19 +451,20 @@ public class CourseSiteData implements AppDataComponent{
         }
         if (endTime.contains("pm")) {
             if(endTime.contains("12")){
-                endHour = 12-1;
+                endHour = 12;
             }else{
-                endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))+12-1;
+                endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))+12;
             }
         }else{
-            endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))-1;
+            endHour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")));
         }
+        
         
     }
     public void initHours(String startHourText, String endHourText) {
         int initStartHour = Integer.parseInt(startHourText);
         int initEndHour = Integer.parseInt(endHourText);
-        if (initStartHour <= initEndHour) {
+        if (initStartHour < initEndHour) {
             // THESE ARE VALID HOURS SO KEEP THEM
             // NOTE THAT THESE VALUES MUST BE PRE-VERIFIED
             startHour = initStartHour;

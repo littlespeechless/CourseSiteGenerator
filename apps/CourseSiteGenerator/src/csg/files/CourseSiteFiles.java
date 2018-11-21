@@ -52,16 +52,25 @@ import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
 import djf.components.AppFileComponent;
 import djf.modules.AppGUIModule;
+import djf.ui.dialogs.AppWebDialog;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -77,6 +86,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -826,11 +837,850 @@ public class CourseSiteFiles implements  AppFileComponent{
     }
     @Override
     public void exportData(AppDataComponent data, String filePath) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("xxx");
+        CourseSiteData dataManager = (CourseSiteData) data;
+        AppGUIModule gui = app.getGUIModule();
+        String exportPath = ((Label) gui.getGUINode(SITE_EXPORT_DIR)).getText();
+        File exportDir = new File(exportPath);
+        if (!exportDir.exists()) {
+            exportDir.mkdirs();
+        }
+        File imageDir = new File(exportPath+"/images");
+        if (!imageDir.exists()) {
+            imageDir.mkdir();
+        }
+        File jsDir = new File(exportDir+"/js");
+        if (!jsDir.exists()) {
+            jsDir.mkdir();
+        }
+        File cssDir = new File(exportPath+"/css");
+        if (!cssDir.exists()) {
+            cssDir.mkdir();
+        }
+        ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
+        ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
+        ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
+        ImageView rightFooterImageView = (ImageView) gui.getGUINode(SITE_RIGHT_FOOTER_IMG);
+        String faviconPath = faviconImageView.getImage().impl_getUrl().replace("file:", "");
+        String navbarPath = navbarImageView.getImage().impl_getUrl().replace("file:", "");
+        String leftFooterPath = leftFooterImageView.getImage().impl_getUrl().replace("file:", "");
+        String rightFooterPath = rightFooterImageView.getImage().impl_getUrl().replace("file:", "");
+        File faviconFile = new File(faviconPath);
+        File navbarFile = new File (navbarPath);
+        File rightFooterFile = new File(rightFooterPath);
+        File leftFooterFile = new File(leftFooterPath);
+        ComboBox cssComboBox = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+        File cssFile = new File ("./work/css/"+cssComboBox.getValue().toString());
+        // copy all files to export dir
+        try{
+           Files.copy(faviconFile.toPath(),Paths.get(exportDir+"/images/"+faviconFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           Files.copy(navbarFile.toPath(),Paths.get(exportDir+"/images/"+navbarFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           Files.copy(rightFooterFile.toPath(),Paths.get(exportDir+"/images/"+rightFooterFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           Files.copy(leftFooterFile.toPath(),Paths.get(exportDir+"/images/"+leftFooterFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           Files.copy(cssFile.toPath(),Paths.get(exportDir+"/css/"+cssFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           File jsFolder = new File("./work/js");
+           
+           for (File jsFile:jsFolder.listFiles()){
+               Files.copy(jsFile.toPath(),Paths.get(exportDir+"/js/"+jsFile.getName())
+                   ,StandardCopyOption.REPLACE_EXISTING);
+           }
+            File defaultCssFile =  new File(exportDir+"/css/course_homepage_layout.css");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(defaultCssFile, false));
+            writer.append(defaultCss());
+            writer.close();
+           
+        }catch(Exception ex){
+            
+        }
+        String finalDispalyPath = null;
+        
+        CheckBox homeBox = (CheckBox) gui.getGUINode(SITE_HOME);
+        CheckBox syllabusBox = (CheckBox)gui.getGUINode(SITE_SYLLABUS);
+        CheckBox scheduleBox = (CheckBox)gui.getGUINode(SITE_SCHEDULE);
+        CheckBox hwsBox = (CheckBox)gui.getGUINode(SITE_HWS);
+        
+        if(homeBox.isSelected()){
+            buildHomePageData(exportPath);
+            buildHomePage(exportPath, cssFile.getName());
+            finalDispalyPath = exportPath+"/index.html";
+        }
+        if (syllabusBox.isSelected()) {
+            buildSyllabus(exportPath, cssFile.getName());
+            buildSyllabusData(exportPath);
+            if (finalDispalyPath==null) {
+                finalDispalyPath = exportPath+"/syllabus.html";
+            }
+        }
+        AppWebDialog appWebDialog = new AppWebDialog(app);
+        appWebDialog.showWebDialog(finalDispalyPath);
+        
+        
     }
-
     @Override
     public void importData(AppDataComponent data, String filePath) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-}
+    public void buildHomePage(String exportDir,String cssFileName) throws IOException{
+         String html = indexString().replace("CUSTOMCSS", cssFileName);
+         File indexFile =  new File(exportDir+"/index.html");
+         BufferedWriter writer = new BufferedWriter(new FileWriter(indexFile, false));
+         writer.append(html);
+         writer.close();
+    }
+    public void buildHomePageData(String exportDir)throws IOException{
+        AppGUIModule gui = app.getGUIModule();
+        //create Site pane object
+            String subjectText = (String) ((ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX)).getEditor().getText();
+            String numberText = (String) ((ComboBox) gui.getGUINode(SITE_NUMBER_COMBO_BOX)).getEditor().getText();
+            String yearText = (String) ((ComboBox) gui.getGUINode(SITE_YEAR_COMBO_BOX)).getEditor().getText();
+            String semesterText = (String) ((ComboBox) gui.getGUINode(SITE_SEMESTER_COMBO_BOX)).getEditor().getText();
+            String titleText = (String) ((TextField) gui.getGUINode(SITE_TITLE_TEXT_FIELD)).getText();
+            ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
+            ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
+            ImageView leftFooterImageView = (ImageView) gui.getGUINode(SITE_LEFT_FOOTER_IMG);
+            ImageView rightFooterImageView = (ImageView) gui.getGUINode(SITE_RIGHT_FOOTER_IMG);
+            String faviconPath = faviconImageView.getImage().impl_getUrl().replace("file:", "");
+            String navbarPath = navbarImageView.getImage().impl_getUrl().replace("file:", "");
+            String leftFooterPath = leftFooterImageView.getImage().impl_getUrl().replace("file:", "");
+            String rightFooterPath = rightFooterImageView.getImage().impl_getUrl().replace("file:", "");
+            File faviconFile = new File(faviconPath);
+            File navbarFile = new File (navbarPath);
+            File rightFooterFile = new File(rightFooterPath);
+            File leftFooterFile = new File(leftFooterPath);
+            //create each individual object
+            JsonObject favicon = Json.createObjectBuilder().add("href", "./images/"+faviconFile.getName()).build();
+            JsonObject navbar = Json.createObjectBuilder().add("src", "./images/"+navbarFile.getName()).build();
+            JsonObject leftFooter = Json.createObjectBuilder().add("src", "./images/"+leftFooterFile.getName()).build();
+            JsonObject rightFooter = Json.createObjectBuilder().add("src", "./images/"+rightFooterFile.getName()).build();
+            //create logo object and puts all img object into it
+            JsonObject logoObject = Json.createObjectBuilder().add("favicon",favicon)
+                    .add("navbar",navbar).add("bottom_left",leftFooter).add("bottom_right",rightFooter).build();
+
+            //instructor
+            String insNameText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD)).getText();
+            String insEmailText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD)).getText();
+            String insRoomText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_ROOM_TEXT_FIELD)).getText();
+            String insHomepageText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_HOMEPAGE_TEXT_FIELD)).getText();
+            String insOHText = ((TextArea) gui.getGUINode(SITE_INSTRUCTOR_OH_TEXT_AREA)).getText();
+            
+            if (insOHText.equals("")) {
+                insOHText = "[]";
+            }
+            JsonReader jsonReader = Json.createReader(new StringReader(insOHText));
+            JsonArray insOHArray = jsonReader.readArray();
+            jsonReader.close();
+            //put them together 
+            JsonObject instructorObject = Json.createObjectBuilder().add("name",insNameText)
+                    .add("link",insHomepageText).add("email",insEmailText).add("room",insRoomText)
+                    .add("photo","./images/"+insNameText.replaceAll(" ", "")+".jpg")
+                    .add("hours",insOHArray).build();
+            //pages
+            CheckBox homeBox = (CheckBox) gui.getGUINode(SITE_HOME);
+            CheckBox syllabusBox = (CheckBox)gui.getGUINode(SITE_SYLLABUS);
+            CheckBox scheduleBox = (CheckBox)gui.getGUINode(SITE_SCHEDULE);
+            CheckBox hwsBox = (CheckBox)gui.getGUINode(SITE_HWS);
+            JsonArrayBuilder pageArrayBuilder = Json.createArrayBuilder();
+            if (homeBox.isSelected()) {
+                JsonObject home = Json.createObjectBuilder().add("name","Home")
+                        .add("link","index.html").build();
+                pageArrayBuilder.add(home);
+            }
+            if (syllabusBox.isSelected()) {
+                JsonObject syllabus = Json.createObjectBuilder().add("name","Syllabus")
+                        .add("link","syllabus.html").build();
+                pageArrayBuilder.add(syllabus);
+            }
+            if (scheduleBox.isSelected()) {
+                JsonObject schedule = Json.createObjectBuilder().add("name","Schedule")
+                        .add("link","schedule.html").build();
+                pageArrayBuilder.add(schedule);
+            }
+            if (hwsBox.isSelected()) {
+                JsonObject hws = Json.createObjectBuilder().add("name","HWs")
+                        .add("link","hws.html").build();
+                pageArrayBuilder.add(hws);
+            }
+            JsonArray pagesArray = pageArrayBuilder.build();
+            //put eveything into one site Object
+
+            JsonObject sitePaneObject = Json.createObjectBuilder().add("subject",subjectText).
+                    add("number", numberText).add("semester", semesterText).add("year", yearText)
+                    .add("title",titleText).add("logos",logoObject)
+                    .add("instructor",instructorObject).add("pages",pagesArray)
+                    .build();
+            
+            exportDataFile(sitePaneObject, exportDir+"/js/PageData.json");
+        }
+    public void buildSyllabus(String exportDir, String cssFileName) throws IOException{
+         String html = syllabusString().replace("CUSTOMCSS", cssFileName);
+         File syllabusFile =  new File(exportDir+"/syllabus.html");
+         BufferedWriter writer = new BufferedWriter(new FileWriter(syllabusFile, false));
+         writer.append(html);
+         writer.close();
+    }
+    public void buildSyllabusData(String exportDir) throws IOException{
+        AppGUIModule gui = app.getGUIModule();
+        //Syllabus object
+        String desText = ((TextArea) gui.getGUINode(SY_DESCRIPTION_TEXT_AREA)).getText();
+        String topicAreaText = ((TextArea) gui.getGUINode(SY_TOPIC_TEXT_AREA)).getText();
+        String prereqText = ((TextArea) gui.getGUINode(SY_PREREQUIREMENT_TEXT_AREA)).getText();
+        String outcomesText = ((TextArea) gui.getGUINode(SY_OUTCOMES_TEXT_AREA)).getText();
+        String textbookText = ((TextArea) gui.getGUINode(SY_TEXTBOOK_TEXT_AREA)).getText();
+        String gradedText = ((TextArea) gui.getGUINode(SY_GRADED_TEXT_AREA)).getText();
+        String gradingText = ((TextArea) gui.getGUINode(SY_GRADING_TEXT_AREA)).getText();
+        String academicText = ((TextArea) gui.getGUINode(SY_ACADEMIC_TEXT_AREA)).getText();
+        String specialText = ((TextArea) gui.getGUINode(SY_SPECIAL_TEXT_AREA)).getText();
+        //creat individual Object
+        if (topicAreaText.equals("")) {
+            topicAreaText="[]";
+        }
+        JsonReader topicAreaReader = Json.createReader(new StringReader(topicAreaText));
+        JsonArray topicArea= topicAreaReader.readArray();
+        topicAreaReader.close();
+        if (outcomesText.equals("")) {
+            outcomesText="[]";
+        }
+        JsonReader outcomeReader = Json.createReader(new StringReader(outcomesText));
+        JsonArray outcomes = outcomeReader.readArray();
+        outcomeReader.close();
+        if (textbookText.equals("")) {
+            textbookText="[]";
+        }
+        JsonReader textbookReader = Json.createReader(new StringReader(textbookText));
+        JsonArray textbook = textbookReader.readArray();
+        textbookReader.close();
+        if (gradedText.equals("")) {
+            gradedText="[]";
+        }
+        JsonReader gradedReader = Json.createReader(new StringReader(gradedText));
+        JsonArray graded = gradedReader.readArray();
+        gradedReader.close();
+        
+        //put everything in one object
+        JsonObject syllabusObject = Json.createObjectBuilder()
+                .add("description",desText).add("topics",topicArea)
+                .add("prerequisites",prereqText).add("outcomes",outcomes)
+                .add("textbooks",textbook).add("gradedComponents",graded)
+                .add("gradingNote",gradingText).add("academicDishonesty",academicText).
+                add("specialAssistance",specialText).build();
+        
+        exportDataFile(syllabusObject, exportDir+"/js/SyllabusData.json");
+        
+        //Meeting Time 
+        //lecture
+        CourseSiteData dataManager = (CourseSiteData) app.getDataComponent();
+        JsonArrayBuilder lectureArrayBuilder = Json.createArrayBuilder();
+        Iterator<Lecture> lectureIterator = dataManager.lecturesIterator();
+        while(lectureIterator.hasNext()){
+            Lecture temp = lectureIterator.next();
+            JsonObject object = Json.createObjectBuilder().
+                    add("section",temp.getSection()).add("days",temp.getDays())
+                    .add("time",temp.getTime()).add("room",temp.getRoom()).build();
+            lectureArrayBuilder.add(object);
+        }
+        JsonArray lectureArray = lectureArrayBuilder.build();
+        //recitation
+        JsonArrayBuilder recitationArrayBuilder = Json.createArrayBuilder();
+        Iterator<Recitation> recitationIterator = dataManager.recitationsIterator();
+        while(recitationIterator.hasNext()){
+            Recitation temp = recitationIterator.next();
+            JsonObject object = Json.createObjectBuilder().add("section",temp.getSection())
+                    .add("day_time",temp.getDaysTime()).add("location",temp.getRoom())
+                    .add("ta_1",temp.getTa1()).add("ta_2",temp.getTa2()).build();
+            recitationArrayBuilder.add(object);
+        }
+        JsonArray recitationArray = recitationArrayBuilder.build();
+        //lab
+        JsonArrayBuilder labArrayBuilder = Json.createArrayBuilder();
+        Iterator<Lab> labIterator = dataManager.labsIterator();
+        while(labIterator.hasNext()){
+            Lab temp = labIterator.next();
+            JsonObject object = Json.createObjectBuilder().add("section",temp.getSection())
+                    .add("day_time",temp.getDaysTime()).add("location",temp.getRoom())
+                    .add("ta_1",temp.getTa1()).add("ta_2",temp.getTa2()).build();
+            labArrayBuilder.add(object);
+        }
+        JsonArray labArray = labArrayBuilder.build();
+        //put everything in one object
+        JsonObject meetingTimeObject = Json.createObjectBuilder().add("lectures",lectureArray)
+                .add("labs",labArray).add("recitations",recitationArray).build();
+        
+        exportDataFile(meetingTimeObject, exportDir+"/js/SectionsData.json");
+        
+        
+        //Office Hours
+        //instructor
+            String insNameText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD)).getText();
+            String insEmailText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD)).getText();
+            String insRoomText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_ROOM_TEXT_FIELD)).getText();
+            String insHomepageText = ((TextField) gui.getGUINode(SITE_INSTRUCTOR_HOMEPAGE_TEXT_FIELD)).getText();
+            String insOHText = ((TextArea) gui.getGUINode(SITE_INSTRUCTOR_OH_TEXT_AREA)).getText();
+            
+            if (insOHText.equals("")) {
+                insOHText = "[]";
+            }
+            JsonReader jsonReader = Json.createReader(new StringReader(insOHText));
+            JsonArray insOHArray = jsonReader.readArray();
+            jsonReader.close();
+            //put them together 
+            JsonObject instructorObject = Json.createObjectBuilder().add("name",insNameText)
+                    .add("link",insHomepageText).add("email",insEmailText).add("room",insRoomText)
+                    .add("photo","./images/"+insNameText.replaceAll(" ", "")+".jpg")
+                    .add("hours",insOHArray).build();
+        //Undergrad save 
+	JsonArrayBuilder taUndergradArrayBuilder = Json.createArrayBuilder();
+	Iterator<TeachingAssistantPrototype> undergradIterator = dataManager.undergraduateIterator();
+        while (undergradIterator.hasNext()) {
+            TeachingAssistantPrototype ta = undergradIterator.next();
+	    JsonObject taJson = Json.createObjectBuilder()
+		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL, ta.getEmail()).build();
+	    taUndergradArrayBuilder.add(taJson);
+	}
+	JsonArray undergradTAsArray = taUndergradArrayBuilder.build();
+        //Grad save
+        JsonArrayBuilder taGradArrayBuilder = Json.createArrayBuilder();
+	Iterator<TeachingAssistantPrototype> gradIterator = dataManager.graduateIterator();
+        while (gradIterator.hasNext()) {
+            TeachingAssistantPrototype ta = gradIterator.next();
+	    JsonObject taJson = Json.createObjectBuilder()
+		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL, ta.getEmail()).build();
+	    taGradArrayBuilder.add(taJson);
+	}
+	JsonArray gradTAsArray = taGradArrayBuilder.build();
+        //time slot save
+        JsonArrayBuilder taOHbArrayBuilder = Json.createArrayBuilder();
+        //add insturctor into the oh
+        for(int i =0; i<insOHArray.size();i++){
+            JsonObject object = insOHArray.getJsonObject(i);
+            String day = object.getString("day").toUpperCase();
+            String time = object.getString("time");
+            String startTime = time.substring(0,time.indexOf("-"));
+            String endTime = time.substring(time.indexOf("-")+1);
+            if (startTime.contains(":")){
+                int min = Integer.parseInt(startTime.substring(startTime.indexOf(":")+1,startTime.length()-2));
+                if (min<=30){
+                    startTime = startTime.substring(0,startTime.indexOf(":"))
+                            +":00"+startTime.substring(startTime.length()-2);
+                }else{
+                    startTime = startTime.substring(0,startTime.indexOf(":"))
+                            +":30"+startTime.substring(startTime.length()-2);
+                }
+            }else{
+                startTime = startTime.substring(0,startTime.length()-2)+":00"
+                        +startTime.substring(startTime.length()-2);
+            }
+            if (endTime.contains(":")){
+                int min = Integer.parseInt(endTime.substring(endTime.indexOf(":")+1,endTime.length()-2));
+                if (min<=30){
+                    endTime = endTime.substring(0,endTime.indexOf(":"))
+                            +":00"+endTime.substring(endTime.length()-2);
+                }else{
+                    endTime = endTime.substring(0,endTime.indexOf(":"))
+                            +":30"+endTime.substring(endTime.length()-2);
+                }
+            }else{
+                int hour = Integer.parseInt(endTime.substring(0,endTime.length()-2))-1;
+                endTime = hour+":30"+endTime.substring(endTime.length()-2);
+            }
+            if(startTime.contains("pm")){
+                if (!startTime.contains("12")) {
+                    int hour = Integer.parseInt(startTime.substring(0,startTime.indexOf(":")))+12;
+                    startTime = hour+startTime.substring(startTime.indexOf(":"),startTime.length()-2);
+                }else{
+                    startTime = startTime.substring(0,startTime.length()-2);
+                }
+            }else{
+                startTime = startTime.substring(0,startTime.length()-2);
+            }
+            if(endTime.contains("pm")){
+                if (!endTime.contains("12")) {
+                    int hour = Integer.parseInt(endTime.substring(0,endTime.indexOf(":")))+12;
+                    endTime = hour+endTime.substring(endTime.indexOf(":"),endTime.length()-2);
+                }else{
+                    endTime = endTime.substring(0,endTime.length()-2);
+                }
+            }else{
+                endTime = endTime.substring(0,endTime.length()-2);
+            }
+            //System.out.println(startTime + endTime);
+            
+            LocalTime startTimes = LocalTime.parse(startTime.replace("_", ":"));
+            LocalTime endTimes = LocalTime.parse(endTime.replace("_", ":"));
+            while (startTimes.isBefore(endTimes)) {
+                if (startTimes.isBefore(LocalTime.of(12, 0))) {
+                    if (startTimes.getMinute()==0) {
+                        startTime = startTimes.toString().replace(":", "_")+"0am";
+                    }else{
+                        startTime = startTimes.toString().replace(":", "_")+"am";
+                    }
+                    
+                }else{
+                    if (startTimes.getMinute()==0) {
+                        startTime = (startTimes.getHour()-12)+"_"+startTimes.getMinute()+"0pm";
+                    }else{
+                        startTime = (startTimes.getHour()-12)+"_"+startTimes.getMinute()+"pm";
+                    }
+                }
+                JsonObject ohJson = Json.createObjectBuilder()
+                            .add(JSON_START_TIME, startTime)
+                            .add(JSON_DAY_OF_WEEK, day)
+                            .add(JSON_NAME, insNameText).build();
+                taOHbArrayBuilder.add(ohJson);
+                //System.out.println(startTime);
+                startTimes = startTimes.plusMinutes(30);
+            }
+            if (startTimes.isBefore(LocalTime.of(12, 0))) {
+                    if (startTimes.getMinute()==0) {
+                        startTime = startTimes.toString().replace(":", "_")+"0am";
+                    }else{
+                        startTime = startTimes.toString().replace(":", "_")+"am";
+                    }
+                    
+            }else{
+                    if (startTimes.getMinute()==0) {
+                        startTime = (startTimes.getHour()-12)+"_"+startTimes.getMinute()+"0pm";
+                    }else{
+                        startTime = (startTimes.getHour()-12)+"_"+startTimes.getMinute()+"pm";
+                    }
+            }
+            JsonObject ohJson = Json.createObjectBuilder()
+                            .add(JSON_START_TIME, startTime)
+                            .add(JSON_DAY_OF_WEEK, day)
+                            .add(JSON_NAME, insNameText).build();
+           taOHbArrayBuilder.add(ohJson);
+           //System.out.println(startTime);
+           startTimes = startTimes.plusMinutes(30);   
+            
+        }
+        // TAs
+        Iterator<TimeSlot> ohIterator = ((TableView)gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW)).getItems().iterator();
+        while(ohIterator.hasNext()){
+            TimeSlot timeSlot=ohIterator.next();
+            for(int i =2;i<7;i++){
+                DayOfWeek dayOfWeek = dataManager.getColumnDayOfWeek(i);
+                for(int j=0;j<timeSlot.getTAS(dayOfWeek).size();j++){
+                    JsonObject ohJson = Json.createObjectBuilder()
+                            .add(JSON_START_TIME, timeSlot.getStartTime().replaceAll(":", "_"))
+                            .add(JSON_DAY_OF_WEEK, dayOfWeek.toString())
+                            .add(JSON_NAME, timeSlot.getTAS(dayOfWeek).get(j).getName()).build();
+                    taOHbArrayBuilder.add(ohJson);
+                }
+            }    
+        }
+        JsonArray officeHourArray = taOHbArrayBuilder.build();
+        
+	// THEN PUT IT ALL TOGETHER IN A JsonObject
+	JsonObject officeHourObject = Json.createObjectBuilder()
+		.add(JSON_START_HOUR, "" + dataManager.getStartHour())
+		.add(JSON_END_HOUR, "" + dataManager.getEndHour())
+                .add("instructor",instructorObject)
+                .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
+                .add(JSON_GRAD_TAS, gradTAsArray)
+                .add(JSON_OFFICE_HOURS,officeHourArray)
+		.build();
+        
+        exportDataFile(officeHourObject, exportDir+"/js/OfficeHoursData.json");
+    }
+    
+    public void exportDataFile(JsonObject object, String path) throws IOException{
+        Map<String, Object> properties = new HashMap<>(1);
+            properties.put(JsonGenerator.PRETTY_PRINTING, true);
+            JsonWriterFactory writerFactory = Json.createWriterFactory(properties);
+            StringWriter sw = new StringWriter();
+            JsonWriter jsonWriter = writerFactory.createWriter(sw);
+            jsonWriter.writeObject(object);
+            jsonWriter.close();
+
+            // INIT THE WRITER
+            OutputStream os = new FileOutputStream(path);
+            JsonWriter jsonFileWriter = Json.createWriter(os);
+            jsonFileWriter.writeObject(object);
+            String prettyPrinted = sw.toString();
+            PrintWriter pw = new PrintWriter(path);
+            pw.write(prettyPrinted);
+            pw.close();
+    }
+    public String indexString(){
+        return "<!doctype html>\n" +
+            "<html>\n" +
+            "<head>\n" +
+            "    <META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+            "    <title></title>\n" +
+            "    <meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\">\n" +
+            "\n" +
+            "    <link href=\"./css/course_homepage_layout.css\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "    <link href=\"./css/CUSTOMCSS\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "\n" +
+            "    <!-- LINK TO OUR JavaScript FILE AND JQuery -->\n" +
+            "    <script src=\"./js/jquery.min.js\"></script>\n" +
+            "    <script src=\"./js/PageBuilder.js\"></script>\n" +
+            "\n" +
+            "    <!-- ONCE THE PAGE FULLY LOADS, COMPLETE BUILDING THE CONTENT -->\n" +
+            "    <script>\n" +
+            "        $(document).ready()\n" +
+            "        {\n" +
+            "            buildPage(\"Home\", \".\");\n" +
+            "        }\n" +
+            "    </script>\n" +
+            "</head>\n" +
+            "\n" +
+            "<body>\n" +
+            "<div id=\"content\">\n" +
+            "    <div id=\"navbar\">\n" +
+            "        <a id=\"navbar_image_link\"></a>\n" +
+            "    </div>\n" +
+            "\n" +
+            "    <div id=\"banner\"></div>\n" +
+            "\n" +
+            "    <div id=\"desc\">\n" +
+            "\n" +
+            "        <p>Welcome to the <span id=\"inlined_course\"></span> Web site. If you are enrolled in the course, be sure to periodically check this site for all materials and changes as the semester moves along. Note that all grades will be posted to <a href=\"http://blackboard.stonybrook.edu\">Blackboard</a>.</p>\n" +
+            "        <br /><br /><br /><br /><br /><br /><br />\n" +
+            "        <hr />\n" +
+            "\n" +
+            "        <a id=\"left_footer_image_link\"></a>\n" +
+            "        <a id=\"right_footer_image_link\"></a>\n" +
+            "        <p class=\"footer\">Web page created and maintained<br />\n" +
+            "            by <span id=\"instructor_link\"></span></p>\n" +
+            "        <br /><br />\n" +
+            "    </div>\n" +
+            "</div>\n" +
+            "</body>\n" +
+            "</html>";
+    }
+    public  String syllabusString(){
+        return "<!doctype html>\n" +
+            "<html>\n" +
+            "    <head>\n" +
+            "        <META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+            "        <title></title>\n" +
+            "        <meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\">\n" +
+            "        <link href=\"./css/course_homepage_layout.css\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "        <link href=\"./css/CUSTOMCSS\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "\n" +
+            "        <!-- LINK TO OUR JavaScript FILE AND JQuery -->\n" +
+            "        <script src=\"./js/jquery.min.js\"></script>\n" +
+            "        <script src=\"./js/PageBuilder.js\"></script>\n" +
+            "        <script src=\"./js/OfficeHoursBuilder.js\"></script>\n" +
+            "        <script src=\"./js/SectionsBuilder.js\"></script>\n" +
+            "        <script src=\"./js/SyllabusBuilder.js\"></script>\n" +
+            "\n" +
+            "        <!-- ONCE THE PAGE FULLY LOADS INITIALIZE THE SLIDESHOW -->\n" +
+            "        <script>\n" +
+            "            $(document).ready()\n" +
+            "            {\n" +
+            "                buildPage(\"Syllabus\", \".\");\n" +
+            "                buildOfficeHours();\n" +
+            "                buildSections();\n" +
+            "                buildSyllabus();\n" +
+            "            }\n" +
+            "        </script>\n" +
+            "    </head>\n" +
+            "\n" +
+            "    <body>\n" +
+            "        <div id=\"content\">\n" +
+            "            <div id=\"navbar\"><a id=\"navbar_image_link\"></a></div>\n" +
+            "\n" +
+            "            <div id=\"banner\"></div>\n" +
+            "            <div id=\"desc\">\n" +
+            "\n" +
+            "                <div id=\"custom_syllabus_content\">\n" +
+            "\n" +
+            "                    <h3>COURSE DESCRIPTION</h3>\n" +
+            "                    <p id='syllabus_course_description'></p>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>COURSE TOPICS</h3>\n" +
+            "                    <ul id=\"syllabus_course_topics\">\n" +
+            "                    </ul>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>PREREQUISITES</h3>\n" +
+            "                    <p id=\"syllabus_prerequisites\"></p>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>COURSE OUTCOMES</h3>\n" +
+            "                    <p>At the end of the course you should have the following knowledge and skills:</p>\n" +
+            "                    <ul id=\"syllabus_course_outcomes\">\n" +
+            "                    </ul>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>LECTURES</h3>\n" +
+            "                    <table>\n" +
+            "                        <tbody>\n" +
+            "                            <tr id='lectures_row'>\n" +
+            "                            </tr>\n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "                    \n" +
+            "                    <h3 id=\"labs_heading\"></h3>\n" +
+            "                    <table>\n" +
+            "                        <tbody id=\"labs_table\">\n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "                                  \n" +
+            "                    <h3 id=\"recitations_heading\"></h3>\n" +
+            "                    <table>\n" +
+            "                        <tbody id=\"recitations_table\">\n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>INSTRUCTOR</h3>                    \n" +
+            "                    <table>\n" +
+            "                        <tr>\n" +
+            "                            <td id='instructor_data'></td>\n" +
+            "                            <td id='instructor_photo'></td>\n" +
+            "                        </tr>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3 id=\"graders\">GRAD TEACHING ASSISTANTS (Grading Appointments)</h3>\n" +
+            "\n" +
+            "                    <table>\n" +
+            "                        <tbody id=\"grad_tas\">\n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3 id=\"tas\">UNDERGRAD TEACHING ASSISTANTS (Help)</h3>\n" +
+            "\n" +
+            "                    <table>\n" +
+            "                        <tbody id=\"undergrad_tas\">\n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br />\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3 id=\"office_hours_grid\">OFFICE HOURS (in Old CS 2217)</h3>\n" +
+            "                    <table class=\"office_hours_schedule\" cellspacing=\"0\" border=\"1\">\n" +
+            "                        <tbody id=\"office_hours_table\">\n" +
+            "                            <tr>\n" +
+            "                                <th class=\"sch\" width=\"150px\">Start Time</th>\n" +
+            "                                <th class=\"sch\" width=\"150px\">End Time</th>\n" +
+            "                                <th class=\"sch\" width=\"200px\">MONDAY</th>\n" +
+            "                                <th class=\"sch\" width=\"200px\">TUESDAY</th>\n" +
+            "                                <th class=\"sch\" width=\"200px\">WEDNESDAY</th>\n" +
+            "                                <th class=\"sch\" width=\"200px\">THURSDAY</th>\n" +
+            "                                <th class=\"sch\" width=\"200px\">FRIDAY</th>\n" +
+            "                            </tr>                        \n" +
+            "                        </tbody>\n" +
+            "                    </table>\n" +
+            "                    <br /> \n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>TEXTBOOKS</h3>                    \n" +
+            "                    <div id='textbook_data'></div>\n" +
+            "                    <br clear=\"all\" />\n" +
+            "                    <br />\n" +
+            "\n" +
+            "\n" +
+            "                    <h3>GRADED COMPONENTS</h3>                    \n" +
+            "                    <ul id='graded_components'></ul>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>GRADING BREAKDOWN</h3>                    \n" +
+            "                    <table id='grading_breakdown'></table>\n" +
+            "                    <p id='grading_note'></p>\n" +
+            "                    <br />                    \n" +
+            "\n" +
+            "                    <h3>ACADEMIC DISHONESTY</h3>\n" +
+            "                    <div id='academic_dishonesty'></div>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <h3>SPECIAL ASSISTANCE</h3>\n" +
+            "                    <div id='special_assistance'></div>\n" +
+            "                    <br />\n" +
+            "\n" +
+            "                    <hr />\n" +
+            "\n" +
+            "                    <a id=\"left_footer_image_link\"></a>\n" +
+            "                    <a id=\"right_footer_image_link\"></a>\n" +
+            "                    <p class=\"footer\">Web page created and maintained<br />\n" +
+            "                        by <span id=\"author_link\"></span></p>\n" +
+            "                    <br /><br />\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </body>\n" +
+            "</html>";
+    }
+    public String defaultCss(){
+        return "#content\n" +
+                "{\n" +
+                "    position:absolute;\n" +
+                "    width:80%;\n" +
+                "    left:10%;\n" +
+                "    right:10%;\n" +
+                "    text-align:left;\n" +
+                "}\n" +
+                "\n" +
+                "#navbar\n" +
+                "{\n" +
+                "    position:absolute	;\n" +
+                "    width:100%;\n" +
+                "    height:45px;\n" +
+                "    top:0px;\n" +
+                "}\n" +
+                "\n" +
+                "#banner\n" +
+                "{\n" +
+                "    position:absolute;\n" +
+                "    width:100%;\n" +
+                "    height:80px;\n" +
+                "    text-align:center;\n" +
+                "    padding-top:10px;\n" +
+                "    padding-bottom:0px;\n" +
+                "    margin-top:0px;\n" +
+                "    margin-bottom:0px;\n" +
+                "    top:50px;\n" +
+                "}\n" +
+                "\n" +
+                "#desc\n" +
+                "{\n" +
+                "    position:absolute;\n" +
+                "    padding-left:2%;\n" +
+                "    padding-right:2%;\n" +
+                "    padding-top:0px;\n" +
+                "    width:96%;\n" +
+                "    margin-top:0px;\n" +
+                "    top:140px;\n" +
+                "}\n" +
+                "\n" +
+                "img.sbu_navbar\n" +
+                "{\n" +
+                "    float:right;\n" +
+                "}\n" +
+                "\n" +
+                "img.photo_floating_right\n" +
+                "{\n" +
+                "    float:right;\n" +
+                "    padding-left:20px;\n" +
+                "}\n" +
+                "\n" +
+                "img.photo_floating_left\n" +
+                "{\n" +
+                "    float:left;\n" +
+                "    padding-right:20px;\n" +
+                "}\n" +
+                "\n" +
+                "p.footer\n" +
+                "{\n" +
+                "    font-size:8pt;\n" +
+                "    text-align:center;\n" +
+                "    padding-top:00px;\n" +
+                "}\n" +
+                "\n" +
+                "img {\n" +
+                "    border:0;\n" +
+                "}\n" +
+                "\n" +
+                "img.stonybrook {\n" +
+                "    background-color:white;\n" +
+                "    padding-left:10px;\n" +
+                "    float:left;\n" +
+                "}\n" +
+                "\n" +
+                "img.cs {\n" +
+                "    float:right;\n" +
+                "    padding-right:10px;\n" +
+                "}\n" +
+                "\n" +
+                "img.start_up\n" +
+                "{\n" +
+                "    float:right;\n" +
+                "    margin-left:20px;\n" +
+                "    margin-right:20px;\n" +
+                "    margin-bottom:5px;\n" +
+                "}\n" +
+                "\n" +
+                "img.centered {\n" +
+                "    margin-left:30%;\n" +
+                "    margin-right:30%;\n" +
+                "}\n" +
+                "\n" +
+                "\n" +
+                "a.nav, a.open_nav {\n" +
+                "    display:inline-block;\n" +
+                "    border:none;\n" +
+                "    text-decoration:none;\n" +
+                "    text-align:center;\n" +
+                "    font-weight:bold;\n" +
+                "    padding-left:5px;\n" +
+                "    padding-right:20px;\n" +
+                "    padding-top:5px;\n" +
+                "    width:80px;\n" +
+                "}\n" +
+                "\n" +
+                "p.contact_info\n" +
+                "{\n" +
+                "    padding-top:0px;\n" +
+                "    margin-top:0px;\n" +
+                "    margin-bottom:0px;\n" +
+                "}\n" +
+                "\n" +
+                "td.course_name\n" +
+                "{\n" +
+                "    padding-left:10px;\n" +
+                "    padding-right:10px;\n" +
+                "}\n" +
+                "\n" +
+                "img.logo_page\n" +
+                "{\n" +
+                "    position:relative;\n" +
+                "    width:100%;\n" +
+                "    height:auto;\n" +
+                "}\n" +
+                "\n" +
+                "table\n" +
+                "{\n" +
+                "    border-color:#555555;\n" +
+                "}\n" +
+                "\n" +
+                "table.schedule\n" +
+                "{\n" +
+                "    margin:auto;\n" +
+                "    width:100%;\n" +
+                "}\n" +
+                "\n" +
+                "td.sch\n" +
+                "{\n" +
+                "    position:relative;\n" +
+                "    width:20%;\n" +
+                "    height:150px;\n" +
+                "    margin-left:0%;\n" +
+                "    margin-right:0%;\n" +
+                "    vertical-align:top;\n" +
+                "}\n" +
+                "\n" +
+                "th.sch\n" +
+                "{\n" +
+                "    vertical-align:top;\n" +
+                "    text-align:center;\n" +
+                "    border-color:#888888;\n" +
+                "}\n" +
+                "\n" +
+                "td.holiday\n" +
+                "{\n" +
+                "    background-color:#aaaaaa;\n" +
+                "    vertical-align:top;\n" +
+                "}\n" +
+                "\n" +
+                ".textbook_image {\n" +
+                "    float:left;\n" +
+                "    margin-right:3em;\n" +
+                "}";
+        }
+    }
