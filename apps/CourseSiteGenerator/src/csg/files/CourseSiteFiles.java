@@ -724,8 +724,9 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = "";
             String type = "Holiday";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
+            
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -740,8 +741,8 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = object.getString("topic");
             String type = "Lecture";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -756,8 +757,8 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = object.getString("topic");
             String type = "Reference";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -772,8 +773,8 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = object.getString("topic");
             String type = "Recitation";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -788,8 +789,8 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = object.getString("topic");
             String type = "HW";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -804,8 +805,8 @@ public class CourseSiteFiles implements  AppFileComponent{
             String link = object.getString("link");
             String topic = object.getString("topic");
             String type = "Lab";
-            String date = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month)
-                    ,Integer.parseInt(day)).toString();
+            String date = Integer.parseInt(year)+"-"+Integer.parseInt(month)+"-"+
+                    Integer.parseInt(day);
             Schedule schedule = new Schedule(type, date, title, topic, link);
             dataManager.addSchedule(schedule);
         }
@@ -914,6 +915,20 @@ public class CourseSiteFiles implements  AppFileComponent{
             buildSyllabusData(exportPath);
             if (finalDispalyPath==null) {
                 finalDispalyPath = exportPath+"/syllabus.html";
+            }
+        }
+        if (scheduleBox.isSelected()) {
+            buildSchedule(exportPath, cssFile.getName());
+            buildScheduleData(exportPath);
+            if (finalDispalyPath==null) {
+                finalDispalyPath = exportPath+"/schedule.html";
+            }
+        }
+        if (hwsBox.isSelected()) {
+            buildHWS(exportPath, cssFile.getName());
+            buildScheduleData(exportPath);
+            if (finalDispalyPath==null) {
+                finalDispalyPath = exportPath+"/hws.html";
             }
         }
         AppWebDialog appWebDialog = new AppWebDialog(app);
@@ -1286,7 +1301,110 @@ public class CourseSiteFiles implements  AppFileComponent{
         
         exportDataFile(officeHourObject, exportDir+"/js/OfficeHoursData.json");
     }
-    
+    public void buildSchedule(String exportDir, String cssFileName) throws IOException{
+        String html = scheduleString().replace("CUSTOMCSS", cssFileName);
+         File scheduleFile =  new File(exportDir+"/schedule.html");
+         BufferedWriter writer = new BufferedWriter(new FileWriter(scheduleFile, false));
+         writer.append(html);
+         writer.close();
+    }
+    public void buildScheduleData(String exportDir) throws IOException{
+        AppGUIModule gui = app.getGUIModule(); 
+        //SCHEDULE
+        CourseSiteData dataManager = (CourseSiteData) app.getDataComponent();
+        DatePicker startDatePicker = (DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER);
+        DatePicker endDatePicker = (DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER);
+        LocalDate startingMonday = startDatePicker.getValue();
+        LocalDate endingFriday = endDatePicker.getValue();
+        String mondayMonth = "";
+        String mondayDay = "";
+        String mondayYear = "";
+        String fridayMonth = "";
+        String fridayDay ="";
+        String fridayYear = "";
+        if (startingMonday!=null) {
+            mondayDay = ""+startingMonday.getDayOfMonth();
+            mondayMonth = ""+startingMonday.getMonthValue();
+            mondayYear = ""+startingMonday.getYear();
+        }
+        if (endingFriday!=null) {
+            fridayDay = ""+endingFriday.getDayOfMonth();
+            fridayMonth =""+endingFriday.getMonthValue();
+            fridayYear = ""+endingFriday.getYear();
+        }
+        
+        JsonArrayBuilder holidayArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder scheduleLectureArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder scheduleRecitationArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder scheduleLabArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder hwsArrayBuilder = Json.createArrayBuilder();
+        JsonArrayBuilder referenceArrayBuilder = Json.createArrayBuilder();
+        
+        Iterator<Schedule> scheduleIterator = dataManager.schedulesIterator();
+        while(scheduleIterator.hasNext()){
+            Schedule temp = scheduleIterator.next();
+            String month = temp.getDate().substring(temp.getDate().indexOf("-")+1,temp.getDate().lastIndexOf("-"));
+            String year = temp.getDate().substring(0,temp.getDate().indexOf("-"));
+            String day = temp.getDate().substring(temp.getDate().lastIndexOf("-")+1);
+            switch(temp.getType()){
+                case "Holiday":
+                    JsonObject holiday = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("link",temp.getLink()).build();
+                    holidayArrayBuilder.add(holiday);break;
+                case "Lecture":
+                    JsonObject lecture = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("topic",temp.getTopic()).add("link",temp.getLink()).build();
+                    scheduleLectureArrayBuilder.add(lecture);break;
+                case "Reference":
+                    JsonObject reference = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("topic",temp.getTopic()).add("link",temp.getLink()).build();
+                    referenceArrayBuilder.add(reference);break;
+                case "Recitation":
+                    JsonObject recitation = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("topic",temp.getTopic()).add("link",temp.getLink()).build();
+                    scheduleRecitationArrayBuilder.add(recitation);break;
+                case "Lab":
+                    JsonObject lab = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("topic",temp.getTopic()).add("link",temp.getLink()).build();
+                    scheduleLabArrayBuilder.add(lab);break;
+                case "HW":
+                    JsonObject hw = Json.createObjectBuilder().add("month",month)
+                            .add("day",day).add("year",year).add("title",temp.getTitle())
+                            .add("topic",temp.getTopic()).add("link",temp.getLink()).add("time","")
+                            .add("criteria","none").build();
+                    hwsArrayBuilder.add(hw);break;
+            }
+        }
+        //BUild arrays 
+        JsonArray holidayArray = holidayArrayBuilder.build();
+        JsonArray scheduleLectureArray = scheduleLectureArrayBuilder.build();
+        JsonArray scheduleRecitationArray = scheduleRecitationArrayBuilder.build();
+        JsonArray scheduleLabArray = scheduleLabArrayBuilder.build();
+        JsonArray hwArray = hwsArrayBuilder.build();
+        JsonArray referenceArray = referenceArrayBuilder.build();
+        
+        //put together
+        JsonObject scheduleObject = Json.createObjectBuilder()
+                .add("startingMondayYear",mondayYear).add("startingMondayMonth",mondayMonth)
+                .add("startingMondayDay",mondayDay).add("endingFridayYear",fridayYear)
+                .add("endingFridayMonth",fridayMonth).add("endingFridayDay",fridayDay)
+                .add("holidays",holidayArray).add("lectures",scheduleLectureArray)
+                .add("references",referenceArray).add("recitations",scheduleRecitationArray)
+                .add("hws",hwArray).add("labs",scheduleLabArray).build();
+        exportDataFile(scheduleObject, exportDir+"/js/ScheduleData.json");
+    }
+    public void buildHWS(String exportDir, String cssFileName)throws  IOException{
+        String html = hwsString().replace("CUSTOMCSS", cssFileName);
+         File hwFile =  new File(exportDir+"/hws.html");
+         BufferedWriter writer = new BufferedWriter(new FileWriter(hwFile, false));
+         writer.append(html);
+         writer.close();
+    }
     public void exportDataFile(JsonObject object, String path) throws IOException{
         Map<String, Object> properties = new HashMap<>(1);
             properties.put(JsonGenerator.PRETTY_PRINTING, true);
@@ -1512,6 +1630,120 @@ public class CourseSiteFiles implements  AppFileComponent{
             "                        by <span id=\"author_link\"></span></p>\n" +
             "                    <br /><br />\n" +
             "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </body>\n" +
+            "</html>";
+    }
+    public String scheduleString(){
+        return "<!doctype html>\n" +
+            "<html>\n" +
+            "    <head>\n" +
+            "        <META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+            "        <title></title>\n" +
+            "        <meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\">\n" +
+            "        <link href=\"./css/course_homepage_layout.css\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "        <link href=\"./css/CUSTOMCSS\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "\n" +
+            "        <!-- LINK TO OUR JavaScript FILE AND JQuery -->\n" +
+            "        <script src=\"./js/jquery.min.js\"></script>\n" +
+            "        <script src=\"./js/PageBuilder.js\"></script>\n" +
+            "        <script src=\"./js/ScheduleBuilder.js\"></script>\n" +
+            "\n" +
+            "        <!-- ONCE THE PAGE FULLY LOADS INITIALIZE THE SLIDESHOW -->\n" +
+            "        <script>\n" +
+            "            $(document).ready()\n" +
+            "            {\n" +
+            "                buildPage(\"Schedule\", \".\");\n" +
+            "                buildSchedule();\n" +
+            "            }\n" +
+            "        </script>\n" +
+            "    </head>\n" +
+            "\n" +
+            "    <body>\n" +
+            "        <div id=\"content\">\n" +
+            "            <div id=\"navbar\"><a id=\"navbar_image_link\"></a></div>\n" +
+            "\n" +
+            "            <div id=\"banner\"></div>\n" +
+            "\n" +
+            "\n" +
+            "            <div id=\"desc\">\n" +
+            "\n" +
+            "                <table border=\"1\" cellspacing=\"0\" class=\"schedule\">\n" +
+            "                    <tbody id=\"schedule_table\">\n" +
+            "                        <!-- THIS WILL BE FILLED IN BY JAVASCRIPT -->                        \n" +
+            "                    </tbody>\n" +
+            "                </table>\n" +
+            "\n" +
+            "                <br />\n" +
+            "\n" +
+            "                <hr />\n" +
+            "\n" +
+            "                <a id=\"left_footer_image_link\"></a>\n" +
+            "                <a id=\"right_footer_image_link\"></a>\n" +
+            "                <p class=\"footer\">Web page created and maintained<br />\n" +
+            "                    by <span id=\"author_link\"></span></p>\n" +
+            "                <br /><br />\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </body>\n" +
+            "</html>";
+    }
+    public String hwsString(){
+        return "<!doctype html>\n" +
+            "<html>\n" +
+            "    <head>\n" +
+            "        <META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+            "        <title></title>\n" +
+            "        <meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\">\n" +
+            "        <link href=\"./css/course_homepage_layout.css\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "        <link href=\"./css/CUSTOMCSS\" rel=\"stylesheet\" type=\"text/css\">\n" +
+            "\n" +
+            "        <!-- LINK TO OUR JavaScript FILE AND JQuery -->\n" +
+            "        <script src=\"./js/jquery.min.js\"></script>\n" +
+            "        <script src=\"./js/PageBuilder.js\"></script>\n" +
+            "        <script src=\"./js/HWsBuilder.js\"></script>\n" +
+            "\n" +
+            "        <!-- ONCE THE PAGE FULLY LOADS INITIALIZE THE SLIDESHOW -->\n" +
+            "        <script>\n" +
+            "            $(document).ready()\n" +
+            "            {\n" +
+            "                buildPage(\"HWs\", \".\");\n" +
+            "                buildHWs();\n" +
+            "            }\n" +
+            "        </script>\n" +
+            "    </head>\n" +
+            "\n" +
+            "    <body>\n" +
+            "        <div id=\"content\">\n" +
+            "            <div id=\"navbar\"><a id=\"navbar_image_link\"></a></div>\n" +
+            "\n" +
+            "            <div id=\"banner\"></div>\n" +
+            "\n" +
+            "            <div id=\"desc\">\n" +
+            "                <h3>Homework Assignments</h3>\n" +
+            "\n" +
+            "                <p>Note that the <a href='./schedule.html'>Schedule Page</a> also contains links to assignments.</p>\n" +
+            "\n" +
+            "                <table class=\"hws\">\n" +
+            "                    <tbody id=\"hws\">\n" +
+            "                        <tr class=\"hws\" style=\"background-color:rgb(235,215,215)\">\n" +
+            "                            <th class=\"hws\">Homework</th>\n" +
+            "                            <th class=\"hws\">Due Date</th>\n" +
+            "                            <!--th class=\"hws\">Grading Criteria</th>-->\n" +
+            "                        </tr>\n" +
+            "\n" +
+            "                        <!-- THIS WILL BE FILLED IN BY JAVASCRIPT -->\n" +
+            "                    </tbody>\n" +
+            "                </table>\n" +
+            "                <br />\n" +
+            "                <hr />\n" +
+            "\n" +
+            "                <a id=\"left_footer_image_link\"></a>\n" +
+            "                <a id=\"right_footer_image_link\"></a>\n" +
+            "                <p class=\"footer\">Web page created and maintained<br />\n" +
+            "                    by <span id=\"author_link\"></span></p>\n" +
+            "                <br /><br />\n" +
             "            </div>\n" +
             "        </div>\n" +
             "    </body>\n" +

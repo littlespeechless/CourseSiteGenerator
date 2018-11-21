@@ -96,6 +96,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
+import java.time.Month;
 
 /**
  *
@@ -586,7 +587,8 @@ public class CourseSiteController {
             TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
             TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
             String newType = (String) type.getValue();
-            String newDate = date.getValue().toString();
+            String newDate = date.getValue().getYear()+"-"+date.getValue().getMonthValue()
+                    +"-"+date.getValue().getDayOfMonth();
             String newTitle = title.getText();
             String newTopic = topic.getText();
             String newLink = link.getText();
@@ -601,7 +603,8 @@ public class CourseSiteController {
             TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
             Schedule schedule = (Schedule)((TableView) gui.getGUINode(SC_SCHEDULE_TABLEVIEW)).getSelectionModel().getSelectedItem();
             String newType = (String) type.getValue();
-            String newDate = date.getValue().toString();
+            String newDate = date.getValue().getYear()+"-"+date.getValue().getMonthValue()
+                    +"-"+date.getValue().getDayOfMonth();
             String newTitle = title.getText();
             String newTopic = topic.getText();
             String newLink = link.getText();
@@ -624,7 +627,10 @@ public class CourseSiteController {
             TextField topic = (TextField)gui.getGUINode(SC_TOPIC_TEXT_FIELD);
             TextField link = (TextField)gui.getGUINode(SC_LINK_TEXT_FIELD);
             type.setValue(schedule.getType());
-            date.setValue(LocalDate.parse(schedule.getDate()));
+            String month = schedule.getDate().substring(schedule.getDate().indexOf("-")+1,schedule.getDate().lastIndexOf("-"));
+            String year = schedule.getDate().substring(0,schedule.getDate().indexOf("-"));
+            String day = schedule.getDate().substring(schedule.getDate().lastIndexOf("-")+1);
+            date.setValue(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)));
             title.textProperty().setValue(schedule.getTitle());
             topic.textProperty().setValue(schedule.getTopic());
             link.textProperty().setValue(schedule.getLink());
