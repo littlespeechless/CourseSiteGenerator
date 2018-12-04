@@ -47,7 +47,6 @@ import static csg.CourseSitePropertyType.SITE_SEMESTER_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_SUBJECT_COMBO_BOX;
 import static csg.CourseSitePropertyType.SITE_YEAR_COMBO_BOX;
 import javafx.scene.control.Label;
-
 /**
  *
  * @author zhengyu
@@ -85,7 +84,7 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         }else{
             ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(true);
         }
-
+         
         
     }
     public void updateExportDir(){

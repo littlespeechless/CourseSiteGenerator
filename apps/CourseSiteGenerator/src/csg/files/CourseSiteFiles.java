@@ -47,6 +47,7 @@ import csg.data.Schedule;
 import csg.data.TeachingAssistantPrototype;
 import csg.data.TimeSlot;
 import csg.data.TimeSlot.DayOfWeek;
+import csg.workspace.CourseSiteWorkspace;
 import static djf.AppPropertyType.EXPORT_BUTTON;
 import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
@@ -75,6 +76,9 @@ import java.time.Month;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -107,6 +111,7 @@ import javax.json.stream.JsonParser;
  */
 public class CourseSiteFiles implements  AppFileComponent{
     CourseSiteGenerateApp app;
+    
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
     static final String JSON_GRAD_TAS = "grad_tas";
     static final String JSON_NAME = "name";
@@ -545,6 +550,8 @@ public class CourseSiteFiles implements  AppFileComponent{
         if (cssComboBox.getItems().contains(cssFileName)) {
             cssComboBox.setValue(cssFileName);
         }
+        CourseSiteWorkspace workspace = (CourseSiteWorkspace) app.getWorkspaceComponent();
+        workspace.getController().setOldCss("");
         
         //instructor
         JsonObject instructorObject= sitePaneObject.getJsonObject("instructor");
@@ -814,7 +821,6 @@ public class CourseSiteFiles implements  AppFileComponent{
         //update controls
         app.getTPS().clearAllTransactions();
         ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(true);
-        ((Button) gui.getGUINode(SAVE_BUTTON)).setDisable(true);
         CheckBox home = (CheckBox) gui.getGUINode(SITE_HOME);
         CheckBox syllabus = (CheckBox)gui.getGUINode(SITE_SYLLABUS);
         CheckBox schedule = (CheckBox)gui.getGUINode(SITE_SCHEDULE);
@@ -822,7 +828,8 @@ public class CourseSiteFiles implements  AppFileComponent{
         if (home.isSelected()||syllabus.isSelected()||schedule.isSelected()||hws.isSelected()) {
           ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(false);
         }
-        app.getFoolproofModule().updateAll();
+        ((Button) gui.getGUINode(SAVE_BUTTON)).setDisable(true);
+        //app.getFoolproofModule().updateAll();
         
         
     }
@@ -838,25 +845,50 @@ public class CourseSiteFiles implements  AppFileComponent{
     }
     @Override
     public void exportData(AppDataComponent data, String filePath) throws IOException {
-        System.out.println("xxx");
+        //System.out.println("xxx");
         CourseSiteData dataManager = (CourseSiteData) data;
         AppGUIModule gui = app.getGUIModule();
         String exportPath = ((Label) gui.getGUINode(SITE_EXPORT_DIR)).getText();
         File exportDir = new File(exportPath);
         if (!exportDir.exists()) {
             exportDir.mkdirs();
+        }else{
+            //reset all html files
+            for(File htmlFile : exportDir.listFiles()){
+                if (!htmlFile.isDirectory()){
+                    htmlFile.delete();
+                }
+            }
         }
         File imageDir = new File(exportPath+"/images");
         if (!imageDir.exists()) {
             imageDir.mkdir();
+        }else{
+            for(File htmlFile : imageDir.listFiles()){
+                if (!htmlFile.isDirectory()){
+                    htmlFile.delete();
+                }
+            }
         }
         File jsDir = new File(exportDir+"/js");
         if (!jsDir.exists()) {
             jsDir.mkdir();
+        }else{
+            for(File htmlFile : jsDir.listFiles()){
+                if (!htmlFile.isDirectory()){
+                    htmlFile.delete();
+                }
+            }
         }
         File cssDir = new File(exportPath+"/css");
         if (!cssDir.exists()) {
             cssDir.mkdir();
+        }else{
+            for(File htmlFile : cssDir.listFiles()){
+                if (!htmlFile.isDirectory()){
+                    htmlFile.delete();
+                }
+            }
         }
         ImageView faviconImageView = (ImageView) gui.getGUINode(SITE_FAVICON_IMG);
         ImageView navbarImageView = (ImageView) gui.getGUINode(SITE_NAVBAR_IMG);
@@ -905,14 +937,17 @@ public class CourseSiteFiles implements  AppFileComponent{
         CheckBox scheduleBox = (CheckBox)gui.getGUINode(SITE_SCHEDULE);
         CheckBox hwsBox = (CheckBox)gui.getGUINode(SITE_HWS);
         
+        //pages data is used in every page so create once
+        buildHomePageData(exportPath);
         if(homeBox.isSelected()){
-            buildHomePageData(exportPath);
             buildHomePage(exportPath, cssFile.getName());
+            //buildHomePageData(exportPath);
             finalDispalyPath = exportPath+"/index.html";
         }
         if (syllabusBox.isSelected()) {
             buildSyllabus(exportPath, cssFile.getName());
             buildSyllabusData(exportPath);
+            //buildHomePageData(exportPath);
             if (finalDispalyPath==null) {
                 finalDispalyPath = exportPath+"/syllabus.html";
             }
@@ -920,6 +955,8 @@ public class CourseSiteFiles implements  AppFileComponent{
         if (scheduleBox.isSelected()) {
             buildSchedule(exportPath, cssFile.getName());
             buildScheduleData(exportPath);
+            //buildHomePageData(exportPath);
+
             if (finalDispalyPath==null) {
                 finalDispalyPath = exportPath+"/schedule.html";
             }
@@ -927,12 +964,28 @@ public class CourseSiteFiles implements  AppFileComponent{
         if (hwsBox.isSelected()) {
             buildHWS(exportPath, cssFile.getName());
             buildScheduleData(exportPath);
+            //buildHomePageData(exportPath);
+
             if (finalDispalyPath==null) {
                 finalDispalyPath = exportPath+"/hws.html";
             }
         }
-        AppWebDialog appWebDialog = new AppWebDialog(app);
+        //System.out.println(finalDispalyPath);
+        java.net.CookieHandler.setDefault(new com.sun.webkit.network.CookieManager());
+        AppWebDialog appWebDialog = new  AppWebDialog(app);
         appWebDialog.showWebDialog(finalDispalyPath);
+        appWebDialog.getWebEngine().reload();
+        
+        //update control
+        ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(true);
+        CheckBox home = (CheckBox) gui.getGUINode(SITE_HOME);
+        CheckBox syllabus = (CheckBox)gui.getGUINode(SITE_SYLLABUS);
+        CheckBox schedule = (CheckBox)gui.getGUINode(SITE_SCHEDULE);
+        CheckBox hws = (CheckBox)gui.getGUINode(SITE_HWS);
+        if (home.isSelected()||syllabus.isSelected()||schedule.isSelected()||hws.isSelected()) {
+          ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(false);
+        }
+        ((Button) gui.getGUINode(SAVE_BUTTON)).setDisable(true);
         
         
     }

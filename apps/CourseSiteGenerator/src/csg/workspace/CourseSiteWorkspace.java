@@ -248,7 +248,7 @@ import static csg.CourseSitePropertyType.SITE_EXPORT_DIR;
  * @author zhengyu
  */
 public class CourseSiteWorkspace extends AppWorkspaceComponent{
-
+    CourseSiteController controller;
     public CourseSiteWorkspace(AppTemplate initApp) {
         super(initApp);
     }
@@ -261,6 +261,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         initLayout();
 
         // INIT THE EVENT HANDLERS
+        controller = new CourseSiteController((CourseSiteGenerateApp) app);
         initControllers();
 
         // SETUP FOOLPROOF DESIGN FOR THIS APP
@@ -878,7 +879,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         ((BorderPane)workspace).setCenter(siteTabPane);
     }
     private void initControllers(){
-        CourseSiteController controller = new CourseSiteController((CourseSiteGenerateApp) app);
+        
         AppGUIModule gui = app.getGUIModule(); 
         
         /**
@@ -933,7 +934,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
         yearBox.setOnAction((event) -> {
             controller.up();
         });
-
+        
         TextField titlefiField = ((TextField) gui.getGUINode(SITE_TITLE_TEXT_FIELD));
         titlefiField.focusedProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -1015,7 +1016,18 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                 controller.changeImages(newImage, rightFooterImageView);
             }
         });
-        
+        ComboBox cssBox = (ComboBox) gui.getGUINode(SITE_CSS_COMBO_BOX);
+        cssBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> 
+                    observable, String oldValue, String newValue) {
+                if (oldValue != null&& newValue!=null) {
+                    controller.changeCss(oldValue,newValue,cssBox);
+                }else{
+                    
+                }
+            }
+        });
         
         TextField insName = (TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD);
         TextField insEmail = (TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD);
@@ -1787,6 +1799,8 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
             return getItem() == null ? "" : getItem().toString();
         }
     }
-
+    public CourseSiteController getController(){
+        return controller;
+    }
 }
  

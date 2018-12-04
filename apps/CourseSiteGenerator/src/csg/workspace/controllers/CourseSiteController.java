@@ -96,6 +96,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
+import static csg.CourseSitePropertyType.SITE_CSS_COMBO_BOX;
+import csg.transactions.ChangeCss_Transaction;
 import java.time.Month;
 
 /**
@@ -111,9 +113,11 @@ public class CourseSiteController {
     String oldFieldText;
     String oldAreaText;
     String oldComboBox;
+    String oldCss;
     public CourseSiteController(CourseSiteGenerateApp initApp){
         app = initApp;
         AppGUIModule gui = app.getGUIModule();
+        CourseSiteData data = (CourseSiteData) app.getDataComponent();
         //oldStartDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_START_DATE_DATE_PICKER)).getValue();
         //oldendDate = (LocalDate) ((DatePicker)gui.getGUINode(SC_END_DATE_DATE_PICKER)).getValue();
         oldStartDate = LocalDate.MIN;
@@ -123,7 +127,7 @@ public class CourseSiteController {
         oldFieldText = "";
         oldAreaText = "";
         oldComboBox = "";
-        
+        oldCss = "";
     }
     /*
     * SITE PAGE  CONTROLLS 
@@ -134,7 +138,7 @@ public class CourseSiteController {
         ComboBox subjectBox = (ComboBox) gui.getGUINode(SITE_SUBJECT_COMBO_BOX);
         String newSubject = subjectBox.getEditor().getText();
         if (!oldSubject.equals(newSubject)){
-            System.out.println(newSubject);
+            //System.out.println(newSubject);
             ChangeSubject_Transaction cst =new ChangeSubject_Transaction(data, oldSubject,newSubject, subjectBox);
             app.processTransaction(cst);
         }
@@ -207,6 +211,20 @@ public class CourseSiteController {
     public void changeImages(Image newimImage,ImageView imageView){
         ChangeImage_Transaction cit = new ChangeImage_Transaction(newimImage, imageView);
         app.processTransaction(cit);
+        up();
+    }
+    public void changeCss(String oldValue,String newValue,ComboBox cssBox){
+        
+         if (!newValue.equals(oldCss)) {
+             //System.out.println(oldValue+newValue+oldCss);
+                ChangeCss_Transaction cct = new ChangeCss_Transaction
+                    (oldValue, newValue,cssBox);
+                app.processTransaction(cct);     
+         }
+        oldCss = oldValue;
+    }
+    public void setOldCss(String cssString){
+        oldCss = cssString;
     }
     /*
     * MT PAGE  CONTROLLS 

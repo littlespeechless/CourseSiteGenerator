@@ -55,6 +55,7 @@ import static csg.CourseSitePropertyType.SY_SPECIAL_TEXT_AREA;
 import static csg.CourseSitePropertyType.SY_TEXTBOOK_TEXT_AREA;
 import static csg.CourseSitePropertyType.SY_TOPIC_TEXT_AREA;
 import csg.data.TimeSlot.DayOfWeek;
+import csg.workspace.CourseSiteWorkspace;
 import static djf.AppPropertyType.SAVE_BUTTON;
 import djf.components.AppDataComponent;
 import djf.modules.AppGUIModule;
@@ -68,12 +69,14 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Iterator;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -146,10 +149,13 @@ public class CourseSiteData implements AppDataComponent{
         initalizeBannerCombobox();
         //time rangebuilding
         resetOfficeHours();
+        ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+        css.setOnAction(null);
         initalizeCssComboBox();
         //loading css files
-        ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
         css.setValue(css.getItems().get(0));
+        CourseSiteWorkspace workspace = (CourseSiteWorkspace) app.getWorkspaceComponent();
+        workspace.getController().setOldCss("");
         initializeType();
     }
 
@@ -181,6 +187,8 @@ public class CourseSiteData implements AppDataComponent{
         rightFooterImageView.setImage(image);
         ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
         css.setValue(css.getItems().get(0));
+        CourseSiteWorkspace workspace = (CourseSiteWorkspace) app.getWorkspaceComponent();
+        workspace.getController().setOldCss("");
         //instructor
         ((TextField) gui.getGUINode(SITE_INSTRUCTOR_NAME_TEXT_FIELD)).setText("");
         ((TextField) gui.getGUINode(SITE_INSTRUCTOR_EMAIL_TEXT_FIELD)).setText("");
@@ -262,7 +270,8 @@ public class CourseSiteData implements AppDataComponent{
                 BufferedReader br = new BufferedReader(new FileReader(subjectFile));
                 String st;
                 while((st=br.readLine())!=null){
-                    subjects.add(st);
+                    if(!subjects.equals(""))
+                        subjects.add(st);
                 }
             }
             File numberFile = new File("./app_data/properties/number.txt");
@@ -272,7 +281,10 @@ public class CourseSiteData implements AppDataComponent{
                 BufferedReader br = new BufferedReader(new FileReader(numberFile));
                 String st;
                 while((st=br.readLine())!=null){
-                    numbers.add(st);
+                    if (!numbers.equals("")) {
+                        numbers.add(st);
+                    }
+                    
                 }
             }
         }catch(Exception e){
@@ -283,41 +295,51 @@ public class CourseSiteData implements AppDataComponent{
     public void initalizeCssComboBox(){
         AppGUIModule gui = app.getGUIModule();
         ComboBox css = (ComboBox)gui.getGUINode(SITE_CSS_COMBO_BOX);
+       
         File cssFolder = new File("work/css/");
-        for (File cssFile:cssFolder.listFiles()){
+        if (cssFolder.list().length>0) {
+            for (File cssFile:cssFolder.listFiles()){
             if (!css.getItems().contains(cssFile.getName())&&cssFile.getName().contains(".css")) {
                 css.getItems().add(cssFile.getName());
+                }           
+            }
+        }else{
+            css.setValue("");
+        }
+        
+    }
+    public void addSubject(String subject){
+        if (!subjects.contains(subject)) {
+            if (!subject.equals("")) {
+                subjects.add(subject);
+                try{
+                    File subjectFile = new File("./app_data/properties/subject.txt");
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(subjectFile, true));
+                    writer.append(subject+"\n");
+                    writer.close();
+                }catch (Exception e){
+
+                }
             }
             
         }
     }
-    public void addSubject(String subject){
-        if (!subjects.contains(subject)) {
-            subjects.add(subject);
-            try{
-                File subjectFile = new File("./app_data/properties/subject.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(subjectFile, true));
-                writer.append(subject+"\n");
-                writer.close();
-            }catch (Exception e){
-                
-            }
-        }
-    }
     public void addNumber(String number){
         if(!numbers.contains(number)){
-            numbers.add(number);
-            try{
-                File numberFile = new File("./app_data/properties/number.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(numberFile, true));
-                writer.append(number+"\n");
-                writer.close();
-            }catch(Exception e){
-                
+            if(!number.equals(""))
+            {
+                numbers.add(number);
+                try{
+                    File numberFile = new File("./app_data/properties/number.txt");
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(numberFile, true));
+                    writer.append(number+"\n");
+                    writer.close();
+                }catch(Exception e){
+
+                }
             }
         }
     }
-    
 /****************************
  * OH RELATED METHODS
  */
