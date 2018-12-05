@@ -1518,7 +1518,7 @@ public class CourseSiteFiles implements  AppFileComponent{
             "        <a id=\"left_footer_image_link\"></a>\n" +
             "        <a id=\"right_footer_image_link\"></a>\n" +
             "        <p class=\"footer\">Web page created and maintained<br />\n" +
-            "            by <span id=\"instructor_link\"></span></p>\n" +
+            "            by <span id=\"author_link\"></span></p>\n" +
             "        <br /><br />\n" +
             "    </div>\n" +
             "</div>\n" +

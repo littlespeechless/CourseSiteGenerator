@@ -308,6 +308,7 @@ public class CourseSiteData implements AppDataComponent{
         }
         
     }
+    
     public void addSubject(String subject){
         if (!subjects.contains(subject)) {
             if (!subject.equals("")) {
