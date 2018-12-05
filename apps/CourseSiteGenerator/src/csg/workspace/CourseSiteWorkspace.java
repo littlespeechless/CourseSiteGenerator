@@ -1190,6 +1190,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lecture lecture = ((Lecture) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLecture(t.getNewValue(),lecture.getDays(),
                             lecture.getTime(),lecture.getRoom(),lecture);
                 }
@@ -1200,6 +1201,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lecture lecture = ((Lecture) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLecture(lecture.getSection(),t.getNewValue(),
                             lecture.getTime(),lecture.getRoom(),lecture);
                 }
@@ -1210,6 +1212,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lecture lecture = ((Lecture) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLecture(lecture.getSection(),lecture.getDays(),
                             t.getNewValue(),lecture.getRoom(),lecture);
                 }
@@ -1220,6 +1223,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lecture lecture = ((Lecture) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLecture(lecture.getSection(),lecture.getDays(),
                             lecture.getTime(),t.getNewValue(),lecture);
                 }
@@ -1249,6 +1253,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Recitation recitation = ((Recitation) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeRecitation(t.getNewValue(),recitation.getDaysTime(),
                             recitation.getRoom(),recitation.getTa1(),recitation.getTa2(),recitation);
                 }
@@ -1259,6 +1264,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Recitation recitation = ((Recitation) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeRecitation(recitation.getSection(),t.getNewValue(),
                             recitation.getRoom(),recitation.getTa1(),recitation.getTa2(),recitation);
                 }
@@ -1269,6 +1275,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Recitation recitation = ((Recitation) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
                             t.getNewValue(),recitation.getTa1(),recitation.getTa2(),recitation);
                 }
@@ -1279,6 +1286,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Recitation recitation = ((Recitation) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
                             recitation.getRoom(),t.getNewValue(),recitation.getTa2(),recitation);
                 }
@@ -1289,6 +1297,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Recitation recitation = ((Recitation) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeRecitation(recitation.getSection(),recitation.getDaysTime(),
                             recitation.getRoom(),recitation.getTa1(),t.getNewValue(),recitation);
                 }
@@ -1318,6 +1327,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lab lab = ((Lab) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLab(t.getNewValue(),lab.getDaysTime(),
                             lab.getRoom(),lab.getTa1(),lab.getTa2(),lab);
                 }
@@ -1328,6 +1338,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lab lab = ((Lab) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLab(lab.getSection(),t.getNewValue(),
                             lab.getRoom(),lab.getTa1(),lab.getTa2(),lab);
                 }
@@ -1338,6 +1349,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lab lab = ((Lab) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
                             t.getNewValue(),lab.getTa1(),lab.getTa2(),lab);
                 }
@@ -1348,6 +1360,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lab lab = ((Lab) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
                             lab.getRoom(),t.getNewValue(),lab.getTa2(),lab);
                 }
@@ -1358,6 +1371,7 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
                     Lab lab = ((Lab) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())
                         );
+                    if(!t.getOldValue().equals(t.getNewValue()))
                     controller.processChangeLab(lab.getSection(),lab.getDaysTime(),
                             lab.getRoom(),lab.getTa1(),t.getNewValue(),lab);
                 }

@@ -142,6 +142,7 @@ public class CourseSiteController {
             ChangeSubject_Transaction cst =new ChangeSubject_Transaction(data, oldSubject,newSubject, subjectBox);
             app.processTransaction(cst);
         }
+        up();
     }
     public void setOldSubject(){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
@@ -163,6 +164,7 @@ public class CourseSiteController {
             ChangeNumber_Transaction cnt = new ChangeNumber_Transaction(data, oldNumber,newNumber, numberBox);
             app.processTransaction(cnt);
         }
+        up();
     }
     public void setOldNumber(){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
@@ -177,6 +179,7 @@ public class CourseSiteController {
             ChangeComboBox_Transaction ccbt = new ChangeComboBox_Transaction(data, oldComboBox, newString, comboBox);
             app.processTransaction(ccbt);
         }
+        up();
     }
     public void setComboBox(ComboBox box){
         oldComboBox = box.getEditor().getText();
@@ -188,6 +191,7 @@ public class CourseSiteController {
             ChangeTextField_Transaction ctft = new ChangeTextField_Transaction(data, newText, oldFieldText, textField);
             app.processTransaction(ctft);
         }
+        up();
     }
     public void setOldFieldText(TextField textField){
         oldFieldText = textField.getText();
@@ -199,6 +203,7 @@ public class CourseSiteController {
             ChangeTextArea_Transaction ctat = new ChangeTextArea_Transaction(data, newText, oldAreaText, textArea);
             app.processTransaction(ctat);
         }
+        up();
     }
     public void setOldAreaText(TextArea textArea){
         oldAreaText = textArea.getText();
@@ -207,6 +212,7 @@ public class CourseSiteController {
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         ChangeCheckBox_Transaction ccbt = new ChangeCheckBox_Transaction(data, checkBox, checkBox.isSelected());
         app.processTransaction(ccbt);
+        up();
     }
     public void changeImages(Image newimImage,ImageView imageView){
         ChangeImage_Transaction cit = new ChangeImage_Transaction(newimImage, imageView);
@@ -222,6 +228,7 @@ public class CourseSiteController {
                 app.processTransaction(cct);     
          }
         oldCss = oldValue;
+        up();
     }
     public void setOldCss(String cssString){
         oldCss = cssString;
@@ -235,11 +242,13 @@ public class CourseSiteController {
         AddLecture_Transaction addLecture_Transaction = new AddLecture_Transaction(
                 data, lecture);
         app.processTransaction(addLecture_Transaction);
+        up();
     }
     public void processRemoveLecture(Lecture lecture){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         RemvLecture_Transaction lecture_Transaction = new RemvLecture_Transaction(data, lecture);
         app.processTransaction(lecture_Transaction);
+        up();
 
     }
     public void processChangeLecture(String newSection, String newDays, 
@@ -248,6 +257,7 @@ public class CourseSiteController {
         EditLecture_Transaction editLecture_Transaction1 = new EditLecture_Transaction
         (data, lecture, newSection, newDays, newTime, newRoom);
         app.processTransaction(editLecture_Transaction1);
+        up();
 
     }
     public void processAddRecitation(){
@@ -255,34 +265,40 @@ public class CourseSiteController {
         Recitation recitation = new Recitation("?", "?", "?", "?", "?");
         AddRecitation_Transaction recitation_Transaction = new AddRecitation_Transaction(data, recitation);
         app.processTransaction(recitation_Transaction);
+        up();
     }
     public void processRemoveRecitation(Recitation recitation){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         RemvRecitation_Transaction recitation_Transaction = new RemvRecitation_Transaction(data, recitation);
         app.processTransaction(recitation_Transaction);
+        up();
     }
     public void processChangeRecitation(String newSection, String newDayTime, 
             String newRoom, String TA1,String TA2, Recitation recitation){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         EditRecitation_Transaction recitation_Transaction = new EditRecitation_Transaction(data, recitation, newSection, newDayTime, newRoom, TA1, TA2);
         app.processTransaction(recitation_Transaction);
+        up();
     }
     public void processAddLab(){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         Lab lab = new Lab("?", "?", "?", "?", "?");
         AddLab_Transaction addLab_Transaction = new AddLab_Transaction(data, lab);
         app.processTransaction(addLab_Transaction);
+        up();
     }
     public void processRemoveLab(Lab lab){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         RemvLab_Transaction remvLab_Transaction =new RemvLab_Transaction(data, lab);
         app.processTransaction(remvLab_Transaction);
+        up();
     }
     public void processChangeLab(String newSection, String newDayTime, 
             String newRoom, String TA1,String TA2, Lab lab){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         EditLab_Transaction editLab_Transaction = new EditLab_Transaction(data, lab, newSection, newDayTime, newRoom, TA1, TA2);
         app.processTransaction(editLab_Transaction);
+        up();
     }
     /*
     * OH PAGE  CONTROLLS 
@@ -326,11 +342,13 @@ public class CourseSiteController {
         nameTF.requestFocus();
         emailTF.setText("");
         }
+        up();
     }
     public  void processRemoveTA(TeachingAssistantPrototype ta){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         RemvTA_Transaction removeTA_Transaction = new RemvTA_Transaction(data, ta);
         app.processTransaction(removeTA_Transaction);
+        up();
     }
     public void processAddTimeslot(TeachingAssistantPrototype ta, int column,TimeSlot dataSlot){
         
@@ -339,6 +357,7 @@ public class CourseSiteController {
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         AddTimeSlot_Transaction addTimeSlot_Transaction = new AddTimeSlot_Transaction(data,dataTimeSlot, ta,column);
         app.processTransaction(addTimeSlot_Transaction);
+        up();
     }
     public void changeTimeRange(){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
@@ -363,6 +382,7 @@ public class CourseSiteController {
                 officeHoursTableView.getItems());
                 app.processTransaction(changeOHTable_Transaction);
             }
+            up();
     }
     public int getHours(String selected){
         int hour = 0;
@@ -505,7 +525,7 @@ public class CourseSiteController {
             // cancel button is pressed
         }
         
-        
+        up();
     }
     
     public void validateInput(TextField nameField, TextField emailField,Node node,
@@ -613,6 +633,7 @@ public class CourseSiteController {
             Schedule schedule = new Schedule(newType, newDate, newTitle, newTopic, newLink);
             AddSchedule_Transaction addSchedule_Transaction = new AddSchedule_Transaction(data, schedule);
             app.processTransaction(addSchedule_Transaction);
+            up();
         }else{
             ComboBox type = (ComboBox) gui.getGUINode(SC_TYPE_COMBO_BOX);
             DatePicker date = (DatePicker) gui.getGUINode(SC_DATE_DATE_PICKER);
@@ -629,6 +650,7 @@ public class CourseSiteController {
             EditSchedule_Transaction editSchedule_Transaction = new EditSchedule_Transaction
                 (data, schedule, newType, newDate, newTitle, newTopic, newLink);
             app.processTransaction(editSchedule_Transaction);
+            up();
         }
         
     }
@@ -636,6 +658,7 @@ public class CourseSiteController {
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
         RemvSchedule_Transaction remvSchedule_Transaction = new RemvSchedule_Transaction(data, schedule);
         app.processTransaction(remvSchedule_Transaction);
+        up();
     }
     public void updateScheduleField(Schedule schedule){
             AppGUIModule gui = app.getGUIModule();
@@ -653,6 +676,7 @@ public class CourseSiteController {
             topic.textProperty().setValue(schedule.getTopic());
             link.textProperty().setValue(schedule.getLink());
             ((Button) gui.getGUINode(SC_ADD_ITEM_BUTTON)).setText("Update");
+            up();
     }
     public void  processChangeStartDate(LocalDate oldDate, LocalDate newDate){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
@@ -665,6 +689,7 @@ public class CourseSiteController {
             
         }
         oldStartDate = oldDate;
+        up();
     }
     public void  processChangeEndDate(LocalDate oldDate, LocalDate newDate){
         CourseSiteData data = (CourseSiteData) app.getDataComponent();
@@ -676,5 +701,6 @@ public class CourseSiteController {
             
         }
         oldendDate = oldDate;
+        up();
     }
 }
