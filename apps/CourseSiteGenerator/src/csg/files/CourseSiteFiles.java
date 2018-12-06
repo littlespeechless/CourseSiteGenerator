@@ -476,8 +476,6 @@ public class CourseSiteFiles implements  AppFileComponent{
         if (home.isSelected()||syllabus.isSelected()||schedule.isSelected()||hws.isSelected()) {
           ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(false);
         }
-        app.getFoolproofModule().updateAll();
-        
         
     }
 

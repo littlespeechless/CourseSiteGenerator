@@ -65,10 +65,17 @@ public class CourseSiteFoolproofDesign implements FoolproofDesign {
         removeTAButtonControls();
         removeScheduleControls();
         removeMTControls();
+        updateSave();
         exportIconControls();
         scheduleDatePickerControls();
         ScheduleControls();
         updateExportDir();
+    }
+    public void updateSave(){
+        AppGUIModule gui = app.getGUIModule();
+        if(!((Button)gui.getGUINode(SAVE_BUTTON)).isDisable()){
+            ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(true);
+        }
     }
     public void exportIconControls(){
         AppGUIModule gui = app.getGUIModule();

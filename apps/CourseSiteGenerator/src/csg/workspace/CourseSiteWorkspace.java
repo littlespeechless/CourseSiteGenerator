@@ -242,6 +242,7 @@ import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 import static csg.CourseSitePropertyType.SC_START_DATE_DATE_PICKER;
 import static csg.CourseSitePropertyType.SITE_EXPORT_DIR;
+import static djf.AppPropertyType.SAVE_BUTTON;
 
 /**
  *
@@ -881,7 +882,13 @@ public class CourseSiteWorkspace extends AppWorkspaceComponent{
     private void initControllers(){
         
         AppGUIModule gui = app.getGUIModule(); 
-        
+        ((Button)gui.getGUINode(SAVE_BUTTON)).disableProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                 //controller.up();
+                    if (newValue==false) {
+                        ((Button) gui.getGUINode(EXPORT_BUTTON)).setDisable(true);
+                    }
+        });
         /**
          * Site pane
          * 

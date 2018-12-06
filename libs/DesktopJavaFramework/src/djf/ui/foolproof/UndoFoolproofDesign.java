@@ -1,6 +1,7 @@
 package djf.ui.foolproof;
 
 import static djf.AppPropertyType.REDO_BUTTON;
+import static djf.AppPropertyType.SAVE_BUTTON;
 import static djf.AppPropertyType.UNDO_BUTTON;
 import djf.AppTemplate;
 import djf.modules.AppGUIModule;
